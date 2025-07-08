@@ -21,6 +21,47 @@ An essential applications installer that:
 - ✅ Logs all activity for troubleshooting
 - ✅ Safe to run multiple times
 
+### `auto-update-brew.sh`
+An intelligent auto-update script that:
+- ✅ Updates Homebrew and all installed packages/apps
+- ✅ Only runs when on "CastleEstates" WiFi and plugged into power
+- ✅ Sends text message notifications with results
+- ✅ Runs in background with comprehensive logging
+- ✅ Safe to run multiple times with smart condition checking
+
+### `setup-auto-update.sh`
+A setup script for automatic updates that:
+- ✅ Configures phone number for notifications
+- ✅ Sets up automatic execution via launchd
+- ✅ Tests the auto-update functionality
+- ✅ Provides scheduling options (daily/weekly/manual)
+
+### `auto-update-brew-hybrid.sh`
+A hybrid notification auto-update script that:
+- ✅ Updates Homebrew and all installed packages/apps
+- ✅ Only runs when on "CastleEstates" WiFi and plugged into power
+- ✅ Sends detailed email reports AND quick text summaries
+- ✅ Includes retry logic for network issues
+- ✅ Comprehensive error handling and logging
+- ✅ Safe to run multiple times with smart condition checking
+
+### `setup-hybrid-notifications.sh`
+A setup script for hybrid notifications that:
+- ✅ Configures both email and phone number for notifications
+- ✅ Tests both notification methods
+- ✅ Sets up automatic execution via launchd
+- ✅ Provides scheduling recommendations
+- ✅ Validates all configuration settings
+
+### `cleanup-homebrew.sh`
+A comprehensive cleanup script that:
+- ✅ Removes old versions of packages and casks
+- ✅ Cleans up download cache and orphaned dependencies
+- ✅ Runs brew doctor for health check
+- ✅ Shows disk usage statistics before/after cleanup
+- ✅ Logs all cleanup activities for troubleshooting
+- ✅ Safe to run multiple times
+
 ## 🚀 Quick Start
 
 1. **Clone this repository:**
@@ -37,6 +78,15 @@ An essential applications installer that:
 3. **Install essential applications:**
    ```bash
    ./install-essential-apps.sh
+   ```
+
+4. **Set up automatic updates (optional):**
+   ```bash
+   # For text-only notifications:
+   ./setup-auto-update.sh
+   
+   # For hybrid notifications (email + text):
+   ./setup-hybrid-notifications.sh
    ```
 
 ## 📋 Requirements
@@ -97,12 +147,56 @@ The `install-essential-apps.sh` script will:
 - Generates a summary of successful and failed installations
 - Includes helpful next steps for post-installation setup
 
+### Auto Update System
+
+The auto-update system consists of two scripts:
+
+#### `auto-update-brew.sh`
+**Smart Conditions:**
+- ✅ Only runs when connected to "CastleEstates" WiFi
+- ✅ Only runs when plugged into power (not on battery)
+- ✅ Sends text message notifications with results
+- ✅ Comprehensive logging for troubleshooting
+
+**What it updates:**
+- Homebrew itself
+- All installed packages (`brew upgrade`)
+- All installed applications (`brew upgrade --cask`)
+- Cleans up old versions (`brew cleanup`)
+
+**Usage:**
+```bash
+./auto-update-brew.sh
+```
+
+#### `setup-auto-update.sh`
+**Setup Features:**
+- Configures your phone number for notifications
+- Tests text messaging functionality
+- Sets up automatic execution via launchd
+- Provides scheduling options
+
+**Scheduling Options:**
+- Daily at 2:00 AM
+- Weekly on Sunday at 2:00 AM
+- Manual execution only
+
+**Usage:**
+```bash
+./setup-auto-update.sh
+```
+
 ## 📁 Log Files
 
 All script activities are logged to:
 ```
 ~/Library/Logs/HomebrewInstall.log      # Homebrew installation
 ~/Library/Logs/EssentialAppsInstall.log # Essential apps installation
+~/Library/Logs/AutoUpdateBrew.log       # Auto-update activities
+~/Library/Logs/AutoUpdateSetup.log      # Setup activities
+~/Library/Logs/AutoUpdateBrewHybrid.log # Hybrid auto-update activities
+~/Library/Logs/HybridNotificationSetup.log # Hybrid setup activities
+~/Library/Logs/HomebrewCleanup.log      # Cleanup activities
 ```
 
 ## 🐛 Troubleshooting
@@ -128,6 +222,17 @@ If you encounter issues:
    - Check if apps are already installed: `brew list --cask`
    - Update Homebrew: `brew update`
    - Clean up: `brew cleanup`
+
+5. **For auto-update issues:**
+   - Check WiFi connection: `networksetup -getairportnetwork en0`
+   - Check power status: `pmset -g ps`
+   - Verify iMessage setup: Sign into Messages app
+   - Check launchd status: `launchctl list | grep homebrew`
+
+6. **For cleanup issues:**
+   - Check disk space: `df -h`
+   - Verify Homebrew health: `brew doctor`
+   - Check for orphaned packages: `brew deps --installed`
 
 ## 🤝 Contributing
 
