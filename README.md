@@ -12,6 +12,15 @@ A comprehensive Homebrew installer script that:
 - ✅ Logs all activity for troubleshooting
 - ✅ Safe to run multiple times
 
+### `install-essential-apps.sh`
+An essential applications installer that:
+- ✅ Installs popular applications using Homebrew casks
+- ✅ Includes: Bambu Studio, Brave Browser, ChatGPT, Cursor AI, Grammarly Desktop, Google Chrome
+- ✅ Checks for existing installations to avoid duplicates
+- ✅ Provides colored progress feedback
+- ✅ Logs all activity for troubleshooting
+- ✅ Safe to run multiple times
+
 ## 🚀 Quick Start
 
 1. **Clone this repository:**
@@ -20,9 +29,14 @@ A comprehensive Homebrew installer script that:
    cd homebrew-scripts
    ```
 
-2. **Run the installer:**
+2. **Install Homebrew:**
    ```bash
    ./install-homebrew.sh
+   ```
+
+3. **Install essential applications:**
+   ```bash
+   ./install-essential-apps.sh
    ```
 
 ## 📋 Requirements
@@ -54,20 +68,51 @@ The `install-homebrew.sh` script will:
 - Provides detailed logging for troubleshooting
 - Includes comprehensive error handling
 
+### Essential Apps Installer
+
+The `install-essential-apps.sh` script will:
+
+1. Check if Homebrew is installed (exits if not)
+2. Update Homebrew to get latest package information
+3. Install each application if not already present
+4. Provide colored progress feedback
+5. Log all activities to `~/Library/Logs/EssentialAppsInstall.log`
+
+**Usage:**
+```bash
+./install-essential-apps.sh
+```
+
+**Applications installed:**
+- **Bambu Studio** - 3D printing software
+- **Brave Browser** - Privacy-focused browser
+- **ChatGPT Desktop** - AI chat application
+- **Cursor AI** - AI-powered code editor
+- **Grammarly Desktop** - Writing assistant
+- **Google Chrome** - Web browser
+
+**What it does:**
+- Checks for existing installations (both Homebrew and Applications folder)
+- Provides real-time colored feedback during installation
+- Generates a summary of successful and failed installations
+- Includes helpful next steps for post-installation setup
+
 ## 📁 Log Files
 
 All script activities are logged to:
 ```
-~/Library/Logs/HomebrewInstall.log
+~/Library/Logs/HomebrewInstall.log      # Homebrew installation
+~/Library/Logs/EssentialAppsInstall.log # Essential apps installation
 ```
 
 ## 🐛 Troubleshooting
 
 If you encounter issues:
 
-1. **Check the log file:**
+1. **Check the log files:**
    ```bash
    cat ~/Library/Logs/HomebrewInstall.log
+   cat ~/Library/Logs/EssentialAppsInstall.log
    ```
 
 2. **Verify Homebrew installation:**
@@ -78,6 +123,11 @@ If you encounter issues:
 3. **Manual shell configuration:**
    - For Apple Silicon: `eval "$(/opt/homebrew/bin/brew shellenv)"`
    - For Intel Macs: `eval "$(/usr/local/bin/brew shellenv)"`
+
+4. **For app installation issues:**
+   - Check if apps are already installed: `brew list --cask`
+   - Update Homebrew: `brew update`
+   - Clean up: `brew cleanup`
 
 ## 🤝 Contributing
 
