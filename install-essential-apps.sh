@@ -4,12 +4,14 @@
 # 🛠️ Essential Apps Installer Script for macOS
 # --------------------------------------------
 # This script installs essential applications using Homebrew casks:
+#   - Adobe Creative Cloud (Creative software suite with Photoshop)
 #   - Bambu Studio (3D printing software)
 #   - Brave Browser (Privacy-focused browser)
 #   - ChatGPT Desktop (AI chat application)
 #   - Cursor AI (AI-powered code editor)
 #   - Grammarly Desktop (Writing assistant)
 #   - Google Chrome (Web browser)
+#   - Steam (Gaming platform)
 #
 # ✅ Safe to run multiple times — it skips apps that are already installed
 # ✅ Logs all activity for troubleshooting
@@ -112,23 +114,29 @@ install_app() {
 # Install applications
 print_status "Starting application installations..."
 
-# 1. Bambu Studio
+# 1. Adobe Creative Cloud
+install_app "Adobe Creative Cloud" "adobe-creative-cloud" "Adobe Creative Cloud"
+
+# 2. Bambu Studio
 install_app "Bambu Studio" "bambu-studio" "Bambu Studio"
 
-# 2. Brave Browser
+# 3. Brave Browser
 install_app "Brave Browser" "brave-browser" "Brave Browser"
 
-# 3. ChatGPT Desktop
+# 4. ChatGPT Desktop
 install_app "ChatGPT" "chatgpt" "ChatGPT Desktop"
 
-# 4. Cursor AI
+# 5. Cursor AI
 install_app "Cursor" "cursor" "Cursor AI"
 
-# 5. Grammarly Desktop
+# 6. Grammarly Desktop
 install_app "Grammarly" "grammarly-desktop" "Grammarly Desktop"
 
-# 6. Google Chrome
+# 7. Google Chrome
 install_app "Google Chrome" "google-chrome" "Google Chrome"
+
+# 8. Steam
+install_app "Steam" "steam" "Steam"
 
 # Post-installation summary
 print_status "Installation complete! Summary:"
@@ -140,12 +148,14 @@ failed_apps=()
 
 # Check each app
 apps=(
+    "Adobe Creative Cloud:adobe-creative-cloud"
     "Bambu Studio:bambu-studio"
     "Brave Browser:brave-browser"
     "ChatGPT Desktop:chatgpt"
     "Cursor AI:cursor"
     "Grammarly Desktop:grammarly-desktop"
     "Google Chrome:google-chrome"
+    "Steam:steam"
 )
 
 for app_info in "${apps[@]}"; do

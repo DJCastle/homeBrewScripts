@@ -37,7 +37,7 @@ chmod +x *.sh
 
 #### `install-essential-apps.sh`
 - **Purpose**: Installs essential applications via Homebrew
-- **Applications**: Visual Studio Code, Parallels Desktop, Bambu Studio, Brave Browser, ChatGPT Desktop, CursorAI, Grammarly, Google Chrome
+- **Applications**: Adobe Creative Cloud (with Photoshop), Bambu Studio, Brave Browser, ChatGPT Desktop, CursorAI, Grammarly, Google Chrome, Steam
 - **Features**:
   - Progress feedback with spinners
   - Safe reinstallation checks
