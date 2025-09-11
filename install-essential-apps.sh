@@ -4,22 +4,22 @@
 # 🛠️ Essential Apps Installer Script for macOS
 # --------------------------------------------
 # This script installs essential applications using Homebrew casks:
-#   - Adobe Creative Cloud (Creative software suite with Photoshop)
-#   - Bambu Studio (3D printing software)
-#   - Brave Browser (Privacy-focused browser)
-#   - ChatGPT Desktop (AI chat application)
-#   - Cursor AI (AI-powered code editor)
+#   - Adobe Creative Cloud (Creative software suite)
+#   - Bambu Studio (3D printing slicer software)
+#   - ChatGPT Desktop (AI assistant desktop app)
+#   - Epson Printer Utility (Printer management tools)
 #   - Grammarly Desktop (Writing assistant)
-#   - Google Chrome (Web browser)
-#   - Steam (Gaming platform)
+#   - Icon Composer (macOS icon creation tool)
+#   - SF Symbols (Apple's symbol library)
+#   - Visual Studio Code (Code editor)
 #
 # ✅ Safe to run multiple times — it skips apps that are already installed
 # ✅ Logs all activity for troubleshooting
 # ✅ Provides progress feedback
+# ✅ Aligned with brew_setup_tahoe.sh app list
 #
 # 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Homebrew is installed first:
-#      ./install-homebrew.sh
+# 1. Make sure Homebrew is installed first (use brew_setup_tahoe.sh for full setup)
 # 2. Run this script:
 #      ./install-essential-apps.sh
 #
@@ -34,6 +34,7 @@
 # - Some apps may require manual setup after installation
 # - You may be prompted for your macOS password
 # - Large downloads may take time depending on your internet speed
+# - For interactive installation with more options, use brew_setup_tahoe.sh
 ###############################################################################
 
 LOG="$HOME/Library/Logs/EssentialAppsInstall.log"
@@ -65,7 +66,7 @@ print_error() {
 
 # Check if Homebrew is installed
 if ! command -v brew &> /dev/null; then
-    print_error "Homebrew is not installed. Please run ./install-homebrew.sh first."
+    print_error "Homebrew is not installed. Please run brew_setup_tahoe.sh first for full setup."
     exit 1
 fi
 
@@ -111,32 +112,32 @@ install_app() {
     fi
 }
 
-# Install applications
+# Install applications (aligned with brew_setup_tahoe.sh)
 print_status "Starting application installations..."
 
 # 1. Adobe Creative Cloud
 install_app "Adobe Creative Cloud" "adobe-creative-cloud" "Adobe Creative Cloud"
 
 # 2. Bambu Studio
-install_app "Bambu Studio" "bambu-studio" "Bambu Studio"
+install_app "Bambu Studio" "bambustudio" "Bambu Studio"
 
-# 3. Brave Browser
-install_app "Brave Browser" "brave-browser" "Brave Browser"
-
-# 4. ChatGPT Desktop
+# 3. ChatGPT Desktop
 install_app "ChatGPT" "chatgpt" "ChatGPT Desktop"
 
-# 5. Cursor AI
-install_app "Cursor" "cursor" "Cursor AI"
+# 4. Epson Printer Utility
+install_app "Epson Printer Utility" "epson-printer-utility" "Epson Printer Utility"
 
-# 6. Grammarly Desktop
-install_app "Grammarly" "grammarly-desktop" "Grammarly Desktop"
+# 5. Grammarly Desktop
+install_app "Grammarly Desktop" "grammarly-desktop" "Grammarly Desktop"
 
-# 7. Google Chrome
-install_app "Google Chrome" "google-chrome" "Google Chrome"
+# 6. Icon Composer
+install_app "Icon Composer" "icon-composer" "Icon Composer"
 
-# 8. Steam
-install_app "Steam" "steam" "Steam"
+# 7. SF Symbols
+install_app "SF Symbols" "sf-symbols" "SF Symbols"
+
+# 8. Visual Studio Code
+install_app "Visual Studio Code" "visual-studio-code" "Visual Studio Code"
 
 # Post-installation summary
 print_status "Installation complete! Summary:"
@@ -146,16 +147,16 @@ echo "----------------------------------------" | tee -a "$LOG"
 installed_apps=()
 failed_apps=()
 
-# Check each app
+# Check each app (aligned with brew_setup_tahoe.sh)
 apps=(
     "Adobe Creative Cloud:adobe-creative-cloud"
-    "Bambu Studio:bambu-studio"
-    "Brave Browser:brave-browser"
+    "Bambu Studio:bambustudio"
     "ChatGPT Desktop:chatgpt"
-    "Cursor AI:cursor"
+    "Epson Printer Utility:epson-printer-utility"
     "Grammarly Desktop:grammarly-desktop"
-    "Google Chrome:google-chrome"
-    "Steam:steam"
+    "Icon Composer:icon-composer"
+    "SF Symbols:sf-symbols"
+    "Visual Studio Code:visual-studio-code"
 )
 
 for app_info in "${apps[@]}"; do

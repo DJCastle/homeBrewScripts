@@ -18,33 +18,36 @@ cd homeBrewScripts
 # Make scripts executable
 chmod +x *.sh
 
-# Install Homebrew
-./install-homebrew.sh
+# Run the comprehensive setup script
+./brew_setup_tahoe.sh
 ```
 
 ## 📦 Scripts Overview
 
 ### Core Installation Scripts
 
-#### `install-homebrew.sh`
-- **Purpose**: Installs Homebrew package manager
-- **Features**: 
-  - Supports Intel and Apple Silicon Macs
-  - Adds Homebrew to shell profile automatically
-  - Runs `brew doctor` for verification
-  - Comprehensive logging and error handling
-  - Safe re-run capability
+#### `brew_setup_tahoe.sh` ⭐ **PRIMARY SCRIPT**
+- **Purpose**: Comprehensive Homebrew setup with interactive checkpoints
+- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, SF Symbols, Visual Studio Code
+- **Features**:
+  - Interactive checkpoints for user control
+  - Individual app selection or batch installation
+  - Architecture detection (Intel/Apple Silicon)
+  - Color-coded progress tracking
+  - Comprehensive error handling
+  - Non-interactive mode support (`--non-interactive`)
+  - Idempotent design (safe to re-run)
+  - Self-updating app pinning
 
 #### `install-essential-apps.sh`
-- **Purpose**: Installs essential applications via Homebrew
-- **Applications**: Adobe Creative Cloud (with Photoshop), Bambu Studio, Brave Browser, ChatGPT Desktop, CursorAI, Grammarly, Google Chrome, Steam
+- **Purpose**: Non-interactive app installation (aligned with brew_setup_tahoe.sh)
+- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, SF Symbols, Visual Studio Code
 - **Features**:
-  - Progress feedback with spinners
+  - Progress feedback and status indicators
   - Safe reinstallation checks
   - Detailed logging
   - Error recovery
-  - Special handling for VS Code command line tools
-  - Parallels activation reminder
+  - Batch installation without prompts
 
 ### Automation Scripts
 
@@ -95,17 +98,23 @@ chmod +x *.sh
 
 ## 🔧 Usage
 
-### Manual Installation
+### Recommended Installation (Interactive)
 ```bash
-# Install Homebrew
-./install-homebrew.sh
+# Primary installation script with interactive checkpoints
+./brew_setup_tahoe.sh
 
-# Install essential apps
+# Set up auto-updates (choose one)
+./setup-hybrid-notifications.sh  # Advanced (email + text)
+./setup-auto-update.sh           # Basic (text only)
+```
+
+### Non-Interactive Installation
+```bash
+# Automated installation without prompts
+./brew_setup_tahoe.sh --non-interactive
+
+# Or install apps separately
 ./install-essential-apps.sh
-
-# Set up auto-updates
-./setup-hybrid-notifications.sh
-./setup-auto-update.sh
 ```
 
 ### Automated Updates
@@ -179,15 +188,18 @@ cat ~/.brew-notifications.conf
 ## 🛠️ Customization
 
 ### Adding New Apps
-Edit `install-essential-apps.sh` and add to the `APPS` array:
+Edit both `brew_setup_tahoe.sh` and `install-essential-apps.sh` to add new applications:
+
+1. **In `brew_setup_tahoe.sh`**: Add to the `APPS` array and `APP_DESCRIPTIONS` associative array
+2. **In `install-essential-apps.sh`**: Add to the installation section and apps array
+
 ```bash
+# Example addition
 APPS=(
     "your-app-name"
     # ... existing apps
 )
 ```
-
-**Note**: VS Code and Parallels Desktop have special installation functions that handle their unique requirements (command line tools setup, activation reminders, etc.).
 
 ### Changing WiFi Network
 Edit the network check in auto-update scripts:
