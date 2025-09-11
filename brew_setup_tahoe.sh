@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: brew_setup_tahoe.sh
-# Description: Comprehensive Homebrew setup with interactive checkpoints for macOS
+# Description: 🍺 Main Homebrew Installer - Interactive setup with app selection for macOS
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

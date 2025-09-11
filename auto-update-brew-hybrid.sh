@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: auto-update-brew-hybrid.sh
-# Description: Advanced Homebrew auto-updater with hybrid notifications (email + text)
+# Description: 🤖 Auto-Updater Pro - Advanced updates with email + text notifications
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

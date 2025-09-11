@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: cleanup-homebrew.sh
-# Description: Comprehensive Homebrew cleanup and maintenance script for macOS
+# Description: 🧹 System Cleaner - Removes old packages and frees up disk space
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

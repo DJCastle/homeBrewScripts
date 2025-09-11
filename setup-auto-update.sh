@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: setup-auto-update.sh
-# Description: Configuration and setup script for basic Homebrew auto-updates
+# Description: ⚙️ Setup Basic Automation - Configure automatic Homebrew updates
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

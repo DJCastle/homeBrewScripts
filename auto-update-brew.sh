@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: auto-update-brew.sh
-# Description: Automated Homebrew updates with smart conditions and text notifications
+# Description: 🤖 Auto-Updater Basic - Keeps Homebrew updated with text notifications
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

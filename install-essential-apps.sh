@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: install-essential-apps.sh
-# Description: Non-interactive essential applications installer for macOS
+# Description: 📦 Batch App Installer - Installs all essential apps automatically (no prompts)
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

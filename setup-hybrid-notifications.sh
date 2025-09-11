@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 ###############################################################################
 # Script Name: setup-hybrid-notifications.sh
-# Description: Configuration script for advanced hybrid notifications (email + text)
+# Description: ⚙️ Setup Pro Automation - Configure advanced email + text notifications
 # Author: DJCastle
 # Version: 1.0.0
 # Created: 2025-01-11

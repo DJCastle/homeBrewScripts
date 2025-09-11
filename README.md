@@ -54,9 +54,9 @@ chmod +x *.sh
 
 ### 🎯 Primary Installation
 
-#### `brew_setup_tahoe.sh` ⭐ **RECOMMENDED**
+#### 🍺 `brew_setup_tahoe.sh` ⭐ **RECOMMENDED**
 
-The main installation script with interactive features:
+**Main Homebrew Installer - Interactive setup with app selection**
 
 - ✅ **Interactive app selection** or batch installation
 - ✅ **Architecture detection** (Intel/Apple Silicon)
@@ -73,9 +73,9 @@ The main installation script with interactive features:
 ./brew_setup_tahoe.sh --non-interactive
 ```
 
-#### `install-essential-apps.sh`
+#### 📦 `install-essential-apps.sh`
 
-Non-interactive batch installer for all applications:
+**Batch App Installer - Installs all essential apps automatically**
 
 ```bash
 ./install-essential-apps.sh
@@ -83,17 +83,17 @@ Non-interactive batch installer for all applications:
 
 ### 🤖 Automation Scripts
 
-#### `auto-update-brew.sh`
+#### 🤖 `auto-update-brew.sh`
 
-Basic automated updates with text notifications:
+**Auto-Updater Basic - Keeps Homebrew updated with text notifications**
 
-- Updates Homebrew and all packages
+- Updates Homebrew and all packages automatically
 - Sends text message notifications
-- Requires "CastleEstates" WiFi and power connection
+- Smart conditions (WiFi + power required)
 
-#### `auto-update-brew-hybrid.sh`
+#### 🤖 `auto-update-brew-hybrid.sh`
 
-Advanced automated updates with dual notifications:
+**Auto-Updater Pro - Advanced updates with email + text notifications**
 
 - Email reports with detailed logs
 - Text message summaries
@@ -101,17 +101,17 @@ Advanced automated updates with dual notifications:
 
 ### ⚙️ Setup Scripts
 
-#### `setup-auto-update.sh`
+#### ⚙️ `setup-auto-update.sh`
 
-Configure basic automation:
+**Setup Basic Automation - Configure automatic Homebrew updates**
 
 ```bash
 ./setup-auto-update.sh
 ```
 
-#### `setup-hybrid-notifications.sh`
+#### ⚙️ `setup-hybrid-notifications.sh`
 
-Configure advanced notifications:
+**Setup Pro Automation - Configure advanced email + text notifications**
 
 ```bash
 ./setup-hybrid-notifications.sh
@@ -119,9 +119,9 @@ Configure advanced notifications:
 
 ### 🧹 Maintenance
 
-#### `cleanup-homebrew.sh`
+#### 🧹 `cleanup-homebrew.sh`
 
-Comprehensive Homebrew cleanup:
+**System Cleaner - Removes old packages and frees up disk space**
 
 ```bash
 ./cleanup-homebrew.sh
