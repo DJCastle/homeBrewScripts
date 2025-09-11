@@ -100,10 +100,10 @@ send_email_notification() {
     local subject="$1"
     local body="$2"
     local log_file="$3"
-    
+
     # Create temporary email file
     local email_file=$(mktemp)
-    
+
     # Create email content
     cat > "$email_file" << EOF
 Subject: $subject
@@ -129,16 +129,16 @@ Content-Type: text/html; charset=utf-8
         <p><strong>Date:</strong> $(date '+%Y-%m-%d %H:%M:%S')</p>
         <p><strong>Mac:</strong> $(hostname)</p>
     </div>
-    
+
     <div>
         $body
     </div>
-    
+
     <div class="log">
         <h3>📋 Recent Log Entries:</h3>
         <pre>$(tail -20 "$log_file")</pre>
     </div>
-    
+
     <hr>
     <p><em>This is an automated message from your Homebrew update script.</em></p>
 </body>
@@ -150,7 +150,7 @@ EOF
         mail -s "$subject" "$EMAIL_ADDRESS" < "$email_file" >> "$LOG" 2>&1
         local result=$?
         rm "$email_file"
-        
+
         if [ $result -eq 0 ]; then
             print_success "Email notification sent successfully"
             return 0
@@ -168,20 +168,20 @@ EOF
 # Function to send text message
 send_text_message() {
     local message="$1"
-    
+
     # Check if iMessage is available
     if ! command -v osascript &> /dev/null; then
         print_error "AppleScript not available for text messaging"
         return 1
     fi
-    
+
     # Send message using AppleScript
     osascript <<EOF
 tell application "Messages"
     send "$message" to buddy "$PHONE_NUMBER" of (service 1 whose service type is iMessage)
 end tell
 EOF
-    
+
     if [ $? -eq 0 ]; then
         print_success "Text message sent successfully"
         return 0
@@ -194,31 +194,31 @@ EOF
 # Function to check WiFi network with retry
 check_wifi_network() {
     local retry_count=0
-    
+
     while [ $retry_count -lt $MAX_RETRIES ]; do
         local current_network=$(networksetup -getairportnetwork en0 2>/dev/null | awk -F': ' '{print $2}')
-        
+
         if [ "$current_network" = "$WIFI_NETWORK" ]; then
             print_success "Connected to $WIFI_NETWORK WiFi"
             return 0
         else
             print_warning "Not connected to $WIFI_NETWORK WiFi (current: $current_network)"
             ((retry_count++))
-            
+
             if [ $retry_count -lt $MAX_RETRIES ]; then
                 print_status "Retrying in $RETRY_DELAY seconds... (attempt $retry_count/$MAX_RETRIES)"
                 sleep $RETRY_DELAY
             fi
         fi
     done
-    
+
     return 1
 }
 
 # Function to check if plugged into power
 check_power_status() {
     local power_status=$(pmset -g ps | grep -E "AC Power|Battery Power")
-    
+
     if echo "$power_status" | grep -q "AC Power"; then
         print_success "Device is plugged into power"
         return 0
@@ -245,9 +245,9 @@ perform_updates() {
     local error_count=0
     local updated_packages=""
     local updated_apps=""
-    
+
     print_status "Starting Homebrew updates..."
-    
+
     # Update Homebrew itself
     print_status "Updating Homebrew..."
     if brew update >> "$LOG" 2>&1; then
@@ -257,7 +257,7 @@ perform_updates() {
         errors+="❌ Homebrew update failed<br>"
         ((error_count++))
     fi
-    
+
     # Upgrade all packages
     print_status "Upgrading all packages..."
     local package_output=$(brew upgrade 2>&1)
@@ -269,7 +269,7 @@ perform_updates() {
         errors+="❌ Package upgrade failed<br>"
         ((error_count++))
     fi
-    
+
     # Upgrade all casks
     print_status "Upgrading all applications..."
     local cask_output=$(brew upgrade --cask 2>&1)
@@ -281,7 +281,7 @@ perform_updates() {
         errors+="❌ Application upgrade failed<br>"
         ((error_count++))
     fi
-    
+
     # Clean up old versions
     print_status "Cleaning up old versions..."
     if brew cleanup >> "$LOG" 2>&1; then
@@ -291,7 +291,7 @@ perform_updates() {
         errors+="❌ Cleanup failed<br>"
         ((error_count++))
     fi
-    
+
     # Return summary
     echo "$update_summary"
     echo "$errors"
@@ -309,7 +309,7 @@ send_hybrid_notifications() {
     local updated_apps="$4"
     local update_summary="$5"
     local errors="$6"
-    
+
     # Prepare email body
     local email_body=""
     if [ "$error_count" -eq 0 ]; then
@@ -317,7 +317,7 @@ send_hybrid_notifications() {
     else
         email_body+="<h3 class='warning'>⚠️ Some updates had issues</h3>"
     fi
-    
+
     email_body+="<p><strong>Summary:</strong></p>"
     email_body+="<ul>"
     email_body+="<li>✅ Successful operations: $success_count</li>"
@@ -325,21 +325,21 @@ send_hybrid_notifications() {
     email_body+="<li>📦 Packages updated: $updated_packages</li>"
     email_body+="<li>🖥️ Applications updated: $updated_apps</li>"
     email_body+="</ul>"
-    
+
     if [ -n "$update_summary" ]; then
         email_body+="<p><strong>Details:</strong></p>"
         email_body+="<p>$update_summary</p>"
     fi
-    
+
     if [ -n "$errors" ]; then
         email_body+="<p><strong>Errors:</strong></p>"
         email_body+="<p class='error'>$errors</p>"
     fi
-    
+
     # Send email notification
     local email_subject="🔄 Auto Update Brew - $(date '+%Y-%m-%d %H:%M')"
     send_email_notification "$email_subject" "$email_body" "$LOG"
-    
+
     # Prepare text message (short summary only)
     local text_message="🔄 Auto Update Brew: "
     if [ "$error_count" -eq 0 ]; then
@@ -347,7 +347,7 @@ send_hybrid_notifications() {
     else
         text_message+="⚠️ Issues ($success_count/$((success_count + error_count)) ops)"
     fi
-    
+
     # Send text notification
     send_text_message "$text_message"
 }
@@ -355,14 +355,14 @@ send_hybrid_notifications() {
 # Main execution
 main() {
     print_status "Hybrid Auto Update Brew started at $(date)"
-    
+
     # Check prerequisites
     if ! check_homebrew; then
         send_text_message "❌ Auto Update Brew: Homebrew not installed"
         send_email_notification "❌ Auto Update Brew Failed" "Homebrew is not installed. Please run ./install-homebrew.sh first." "$LOG"
         exit 1
     fi
-    
+
     # Check WiFi network with retry
     if ! check_wifi_network; then
         print_warning "Skipping update - not on $WIFI_NETWORK WiFi after $MAX_RETRIES attempts"
@@ -370,7 +370,7 @@ main() {
         send_email_notification "⚠️ Auto Update Brew Skipped" "Update skipped because not connected to CastleEstates WiFi network." "$LOG"
         exit 0
     fi
-    
+
     # Check power status
     if ! check_power_status; then
         print_warning "Skipping update - not plugged into power"
@@ -378,10 +378,10 @@ main() {
         send_email_notification "⚠️ Auto Update Brew Skipped" "Update skipped because device is running on battery power." "$LOG"
         exit 0
     fi
-    
+
     # All conditions met, proceed with updates
     print_success "All conditions met. Proceeding with updates..."
-    
+
     # Perform updates and capture results
     local update_results=$(perform_updates)
     local update_summary=$(echo "$update_results" | head -1)
@@ -390,13 +390,13 @@ main() {
     local error_count=$(echo "$update_results" | head -4 | tail -1)
     local updated_packages=$(echo "$update_results" | head -5 | tail -1)
     local updated_apps=$(echo "$update_results" | head -6 | tail -1)
-    
+
     # Send hybrid notifications
     send_hybrid_notifications "$success_count" "$error_count" "$updated_packages" "$updated_apps" "$update_summary" "$errors"
-    
+
     print_success "Hybrid Auto Update Brew completed at $(date)"
     print_status "Check log file for details: $LOG"
 }
 
 # Run main function
-main "$@" 
+main "$@"

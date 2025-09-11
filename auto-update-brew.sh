@@ -84,20 +84,20 @@ print_error() {
 # Function to send text message
 send_text_message() {
     local message="$1"
-    
+
     # Check if iMessage is available
     if ! command -v osascript &> /dev/null; then
         print_error "AppleScript not available for text messaging"
         return 1
     fi
-    
+
     # Send message using AppleScript
     osascript <<EOF
 tell application "Messages"
     send "$message" to buddy "$PHONE_NUMBER" of (service 1 whose service type is iMessage)
 end tell
 EOF
-    
+
     if [ $? -eq 0 ]; then
         print_success "Text message sent successfully"
         return 0
@@ -110,7 +110,7 @@ EOF
 # Function to check WiFi network
 check_wifi_network() {
     local current_network=$(networksetup -getairportnetwork en0 2>/dev/null | awk -F': ' '{print $2}')
-    
+
     if [ "$current_network" = "$WIFI_NETWORK" ]; then
         print_success "Connected to $WIFI_NETWORK WiFi"
         return 0
@@ -123,7 +123,7 @@ check_wifi_network() {
 # Function to check if plugged into power
 check_power_status() {
     local power_status=$(pmset -g ps | grep -E "AC Power|Battery Power")
-    
+
     if echo "$power_status" | grep -q "AC Power"; then
         print_success "Device is plugged into power"
         return 0
@@ -148,9 +148,9 @@ perform_updates() {
     local errors=""
     local success_count=0
     local error_count=0
-    
+
     print_status "Starting Homebrew updates..."
-    
+
     # Update Homebrew itself
     print_status "Updating Homebrew..."
     if brew update >> "$LOG" 2>&1; then
@@ -160,7 +160,7 @@ perform_updates() {
         errors+="❌ Homebrew update failed\n"
         ((error_count++))
     fi
-    
+
     # Upgrade all packages
     print_status "Upgrading all packages..."
     if brew upgrade >> "$LOG" 2>&1; then
@@ -170,7 +170,7 @@ perform_updates() {
         errors+="❌ Package upgrade failed\n"
         ((error_count++))
     fi
-    
+
     # Upgrade all casks
     print_status "Upgrading all applications..."
     if brew upgrade --cask >> "$LOG" 2>&1; then
@@ -180,7 +180,7 @@ perform_updates() {
         errors+="❌ Application upgrade failed\n"
         ((error_count++))
     fi
-    
+
     # Clean up old versions
     print_status "Cleaning up old versions..."
     if brew cleanup >> "$LOG" 2>&1; then
@@ -190,7 +190,7 @@ perform_updates() {
         errors+="❌ Cleanup failed\n"
         ((error_count++))
     fi
-    
+
     # Return summary
     echo "$update_summary"
     echo "$errors"
@@ -201,54 +201,54 @@ perform_updates() {
 # Main execution
 main() {
     print_status "Auto Update Brew started at $(date)"
-    
+
     # Check prerequisites
     if ! check_homebrew; then
         send_text_message "❌ Auto Update Brew: Homebrew not installed"
         exit 1
     fi
-    
+
     # Check WiFi network
     if ! check_wifi_network; then
         print_warning "Skipping update - not on $WIFI_NETWORK WiFi"
         send_text_message "⚠️ Auto Update Brew: Skipped - not on CastleEstates WiFi"
         exit 0
     fi
-    
+
     # Check power status
     if ! check_power_status; then
         print_warning "Skipping update - not plugged into power"
         send_text_message "⚠️ Auto Update Brew: Skipped - running on battery"
         exit 0
     fi
-    
+
     # All conditions met, proceed with updates
     print_success "All conditions met. Proceeding with updates..."
-    
+
     # Perform updates and capture results
     local update_results=$(perform_updates)
     local update_summary=$(echo "$update_results" | head -4 | tr '\n' ' ')
     local errors=$(echo "$update_results" | tail -n +5 | head -4 | tr '\n' ' ')
     local success_count=$(echo "$update_results" | tail -n +9 | head -1)
     local error_count=$(echo "$update_results" | tail -n +10 | head -1)
-    
+
     # Prepare notification message
     local message="🔄 Auto Update Brew completed at $(date '+%Y-%m-%d %H:%M')\n\n"
     message+="✅ Successful operations: $success_count\n"
     message+="❌ Errors: $error_count\n\n"
-    
+
     if [ "$error_count" -eq 0 ]; then
         message+="🎉 All updates completed successfully!"
     else
         message+="⚠️ Some updates had issues. Check log for details."
     fi
-    
+
     # Send notification
     send_text_message "$message"
-    
+
     print_success "Auto Update Brew completed at $(date)"
     print_status "Check log file for details: $LOG"
 }
 
 # Run main function
-main "$@" 
+main "$@"

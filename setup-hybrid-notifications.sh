@@ -100,21 +100,21 @@ validate_phone_number() {
 # Function to test email functionality
 test_email() {
     local email_address="$1"
-    
+
     print_status "Testing email functionality..."
-    
+
     # Check if mail command is available
     if ! command -v mail &> /dev/null; then
         print_error "mail command not available. Please configure Mail app first."
         return 1
     fi
-    
+
     # Send test email
     local test_subject="🧪 Test Email from Auto Update Brew Setup"
     local test_body="This is a test email from your Auto Update Brew setup script. If you receive this, email notifications are working correctly."
-    
+
     echo "$test_body" | mail -s "$test_subject" "$email_address" >> "$LOG" 2>&1
-    
+
     if [ $? -eq 0 ]; then
         print_success "Test email sent successfully!"
         return 0
@@ -127,16 +127,16 @@ test_email() {
 # Function to test text messaging
 test_text_message() {
     local phone_number="$1"
-    
+
     print_status "Testing text message to $phone_number..."
-    
+
     # Send test message
     osascript <<EOF
 tell application "Messages"
     send "🧪 Test message from Auto Update Brew hybrid setup script" to buddy "$phone_number" of (service 1 whose service type is iMessage)
 end tell
 EOF
-    
+
     if [ $? -eq 0 ]; then
         print_success "Test message sent successfully!"
         return 0
@@ -151,14 +151,14 @@ update_script_config() {
     local email_address="$1"
     local phone_number="$2"
     local temp_file=$(mktemp)
-    
+
     # Update both email and phone number in the script
     sed -e "s/EMAIL_ADDRESS=\"[^\"]*\"/EMAIL_ADDRESS=\"$email_address\"/" \
         -e "s/PHONE_NUMBER=\"[^\"]*\"/PHONE_NUMBER=\"$phone_number\"/" \
         "$HYBRID_SCRIPT" > "$temp_file"
-    
+
     mv "$temp_file" "$HYBRID_SCRIPT"
-    
+
     print_success "Configuration updated in hybrid script"
 }
 
@@ -167,10 +167,10 @@ create_launchd_plist() {
     local schedule="$1"
     local plist_name="com.homebrew.hybridautoupdate"
     local plist_path="$HOME/Library/LaunchAgents/$plist_name.plist"
-    
+
     # Create plist content based on schedule
     local plist_content=""
-    
+
     case "$schedule" in
         "daily")
             plist_content="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -225,13 +225,13 @@ create_launchd_plist() {
 </plist>"
             ;;
     esac
-    
+
     # Write plist file
     echo "$plist_content" > "$plist_path"
-    
+
     # Load the plist
     launchctl load "$plist_path"
-    
+
     if [ $? -eq 0 ]; then
         print_success "Automatic execution scheduled: $schedule"
         return 0
@@ -270,33 +270,33 @@ show_scheduling_recommendations() {
 # Main setup function
 main() {
     print_status "Hybrid Notification Setup started at $(date)"
-    
+
     # Check if hybrid script exists
     if [ ! -f "$HYBRID_SCRIPT" ]; then
         print_error "Hybrid script not found: $HYBRID_SCRIPT"
         exit 1
     fi
-    
+
     # Make sure hybrid script is executable
     chmod +x "$HYBRID_SCRIPT"
-    
+
     echo ""
     echo "🔄 Hybrid Notification Setup"
     echo "============================"
     echo ""
-    
+
     # Get email address
     echo "📧 Email Setup"
     echo "--------------"
     echo "Enter your email address for detailed reports:"
     read -p "Email address: " email_address
-    
+
     # Validate email
     while ! validate_email "$email_address"; do
         print_error "Invalid email format. Please enter a valid email address."
         read -p "Email address: " email_address
     done
-    
+
     # Test email
     echo ""
     print_status "Testing email functionality..."
@@ -305,20 +305,20 @@ main() {
     else
         print_warning "Email test failed. You can still use the script manually."
     fi
-    
+
     # Get phone number
     echo ""
     echo "📱 Phone Number Setup"
     echo "--------------------"
     echo "Enter your phone number for quick summaries (format: +1234567890):"
     read -p "Phone number: " phone_number
-    
+
     # Validate phone number
     while ! validate_phone_number "$phone_number"; do
         print_error "Invalid phone number format. Please use format: +1234567890"
         read -p "Phone number: " phone_number
     done
-    
+
     # Test text messaging
     echo ""
     print_status "Testing text messaging..."
@@ -327,13 +327,13 @@ main() {
     else
         print_warning "Text messaging test failed. You can still use the script manually."
     fi
-    
+
     # Update script configuration
     update_script_config "$email_address" "$phone_number"
-    
+
     # Show scheduling recommendations
     show_scheduling_recommendations
-    
+
     # Schedule selection
     echo "Choose when to run automatic updates:"
     echo "1. Weekly (recommended) - Sunday at 2:00 AM"
@@ -341,7 +341,7 @@ main() {
     echo "3. Manual execution only"
     echo ""
     read -p "Enter choice (1-3): " schedule_choice
-    
+
     case "$schedule_choice" in
         1)
             create_launchd_plist "weekly"
@@ -356,7 +356,7 @@ main() {
             print_error "Invalid choice. Manual execution only selected."
             ;;
     esac
-    
+
     # Test the hybrid script
     echo ""
     print_status "Testing hybrid auto-update script..."
@@ -365,7 +365,7 @@ main() {
     else
         print_warning "Hybrid script test had issues (this is normal if conditions aren't met)"
     fi
-    
+
     # Final instructions
     echo ""
     echo "✅ Setup Complete!"
@@ -389,9 +389,9 @@ main() {
     echo "- If Homebrew not installed: Sends error notification"
     echo "- If network issues: Retries up to 3 times with 5-minute delays"
     echo ""
-    
+
     print_success "Hybrid notification setup completed at $(date)"
 }
 
 # Run main function
-main "$@" 
+main "$@"

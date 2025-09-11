@@ -270,8 +270,8 @@ if ! xcode-select -p >/dev/null 2>&1; then
   fi
 
   log_info "Waiting up to 15 minutes for installation to complete..."
-  local waited=0
-  local max_wait=900  # 15 minutes
+  waited=0
+  max_wait=900  # 15 minutes
 
   while [[ $waited -lt $max_wait ]]; do
     if xcode-select -p >/dev/null 2>&1; then
@@ -281,7 +281,7 @@ if ! xcode-select -p >/dev/null 2>&1; then
 
     # Show progress every 30 seconds
     if [[ $((waited % 30)) -eq 0 ]] && [[ $waited -gt 0 ]]; then
-      local remaining=$((max_wait - waited))
+      remaining=$((max_wait - waited))
       log_info "Still waiting... ${remaining}s remaining"
     fi
 
@@ -350,7 +350,7 @@ readonly BASHRC="${HOME}/.bashrc"
 log_info "Configuring Homebrew environment in shell profiles..."
 
 # Configure Homebrew environment
-local brew_shellenv='eval "$('"$BREW_PREFIX"'/bin/brew shellenv)"'
+brew_shellenv='eval "$('"$BREW_PREFIX"'/bin/brew shellenv)"'
 append_line_if_missing "$brew_shellenv" "$ZPROFILE"
 append_line_if_missing "$brew_shellenv" "$ZSHRC"
 append_line_if_missing "$brew_shellenv" "$BASH_PROFILE"
@@ -419,7 +419,7 @@ readonly APPS=(
 echo
 log_info "The following applications are available for installation:"
 for app in "${APPS[@]}"; do
-    local status=""
+    status=""
     if brew list --cask "$app" >/dev/null 2>&1; then
         status=" ${GREEN}(already installed)${NC}"
     fi
@@ -431,7 +431,7 @@ if ! checkpoint "Do you want to install applications?"; then
     log_info "Skipping application installation"
 else
     # Ask for installation mode
-    local install_mode
+    install_mode
     install_mode=$(ask_choice "Choose installation mode:" \
         "Install all applications automatically" \
         "Choose applications individually" \
@@ -539,7 +539,7 @@ readonly PIN_APPS=("chatgpt" "visual-studio-code")
 if checkpoint "Pin self-updating apps to prevent Homebrew conflicts? (Recommended)"; then
     log_info "Pinning apps that self-update to prevent Homebrew conflicts..."
 
-    local pinned_count=0
+    pinned_count=0
     for app in "${PIN_APPS[@]}"; do
       if brew list --cask "$app" >/dev/null 2>&1; then
         if brew pin "$app" 2>/dev/null; then

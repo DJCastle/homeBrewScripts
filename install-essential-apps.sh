@@ -102,21 +102,21 @@ install_app() {
     local app_name="$1"
     local cask_name="$2"
     local display_name="$3"
-    
+
     print_status "Checking $display_name..."
-    
+
     # Check if app is already installed via Homebrew
     if brew list --cask "$cask_name" &> /dev/null; then
         print_success "$display_name is already installed via Homebrew"
         return 0
     fi
-    
+
     # Check if app exists in Applications folder
     if [ -d "/Applications/$app_name.app" ]; then
         print_warning "$display_name is already installed in Applications folder"
         return 0
     fi
-    
+
     # Install the app
     print_status "Installing $display_name..."
     if brew install --cask "$cask_name" >> "$LOG" 2>&1; then
@@ -181,7 +181,7 @@ apps=(
 
 for app_info in "${apps[@]}"; do
     IFS=':' read -r display_name cask_name <<< "$app_info"
-    
+
     if brew list --cask "$cask_name" &> /dev/null || [ -d "/Applications/$display_name.app" ]; then
         installed_apps+=("$display_name")
         print_success "✓ $display_name"
@@ -208,4 +208,4 @@ echo "2. Some apps may require additional setup or login" | tee -a "$LOG"
 echo "3. You may need to grant permissions in System Preferences > Security & Privacy" | tee -a "$LOG"
 echo "4. For troubleshooting, check the log file: $LOG" | tee -a "$LOG"
 
-print_success "Essential apps installation completed at $(date)" 
+print_success "Essential apps installation completed at $(date)"

@@ -94,9 +94,9 @@ perform_cleanup() {
     local errors=""
     local success_count=0
     local error_count=0
-    
+
     print_status "Starting Homebrew cleanup operations..."
-    
+
     # Update Homebrew first
     print_status "Updating Homebrew..."
     if brew update >> "$LOG" 2>&1; then
@@ -106,7 +106,7 @@ perform_cleanup() {
         errors+="❌ Homebrew update failed<br>"
         ((error_count++))
     fi
-    
+
     # Clean up old versions
     print_status "Cleaning up old versions..."
     if brew cleanup >> "$LOG" 2>&1; then
@@ -116,7 +116,7 @@ perform_cleanup() {
         errors+="❌ Cleanup failed<br>"
         ((error_count++))
     fi
-    
+
     # Clean up download cache
     print_status "Cleaning up download cache..."
     if brew cleanup --prune=all >> "$LOG" 2>&1; then
@@ -126,7 +126,7 @@ perform_cleanup() {
         errors+="❌ Cache cleanup failed<br>"
         ((error_count++))
     fi
-    
+
     # Remove orphaned dependencies
     print_status "Removing orphaned dependencies..."
     if brew autoremove >> "$LOG" 2>&1; then
@@ -136,7 +136,7 @@ perform_cleanup() {
         errors+="❌ Orphaned dependency removal failed<br>"
         ((error_count++))
     fi
-    
+
     # Run brew doctor for health check
     print_status "Running brew doctor for health check..."
     if brew doctor >> "$LOG" 2>&1; then
@@ -146,7 +146,7 @@ perform_cleanup() {
         errors+="❌ Health check failed<br>"
         ((error_count++))
     fi
-    
+
     # Return summary
     echo "$cleanup_summary"
     echo "$errors"
@@ -158,12 +158,12 @@ perform_cleanup() {
 show_cleanup_stats() {
     local before_usage="$1"
     local after_usage="$2"
-    
+
     echo ""
     print_status "Cleanup Statistics:"
     echo "Before cleanup: $before_usage"
     echo "After cleanup:  $after_usage"
-    
+
     # Calculate space saved (if possible)
     if [ "$before_usage" != "$after_usage" ]; then
         print_success "Space saved through cleanup!"
@@ -173,35 +173,35 @@ show_cleanup_stats() {
 # Main execution
 main() {
     print_status "Homebrew cleanup started at $(date)"
-    
+
     # Check prerequisites
     if ! check_homebrew; then
         exit 1
     fi
-    
+
     print_success "Homebrew is available. Starting cleanup..."
-    
+
     # Get disk usage before cleanup
     print_status "Checking disk usage before cleanup..."
     local before_usage=$(get_disk_usage)
     print_status "Current Homebrew disk usage: $before_usage"
-    
+
     # Perform cleanup operations
     local cleanup_results=$(perform_cleanup)
     local cleanup_summary=$(echo "$cleanup_results" | head -1)
     local errors=$(echo "$cleanup_results" | head -2 | tail -1)
     local success_count=$(echo "$cleanup_results" | head -3 | tail -1)
     local error_count=$(echo "$cleanup_results" | head -4 | tail -1)
-    
+
     # Get disk usage after cleanup
     print_status "Checking disk usage after cleanup..."
     local after_usage=$(get_disk_usage)
     print_status "Homebrew disk usage after cleanup: $after_usage"
-    
+
     # Show cleanup summary
     print_status "Cleanup complete! Summary:"
     echo "----------------------------------------" | tee -a "$LOG"
-    
+
     if [ "$error_count" -eq 0 ]; then
         print_success "✅ All cleanup operations completed successfully ($success_count operations)"
     else
@@ -209,18 +209,18 @@ main() {
         print_warning "Failed operations:"
         echo "$errors" | tee -a "$LOG"
     fi
-    
+
     # Show cleanup statistics
     show_cleanup_stats "$before_usage" "$after_usage"
-    
+
     echo "" | tee -a "$LOG"
     print_status "Next steps:"
     echo "1. Your Homebrew installation is now cleaned up" | tee -a "$LOG"
     echo "2. Check the log file for detailed information: $LOG" | tee -a "$LOG"
     echo "3. Run this script periodically to maintain your Homebrew installation" | tee -a "$LOG"
-    
+
     print_success "Homebrew cleanup completed at $(date)"
 }
 
 # Run main function
-main "$@" 
+main "$@"

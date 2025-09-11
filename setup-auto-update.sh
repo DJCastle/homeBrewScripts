@@ -89,16 +89,16 @@ validate_phone_number() {
 # Function to test text messaging
 test_text_message() {
     local phone_number="$1"
-    
+
     print_status "Testing text message to $phone_number..."
-    
+
     # Send test message
     osascript <<EOF
 tell application "Messages"
     send "🧪 Test message from Auto Update Brew setup script" to buddy "$phone_number" of (service 1 whose service type is iMessage)
 end tell
 EOF
-    
+
     if [ $? -eq 0 ]; then
         print_success "Test message sent successfully!"
         return 0
@@ -112,11 +112,11 @@ EOF
 update_phone_number() {
     local phone_number="$1"
     local temp_file=$(mktemp)
-    
+
     # Update the phone number in the script
     sed "s/PHONE_NUMBER=\"[^\"]*\"/PHONE_NUMBER=\"$phone_number\"/" "$AUTO_UPDATE_SCRIPT" > "$temp_file"
     mv "$temp_file" "$AUTO_UPDATE_SCRIPT"
-    
+
     print_success "Phone number updated in auto-update script"
 }
 
@@ -125,10 +125,10 @@ create_launchd_plist() {
     local schedule="$1"
     local plist_name="com.homebrew.autoupdate"
     local plist_path="$HOME/Library/LaunchAgents/$plist_name.plist"
-    
+
     # Create plist content based on schedule
     local plist_content=""
-    
+
     case "$schedule" in
         "daily")
             plist_content="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -183,13 +183,13 @@ create_launchd_plist() {
 </plist>"
             ;;
     esac
-    
+
     # Write plist file
     echo "$plist_content" > "$plist_path"
-    
+
     # Load the plist
     launchctl load "$plist_path"
-    
+
     if [ $? -eq 0 ]; then
         print_success "Automatic execution scheduled: $schedule"
         return 0
@@ -202,33 +202,33 @@ create_launchd_plist() {
 # Main setup function
 main() {
     print_status "Auto Update Brew Setup started at $(date)"
-    
+
     # Check if auto-update script exists
     if [ ! -f "$AUTO_UPDATE_SCRIPT" ]; then
         print_error "Auto-update script not found: $AUTO_UPDATE_SCRIPT"
         exit 1
     fi
-    
+
     # Make sure auto-update script is executable
     chmod +x "$AUTO_UPDATE_SCRIPT"
-    
+
     echo ""
     echo "🔄 Auto Update Brew Setup"
     echo "========================="
     echo ""
-    
+
     # Get phone number
     echo "📱 Phone Number Setup"
     echo "--------------------"
     echo "Enter your phone number for notifications (format: +1234567890):"
     read -p "Phone number: " phone_number
-    
+
     # Validate phone number
     while ! validate_phone_number "$phone_number"; do
         print_error "Invalid phone number format. Please use format: +1234567890"
         read -p "Phone number: " phone_number
     done
-    
+
     # Test text messaging
     echo ""
     print_status "Testing text messaging..."
@@ -238,7 +238,7 @@ main() {
     else
         print_warning "Text messaging test failed. You can still use the script manually."
     fi
-    
+
     # Schedule selection
     echo ""
     echo "⏰ Automatic Execution Setup"
@@ -249,7 +249,7 @@ main() {
     echo "3. Manual execution only"
     echo ""
     read -p "Enter choice (1-3): " schedule_choice
-    
+
     case "$schedule_choice" in
         1)
             create_launchd_plist "daily"
@@ -264,7 +264,7 @@ main() {
             print_error "Invalid choice. Manual execution only selected."
             ;;
     esac
-    
+
     # Test the auto-update script
     echo ""
     print_status "Testing auto-update script..."
@@ -273,7 +273,7 @@ main() {
     else
         print_warning "Auto-update script test had issues (this is normal if conditions aren't met)"
     fi
-    
+
     # Final instructions
     echo ""
     echo "✅ Setup Complete!"
@@ -289,9 +289,9 @@ main() {
     echo "3. Test the script manually when on CastleEstates WiFi and plugged in"
     echo "4. Check the log file for any issues"
     echo ""
-    
+
     print_success "Auto Update Brew setup completed at $(date)"
 }
 
 # Run main function
-main "$@" 
+main "$@"
