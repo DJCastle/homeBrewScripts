@@ -73,6 +73,30 @@ chmod +x *.sh
 ./brew_setup_tahoe.sh --non-interactive
 ```
 
+#### 🔑 `setup-github-token.sh`
+
+**GitHub Token Setup - Configure GitHub Personal Access Token for Homebrew**
+
+- ✅ **Secure token configuration** with validation
+- ✅ **Interactive setup** with step-by-step guidance
+- ✅ **Rate limit improvement** (60 → 5,000 requests/hour)
+- ✅ **Automatic shell integration** (zsh/bash support)
+- ✅ **Token management** (setup, status, removal)
+
+```bash
+# Interactive setup
+./setup-github-token.sh
+
+# Direct token setup
+./setup-github-token.sh --token ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Check current status
+./setup-github-token.sh --status
+
+# Remove configured token
+./setup-github-token.sh --remove
+```
+
 #### 📦 `install-essential-apps.sh`
 
 **Batch App Installer - Installs all essential apps automatically**
@@ -159,6 +183,19 @@ chmod +x *.sh
 ./auto-update-brew-hybrid.sh
 ```
 
+### GitHub API Configuration (Recommended)
+
+```bash
+# Set up GitHub Personal Access Token for better rate limits
+./setup-github-token.sh
+```
+
+**Why configure a GitHub token?**
+- **Higher rate limits**: 5,000 vs 60 requests/hour
+- **Faster updates**: Reduced API throttling during brew operations
+- **Better reliability**: Fewer failed operations due to rate limiting
+- **Automatic integration**: Works seamlessly with all update scripts
+
 ## 📁 Log Files
 
 All scripts create detailed logs in `~/Library/Logs/`:
@@ -166,6 +203,7 @@ All scripts create detailed logs in `~/Library/Logs/`:
 - `BrewSetupTahoe.log` - Primary installation logs
 - `AutoUpdateBrewHybrid.log` - Update operation logs
 - `HomebrewCleanup.log` - Cleanup operation logs
+- `GitHubTokenSetup.log` - Token configuration logs
 
 ## 🛠️ Requirements
 

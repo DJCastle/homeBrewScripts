@@ -369,6 +369,27 @@ eval "$("$BREW_PREFIX/bin/brew" shellenv)"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_ENV_HINTS=1
 
+# Suggest GitHub token setup for better API rate limits
+log_step "GitHub API Configuration (Optional)"
+if [ -z "${HOMEBREW_GITHUB_API_TOKEN:-}" ]; then
+  log_info "For better GitHub API rate limits, consider setting up a GitHub Personal Access Token"
+  log_info "This helps avoid rate limiting during Homebrew operations"
+  if checkpoint "Would you like to set up a GitHub token now? (Recommended)"; then
+    if [ -f "$(dirname "$0")/setup-github-token.sh" ]; then
+      log_info "Running GitHub token setup script..."
+      "$(dirname "$0")/setup-github-token.sh"
+    else
+      log_warning "setup-github-token.sh not found in the same directory"
+      log_info "You can run it later: ./setup-github-token.sh"
+    fi
+  else
+    log_info "Skipping GitHub token setup"
+    log_info "You can run it later: ./setup-github-token.sh"
+  fi
+else
+  log_success "GitHub token is already configured"
+fi
+
 log_success "Shell environment configured"
 
 log_step "Configuring Homebrew settings"

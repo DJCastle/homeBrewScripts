@@ -133,6 +133,39 @@ check_power_status() {
     fi
 }
 
+# Function to load GitHub token if available
+load_github_token() {
+    # Check if token is already set
+    if [ -n "${HOMEBREW_GITHUB_API_TOKEN:-}" ]; then
+        print_status "GitHub token is already loaded for this session"
+        return 0
+    fi
+    
+    # Try to load from shell profile
+    local profile_files=("$HOME/.zshrc" "$HOME/.bash_profile" "$HOME/.profile")
+    
+    for profile in "${profile_files[@]}"; do
+        if [ -f "$profile" ] && grep -q "export HOMEBREW_GITHUB_API_TOKEN=" "$profile"; then
+            # Source the token from profile
+            local token_line
+            token_line=$(grep "export HOMEBREW_GITHUB_API_TOKEN=" "$profile" | tail -n1)
+            if [ -n "$token_line" ]; then
+                eval "$token_line"
+                if [ -n "${HOMEBREW_GITHUB_API_TOKEN:-}" ]; then
+                    print_status "GitHub token loaded from $profile"
+                    print_status "This will help avoid GitHub API rate limits during updates"
+                    return 0
+                fi
+            fi
+            break
+        fi
+    done
+    
+    print_status "No GitHub token configured - using unauthenticated GitHub API"
+    print_status "Run ./setup-github-token.sh to configure a token for higher rate limits"
+    return 0
+}
+
 # Function to check if Homebrew is installed
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
@@ -207,6 +240,9 @@ main() {
         send_text_message "❌ Auto Update Brew: Homebrew not installed"
         exit 1
     fi
+    
+    # Load GitHub token if available (for better API rate limits)
+    load_github_token
     
     # Check WiFi network
     if ! check_wifi_network; then
