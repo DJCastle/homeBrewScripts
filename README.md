@@ -1,243 +1,179 @@
-# Homebrew Scripts for macOS
+# 🍺 Homebrew Scripts for macOS
 
-A comprehensive collection of automated scripts for managing Homebrew packages and applications on macOS, supporting both Intel and Apple Silicon Macs.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![macOS](https://img.shields.io/badge/macOS-10.15%2B-blue.svg)](https://www.apple.com/macos/)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
 
-**Author:** DJCastle
-**License:** MIT License (see [LICENSE](LICENSE) file)
-**Version:** 1.0.0
+A comprehensive collection of automated scripts for managing Homebrew packages and applications on macOS. Designed for both Intel and Apple Silicon Macs with professional-grade error handling, logging, and user experience.
+
+## ✨ Features
+
+- 🎯 **Interactive Installation** - Choose apps individually or install all at once
+- 🤖 **Automated Updates** - Smart background updates with notifications
+- 🛡️ **Safe & Reliable** - Comprehensive error handling and recovery
+- 📱 **Smart Notifications** - Email and text alerts for update status
+- 🔄 **Idempotent Design** - Safe to run multiple times
+- 🏗️ **Architecture Aware** - Optimized for both Intel and Apple Silicon
+- 📊 **Detailed Logging** - Complete operation logs for troubleshooting
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - macOS 10.15 (Catalina) or later
 - Administrator privileges
 - Internet connection
 
 ### Installation
+
 ```bash
 # Clone this repository
-git clone https://github.com/yourusername/homeBrewScripts.git
+git clone https://github.com/DJCastle/homeBrewScripts.git
 cd homeBrewScripts
 
 # Make scripts executable
 chmod +x *.sh
 
-# Run the comprehensive setup script
+# Run the primary installation script
 ./brew_setup_tahoe.sh
 ```
 
-## 📦 Scripts Overview
+## 📦 Applications Included
 
-### Core Installation Scripts
+- **Adobe Creative Cloud** - Creative software suite
+- **Bambu Studio** - 3D printing slicer software
+- **ChatGPT Desktop** - AI assistant desktop app
+- **Epson Printer Utility** - Printer management tools
+- **Grammarly Desktop** - Writing assistant
+- **Icon Composer** - macOS icon creation tool
+- **Microsoft Edge** - Modern web browser
+- **SF Symbols** - Apple's symbol library
+- **Visual Studio Code** - Code editor
 
-#### `brew_setup_tahoe.sh` ⭐ **PRIMARY SCRIPT**
-- **Purpose**: Comprehensive Homebrew setup with interactive checkpoints
-- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, Microsoft Edge, SF Symbols, Visual Studio Code
-- **Features**:
-  - Interactive checkpoints for user control
-  - Individual app selection or batch installation
-  - Architecture detection (Intel/Apple Silicon)
-  - Color-coded progress tracking
-  - Comprehensive error handling
-  - Non-interactive mode support (`--non-interactive`)
-  - Idempotent design (safe to re-run)
-  - Self-updating app pinning
+## 📋 Scripts Overview
+
+### 🎯 Primary Installation
+
+#### `brew_setup_tahoe.sh` ⭐ **RECOMMENDED**
+
+The main installation script with interactive features:
+
+- ✅ **Interactive app selection** or batch installation
+- ✅ **Architecture detection** (Intel/Apple Silicon)
+- ✅ **Color-coded progress** tracking
+- ✅ **Non-interactive mode** (`--non-interactive`)
+- ✅ **Comprehensive error handling** and recovery
+- ✅ **Detailed logging** and status reporting
+
+```bash
+# Interactive mode (recommended)
+./brew_setup_tahoe.sh
+
+# Non-interactive mode
+./brew_setup_tahoe.sh --non-interactive
+```
 
 #### `install-essential-apps.sh`
-- **Purpose**: Non-interactive app installation (aligned with brew_setup_tahoe.sh)
-- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, Microsoft Edge, SF Symbols, Visual Studio Code
-- **Features**:
-  - Progress feedback and status indicators
-  - Safe reinstallation checks
-  - Detailed logging
-  - Error recovery
-  - Batch installation without prompts
 
-### Automation Scripts
+Non-interactive batch installer for all applications:
 
-#### `auto-update-brew.sh`
-- **Purpose**: Automated Homebrew updates with notifications
-- **Features**:
-  - Runs only on "CastleEstates" WiFi
-  - Requires power connection
-  - Background execution
-  - iMessage notifications
-  - Comprehensive logging
-
-#### `auto-update-brew-hybrid.sh`
-- **Purpose**: Enhanced auto-update with hybrid notifications
-- **Features**:
-  - Email + iMessage notifications
-  - Detailed email reports
-  - Quick text summaries
-  - Retry logic for failed updates
-  - Network and power monitoring
-
-#### `setup-auto-update.sh`
-- **Purpose**: Sets up automated update scheduling
-- **Features**:
-  - Launchd service configuration
-  - Phone number configuration
-  - Customizable schedule
-  - Background service management
-
-#### `setup-hybrid-notifications.sh`
-- **Purpose**: Configures hybrid notification system
-- **Features**:
-  - Email server configuration
-  - iMessage setup
-  - Notification preferences
-  - Testing capabilities
-
-### Maintenance Scripts
-
-#### `cleanup-homebrew.sh`
-- **Purpose**: Homebrew maintenance and cleanup
-- **Features**:
-  - Removes old package versions
-  - Cleans up cache files
-  - Updates Homebrew itself
-  - System optimization
-  - Disk space recovery
-
-## 🔧 Usage
-
-### Recommended Installation (Interactive)
 ```bash
-# Primary installation script with interactive checkpoints
-./brew_setup_tahoe.sh
-
-# Set up auto-updates (choose one)
-./setup-hybrid-notifications.sh  # Advanced (email + text)
-./setup-auto-update.sh           # Basic (text only)
-```
-
-### Non-Interactive Installation
-```bash
-# Automated installation without prompts
-./brew_setup_tahoe.sh --non-interactive
-
-# Or install apps separately
 ./install-essential-apps.sh
 ```
 
-### Automated Updates
-The auto-update scripts run in the background and will:
-- Check for updates daily
-- Only run when connected to "CastleEstates" WiFi
-- Only run when plugged into power
-- Send notifications on completion
+### 🤖 Automation Scripts
 
-### Maintenance
+#### `auto-update-brew.sh`
+
+Basic automated updates with text notifications:
+
+- Updates Homebrew and all packages
+- Sends text message notifications
+- Requires "CastleEstates" WiFi and power connection
+
+#### `auto-update-brew-hybrid.sh`
+
+Advanced automated updates with dual notifications:
+
+- Email reports with detailed logs
+- Text message summaries
+- Enhanced error handling and retry logic
+
+### ⚙️ Setup Scripts
+
+#### `setup-auto-update.sh`
+
+Configure basic automation:
+
 ```bash
-# Run cleanup monthly
+./setup-auto-update.sh
+```
+
+#### `setup-hybrid-notifications.sh`
+
+Configure advanced notifications:
+
+```bash
+./setup-hybrid-notifications.sh
+```
+
+### 🧹 Maintenance
+
+#### `cleanup-homebrew.sh`
+
+Comprehensive Homebrew cleanup:
+
+```bash
 ./cleanup-homebrew.sh
 ```
 
-## 📱 Notifications
+## 🔧 Usage Examples
 
-### Email Notifications
-- Detailed update reports
-- Error summaries
-- System health information
-- Configurable recipients
-
-### iMessage Notifications
-- Quick status updates
-- Success/failure indicators
-- Network status alerts
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-#### Script Permission Denied
-```bash
-chmod +x *.sh
-```
-
-#### Homebrew Installation Fails
-```bash
-# Check internet connection
-ping -c 3 google.com
-
-# Check system requirements
-sw_vers
-```
-
-#### Auto-update Not Working
-```bash
-# Check launchd service
-launchctl list | grep brew
-
-# Check logs
-tail -f ~/Library/Logs/brew-auto-update.log
-```
-
-#### Notification Issues
-```bash
-# Test iMessage
-osascript -e 'tell application "Messages" to send "Test" to buddy "your-phone"'
-
-# Check email configuration
-cat ~/.brew-notifications.conf
-```
-
-### Log Files
-- Homebrew installation: `~/Library/Logs/homebrew-install.log`
-- Auto-updates: `~/Library/Logs/brew-auto-update.log`
-- App installation: `~/Library/Logs/brew-apps-install.log`
-- Cleanup: `~/Library/Logs/brew-cleanup.log`
-
-## 🛠️ Customization
-
-### Adding New Apps
-Edit both `brew_setup_tahoe.sh` and `install-essential-apps.sh` to add new applications:
-
-1. **In `brew_setup_tahoe.sh`**: Add to the `APPS` array and `APP_DESCRIPTIONS` associative array
-2. **In `install-essential-apps.sh`**: Add to the installation section and apps array
+### First-Time Setup
 
 ```bash
-# Example addition
-APPS=(
-    "your-app-name"
-    # ... existing apps
-)
+# Interactive installation with app selection
+./brew_setup_tahoe.sh
+
+# Set up automated updates
+./setup-hybrid-notifications.sh
 ```
 
-### Changing WiFi Network
-Edit the network check in auto-update scripts:
+### Automated Installation
+
 ```bash
-WIFI_NAME="Your-WiFi-Name"
+# Install everything without prompts
+./brew_setup_tahoe.sh --non-interactive
+
+# Or use the dedicated batch installer
+./install-essential-apps.sh
 ```
 
-### Customizing Notifications
-Edit notification scripts to modify:
-- Email recipients
-- Message content
-- Notification timing
+### Maintenance
 
-## 📋 Requirements
+```bash
+# Clean up old packages and cache
+./cleanup-homebrew.sh
 
-### System Requirements
-- macOS 10.15 (Catalina) or later
-- Intel Mac or Apple Silicon Mac
-- Administrator privileges
-- Internet connection
+# Manual update check
+./auto-update-brew-hybrid.sh
+```
 
-### Network Requirements
-- WiFi connection to "CastleEstates" (for auto-updates)
-- Power connection (for auto-updates)
-- iMessage account (for notifications)
-- Email account (for detailed reports)
+## 📁 Log Files
 
-## 🤝 Contributing
+All scripts create detailed logs in `~/Library/Logs/`:
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes with proper documentation
-4. Test thoroughly on both Intel and Apple Silicon Macs
-5. Submit a pull request
+- `BrewSetupTahoe.log` - Primary installation logs
+- `AutoUpdateBrewHybrid.log` - Update operation logs
+- `HomebrewCleanup.log` - Cleanup operation logs
+
+## 🛠️ Requirements
+
+- **macOS**: 10.15 (Catalina) or later
+- **Architecture**: Intel or Apple Silicon
+- **Permissions**: Administrator privileges
+- **Network**: Internet connection required
+- **Notifications**: iMessage and Mail app configured (for automation)
 
 ## 📄 License
 
@@ -247,15 +183,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 These scripts modify system settings and install software. Use at your own risk. Always backup important data before running system scripts.
 
-## 📞 Support
-
-For issues and questions:
-
-1. Check the troubleshooting section above
-2. Review log files in `~/Library/Logs/`
-3. Create an issue on GitHub
-
 ---
 
-**Made with ❤️ for macOS automation**
+**Made with ❤️ for macOS automation**  
 **Author:** DJCastle | **License:** MIT | **Version:** 1.0.0
