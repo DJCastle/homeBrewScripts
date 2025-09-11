@@ -1,5 +1,13 @@
 # Changelog
 
+## [2025-01-11] - Added Microsoft Edge and Enhanced Documentation
+
+### Added
+- **Microsoft Edge**: Added to both installation scripts
+  - Added to `brew_setup_tahoe.sh` app list and descriptions
+  - Added to `install-essential-apps.sh` installation sequence
+  - Updated documentation to reflect new application
+
 ## [2025-01-11] - Major Repository Cleanup, Licensing, and Documentation
 
 ### Added
