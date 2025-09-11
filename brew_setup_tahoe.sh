@@ -398,6 +398,7 @@ declare -A APP_DESCRIPTIONS=(
   ["epson-printer-utility"]="Epson Printer Utility - Printer management tools"
   ["grammarly-desktop"]="Grammarly Desktop - Writing assistant"
   ["icon-composer"]="Icon Composer - macOS icon creation tool"
+  ["microsoft-edge"]="Microsoft Edge - Modern web browser"
   ["sf-symbols"]="SF Symbols - Apple's symbol library"
   ["visual-studio-code"]="Visual Studio Code - Code editor"
 )
@@ -409,6 +410,7 @@ readonly APPS=(
   "epson-printer-utility"
   "grammarly-desktop"
   "icon-composer"
+  "microsoft-edge"
   "sf-symbols"
   "visual-studio-code"
 )

@@ -32,7 +32,7 @@ chmod +x *.sh
 
 #### `brew_setup_tahoe.sh` ⭐ **PRIMARY SCRIPT**
 - **Purpose**: Comprehensive Homebrew setup with interactive checkpoints
-- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, SF Symbols, Visual Studio Code
+- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, Microsoft Edge, SF Symbols, Visual Studio Code
 - **Features**:
   - Interactive checkpoints for user control
   - Individual app selection or batch installation
@@ -45,7 +45,7 @@ chmod +x *.sh
 
 #### `install-essential-apps.sh`
 - **Purpose**: Non-interactive app installation (aligned with brew_setup_tahoe.sh)
-- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, SF Symbols, Visual Studio Code
+- **Applications**: Adobe Creative Cloud, Bambu Studio, ChatGPT, Epson Printer Utility, Grammarly Desktop, Icon Composer, Microsoft Edge, SF Symbols, Visual Studio Code
 - **Features**:
   - Progress feedback and status indicators
   - Safe reinstallation checks

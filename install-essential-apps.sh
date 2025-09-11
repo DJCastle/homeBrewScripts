@@ -25,6 +25,7 @@
 #   - Epson Printer Utility (Printer management tools)
 #   - Grammarly Desktop (Writing assistant)
 #   - Icon Composer (macOS icon creation tool)
+#   - Microsoft Edge (Modern web browser)
 #   - SF Symbols (Apple's symbol library)
 #   - Visual Studio Code (Code editor)
 #
@@ -148,10 +149,13 @@ install_app "Grammarly Desktop" "grammarly-desktop" "Grammarly Desktop"
 # 6. Icon Composer
 install_app "Icon Composer" "icon-composer" "Icon Composer"
 
-# 7. SF Symbols
+# 7. Microsoft Edge
+install_app "Microsoft Edge" "microsoft-edge" "Microsoft Edge"
+
+# 8. SF Symbols
 install_app "SF Symbols" "sf-symbols" "SF Symbols"
 
-# 8. Visual Studio Code
+# 9. Visual Studio Code
 install_app "Visual Studio Code" "visual-studio-code" "Visual Studio Code"
 
 # Post-installation summary
@@ -170,6 +174,7 @@ apps=(
     "Epson Printer Utility:epson-printer-utility"
     "Grammarly Desktop:grammarly-desktop"
     "Icon Composer:icon-composer"
+    "Microsoft Edge:microsoft-edge"
     "SF Symbols:sf-symbols"
     "Visual Studio Code:visual-studio-code"
 )
