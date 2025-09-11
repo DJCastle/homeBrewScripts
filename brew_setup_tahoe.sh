@@ -1,16 +1,45 @@
 #!/usr/bin/env bash
-# brew_setup_tahoe.sh
-# Purpose: Install Homebrew on macOS, configure environment, and install selected apps
-# Usage: bash brew_setup_tahoe.sh
+###############################################################################
+# Script Name: brew_setup_tahoe.sh
+# Description: Comprehensive Homebrew setup with interactive checkpoints for macOS
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
 #
-# This script is idempotent: you can rerun it safely.
-# It will:
+# LICENSE: Free to use, modify, and distribute
+#
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
+#
+# PURPOSE:
+# Install Homebrew on macOS, configure environment, and install selected apps
+# with interactive checkpoints for user control.
+#
+# USAGE:
+# bash brew_setup_tahoe.sh                    # Interactive mode
+# bash brew_setup_tahoe.sh --non-interactive  # Automated mode
+# bash brew_setup_tahoe.sh --help            # Show help
+#
+# FEATURES:
+# This script is idempotent and safe to rerun. It will:
 #   1) Ensure Xcode Command Line Tools are installed
 #   2) Install Homebrew (if missing)
 #   3) Configure PATH for your shell (zsh & bash)
 #   4) Turn off Homebrew auto-update checks
-#   5) Install requested apps via brew cask
+#   5) Install requested apps via brew cask (with user choice)
 #   6) Pin select self-updating apps to avoid Brew overwriting them
+#
+# REQUIREMENTS:
+#   - macOS 10.15 (Catalina) or later
+#   - Administrator privileges
+#   - Internet connection
+#
+# LOG FILE:
+#   All operations are logged to: ~/Library/Logs/BrewSetupTahoe.log
+###############################################################################
 
 set -euo pipefail
 

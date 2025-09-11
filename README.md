@@ -1,6 +1,10 @@
 # Homebrew Scripts for macOS
 
-A collection of automated scripts for managing Homebrew packages and applications on macOS, supporting both Intel and Apple Silicon Macs.
+A comprehensive collection of automated scripts for managing Homebrew packages and applications on macOS, supporting both Intel and Apple Silicon Macs.
+
+**Author:** DJCastle
+**License:** MIT License (see [LICENSE](LICENSE) file)
+**Version:** 1.0.0
 
 ## 🚀 Quick Start
 
@@ -231,8 +235,8 @@ Edit notification scripts to modify:
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
+3. Make your changes with proper documentation
+4. Test thoroughly on both Intel and Apple Silicon Macs
 5. Submit a pull request
 
 ## 📄 License
@@ -246,10 +250,12 @@ These scripts modify system settings and install software. Use at your own risk.
 ## 📞 Support
 
 For issues and questions:
-1. Check the troubleshooting section
-2. Review log files
+
+1. Check the troubleshooting section above
+2. Review log files in `~/Library/Logs/`
 3. Create an issue on GitHub
 
 ---
 
 **Made with ❤️ for macOS automation**
+**Author:** DJCastle | **License:** MIT | **Version:** 1.0.0

@@ -1,9 +1,24 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 ###############################################################################
-# 🛠️ Essential Apps Installer Script for macOS
-# --------------------------------------------
-# This script installs essential applications using Homebrew casks:
+# Script Name: install-essential-apps.sh
+# Description: Non-interactive essential applications installer for macOS
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
+#
+# LICENSE: Free to use, modify, and distribute
+#
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
+#
+# PURPOSE:
+# Install essential applications using Homebrew casks without user interaction.
+# This script is aligned with brew_setup_tahoe.sh app list for consistency.
+#
+# APPLICATIONS INSTALLED:
 #   - Adobe Creative Cloud (Creative software suite)
 #   - Bambu Studio (3D printing slicer software)
 #   - ChatGPT Desktop (AI assistant desktop app)
@@ -13,28 +28,28 @@
 #   - SF Symbols (Apple's symbol library)
 #   - Visual Studio Code (Code editor)
 #
-# ✅ Safe to run multiple times — it skips apps that are already installed
-# ✅ Logs all activity for troubleshooting
-# ✅ Provides progress feedback
-# ✅ Aligned with brew_setup_tahoe.sh app list
+# USAGE:
+# ./install-essential-apps.sh
 #
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Homebrew is installed first (use brew_setup_tahoe.sh for full setup)
-# 2. Run this script:
-#      ./install-essential-apps.sh
+# FEATURES:
+# ✅ Safe to run multiple times — skips apps that are already installed
+# ✅ Comprehensive logging and error handling
+# ✅ Progress feedback with colored output
+# ✅ Detailed installation summary
 #
-# 📁 Log output is saved to:
-#      ~/Library/Logs/EssentialAppsInstall.log
+# REQUIREMENTS:
+#   - Homebrew must be installed (use brew_setup_tahoe.sh for full setup)
+#   - macOS with administrator privileges
+#   - Internet connection
 #
-# ℹ️ Requirements:
-#   - Homebrew must be installed
-#   - macOS with admin privileges
-#
-# 🚨 Notes:
+# NOTES:
 # - Some apps may require manual setup after installation
 # - You may be prompted for your macOS password
 # - Large downloads may take time depending on your internet speed
 # - For interactive installation with more options, use brew_setup_tahoe.sh
+#
+# LOG FILE:
+#   All operations are logged to: ~/Library/Logs/EssentialAppsInstall.log
 ###############################################################################
 
 LOG="$HOME/Library/Logs/EssentialAppsInstall.log"

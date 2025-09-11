@@ -1,31 +1,51 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 ###############################################################################
-# ⚙️ Auto Update Setup Script for macOS
-# -------------------------------------
-# This script helps configure and set up automatic Homebrew updates:
+# Script Name: setup-auto-update.sh
+# Description: Configuration and setup script for basic Homebrew auto-updates
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
 #
-# ✅ SETUP FEATURES:
-#   - Configures phone number for notifications
-#   - Sets up automatic execution via launchd
+# LICENSE: Free to use, modify, and distribute
+#
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
+#
+# PURPOSE:
+# Configure and set up automatic Homebrew updates with text notifications.
+# This script sets up the basic auto-update system (auto-update-brew.sh).
+#
+# SETUP FEATURES:
+#   - Configures phone number for text notifications
+#   - Sets up automatic execution via macOS launchd
 #   - Tests the auto-update functionality
-#   - Provides manual execution options
+#   - Provides scheduling options (daily/weekly/manual)
+#   - Validates iMessage configuration
 #
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Run the setup script:
-#      ./setup-auto-update.sh
-# 2. Follow the prompts to configure
-# 3. Choose automatic execution schedule
+# USAGE:
+# ./setup-auto-update.sh
+# Follow the interactive prompts to configure
 #
-# 📱 NOTIFICATION SETUP:
-# - Requires iMessage to be signed in
+# NOTIFICATION SETUP:
+# - Requires iMessage to be signed in and configured
 # - Phone number must be in your contacts
-# - Test message will be sent during setup
+# - Test message will be sent during setup for verification
 #
-# ⏰ SCHEDULING OPTIONS:
+# SCHEDULING OPTIONS:
 # - Daily at 2:00 AM
 # - Weekly on Sunday at 2:00 AM
 # - Manual execution only
+#
+# REQUIREMENTS:
+#   - macOS with administrator privileges
+#   - iMessage configured and signed in
+#   - auto-update-brew.sh script present
+#
+# LOG FILE:
+#   Setup operations are logged to: ~/Library/Logs/AutoUpdateSetup.log
 ###############################################################################
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

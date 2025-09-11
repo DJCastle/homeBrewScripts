@@ -1,34 +1,48 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 ###############################################################################
-# 🧹 Homebrew Cleanup Script for macOS
-# ------------------------------------
-# This script performs comprehensive Homebrew cleanup and maintenance:
+# Script Name: cleanup-homebrew.sh
+# Description: Comprehensive Homebrew cleanup and maintenance script for macOS
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
 #
-# ✅ CLEANUP FEATURES:
+# LICENSE: Free to use, modify, and distribute
+#
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
+#
+# PURPOSE:
+# Perform comprehensive Homebrew cleanup and maintenance to optimize disk space
+# and maintain system health.
+#
+# CLEANUP FEATURES:
 #   - Removes old versions of packages and casks
-#   - Cleans up download cache
+#   - Cleans up download cache and temporary files
 #   - Removes orphaned dependencies
-#   - Runs brew doctor for health check
-#   - Logs all cleanup activities
+#   - Runs brew doctor for health check and diagnostics
+#   - Provides disk usage statistics before and after
+#   - Comprehensive logging of all cleanup activities
 #
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Homebrew is installed first:
-#      ./install-homebrew.sh
-# 2. Run cleanup:
-#      ./cleanup-homebrew.sh
+# USAGE:
+# ./cleanup-homebrew.sh
+# Run periodically (monthly recommended) for optimal system maintenance
 #
-# 📁 Log output is saved to:
-#      ~/Library/Logs/HomebrewCleanup.log
-#
-# ℹ️ Requirements:
+# REQUIREMENTS:
 #   - Homebrew must be installed
-#   - macOS with admin privileges
+#   - macOS with administrator privileges
+#   - Sufficient disk space for temporary operations
 #
-# 🚨 Notes:
-# - This script will remove old versions of packages
-# - It's safe to run multiple times
-# - Large cleanup operations may take time
+# SAFETY NOTES:
+# - This script will remove old versions of packages (safe operation)
+# - Safe to run multiple times without adverse effects
+# - Large cleanup operations may take time depending on system state
+# - All operations are logged for review
+#
+# LOG FILE:
+#   All operations are logged to: ~/Library/Logs/HomebrewCleanup.log
 ###############################################################################
 
 LOG="$HOME/Library/Logs/HomebrewCleanup.log"
