@@ -1,38 +1,52 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 ###############################################################################
-# ⚙️ Hybrid Notification Setup Script for macOS
-# --------------------------------------------
-# This script helps configure hybrid notifications (email + text) for
-# the auto-update system:
+# Script Name: setup-hybrid-notifications.sh
+# Description: Configuration script for advanced hybrid notifications (email + text)
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
 #
-# ✅ SETUP FEATURES:
-#   - Configures email address for detailed reports
-#   - Configures phone number for quick summaries
-#   - Tests both notification methods
-#   - Sets up automatic execution via launchd
-#   - Provides scheduling recommendations
+# LICENSE: Free to use, modify, and distribute
 #
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Run the setup script:
-#      ./setup-hybrid-notifications.sh
-# 2. Follow the prompts to configure
-# 3. Choose automatic execution schedule
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
 #
-# 📧 EMAIL SETUP:
-# - Uses macOS Mail app (no external dependencies)
-# - Requires Mail app to be configured
-# - Sends detailed HTML reports with logs
+# PURPOSE:
+# Configure hybrid notifications (email + text) for the advanced auto-update
+# system. This script sets up auto-update-brew-hybrid.sh with dual notification methods.
 #
-# 📱 TEXT SETUP:
-# - Requires iMessage to be signed in
-# - Phone number must be in your contacts
-# - Sends quick status summaries
+# SETUP FEATURES:
+#   - Configures email address for detailed HTML reports
+#   - Configures phone number for quick text summaries
+#   - Tests both notification methods during setup
+#   - Sets up automatic execution via macOS launchd
+#   - Provides intelligent scheduling recommendations
+#   - Validates both Mail app and iMessage configuration
 #
-# ⏰ SCHEDULING RECOMMENDATIONS:
-# - WEEKLY (recommended): Less notifications, still current
-# - DAILY: If you want latest updates and don't mind notifications
-# - MANUAL: If you prefer to control when updates happen
+# USAGE:
+# ./setup-hybrid-notifications.sh
+# Follow the interactive prompts to configure both notification methods
+#
+# NOTIFICATION METHODS:
+# 📧 EMAIL: Detailed HTML reports using macOS Mail app (no external dependencies)
+# 📱 TEXT: Quick status summaries via iMessage
+#
+# REQUIREMENTS:
+#   - macOS with administrator privileges
+#   - Mail app configured with email account
+#   - iMessage configured and signed in
+#   - auto-update-brew-hybrid.sh script present
+#
+# SCHEDULING RECOMMENDATIONS:
+# - WEEKLY (recommended): Less notifications while staying current
+# - DAILY: Latest updates if you use your Mac heavily
+# - MANUAL: Full control over when updates happen
+#
+# LOG FILE:
+#   Setup operations are logged to: ~/Library/Logs/HybridNotificationSetup.log
 ###############################################################################
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

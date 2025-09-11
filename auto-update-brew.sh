@@ -1,41 +1,52 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 ###############################################################################
-# 🔄 Auto Update Homebrew Script for macOS
-# ----------------------------------------
-# This script automatically updates Homebrew and installed applications
-# with smart conditions and notifications:
+# Script Name: auto-update-brew.sh
+# Description: Automated Homebrew updates with smart conditions and text notifications
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
 #
-# ✅ CONDITIONS:
+# LICENSE: Free to use, modify, and distribute
+#
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
+#
+# PURPOSE:
+# Automatically update Homebrew and installed applications with smart conditions
+# and text message notifications for status updates.
+#
+# CONDITIONS FOR EXECUTION:
 #   - Must be connected to "CastleEstates" WiFi network
 #   - Must be plugged into power (not on battery)
 #   - Runs in background with notifications
 #
-# ✅ FEATURES:
+# FEATURES:
 #   - Updates Homebrew itself
 #   - Updates all installed packages and casks
-#   - Sends text message notifications
-#   - Logs all activity for troubleshooting
+#   - Sends text message notifications via iMessage
+#   - Comprehensive logging for troubleshooting
 #   - Safe to run multiple times
+#   - Intelligent condition checking
 #
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Homebrew is installed first:
-#      ./install-homebrew.sh
-# 2. Run manually:
-#      ./auto-update-brew.sh
-# 3. Set up automatic execution (see README for cron setup)
+# USAGE:
+# ./auto-update-brew.sh                    # Manual execution
+# Use setup-auto-update.sh for scheduling
 #
-# 📁 Log output is saved to:
-#      ~/Library/Logs/AutoUpdateBrew.log
-#
-# 📱 NOTIFICATIONS:
-# - Requires iMessage setup for text notifications
-# - Sends to the phone number configured in the script
-#
-# ℹ️ Requirements:
+# REQUIREMENTS:
 #   - Homebrew must be installed
-#   - macOS with admin privileges
+#   - macOS with administrator privileges
 #   - iMessage configured for text notifications
+#   - Connected to "CastleEstates" WiFi
+#   - Device plugged into power
+#
+# CONFIGURATION:
+# Edit the PHONE_NUMBER variable below to set your notification number
+#
+# LOG FILE:
+#   All operations are logged to: ~/Library/Logs/AutoUpdateBrew.log
 ###############################################################################
 
 LOG="$HOME/Library/Logs/AutoUpdateBrew.log"

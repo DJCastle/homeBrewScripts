@@ -1,57 +1,63 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 ###############################################################################
-# 🔄 Hybrid Auto Update Homebrew Script for macOS
-# ----------------------------------------------
-# This script automatically updates Homebrew and installed applications
-# with hybrid notifications (email + text) and smart conditions:
+# Script Name: auto-update-brew-hybrid.sh
+# Description: Advanced Homebrew auto-updater with hybrid notifications (email + text)
+# Author: DJCastle
+# Version: 1.0.0
+# Created: 2025-01-11
 #
-# ✅ CONDITIONS:
+# LICENSE: Free to use, modify, and distribute
+#
+# DISCLAIMER: This script is provided "AS IS" without warranty of any kind.
+# Use at your own risk. The author is not responsible for any damage, data loss,
+# or other issues that may occur from using this script. Always backup your
+# system before running system modification scripts.
+###############################################################################
+#
+# PURPOSE:
+# Automatically update Homebrew and installed applications with hybrid
+# notifications (email + text) and intelligent retry logic.
+#
+# CONDITIONS FOR EXECUTION:
 #   - Must be connected to "CastleEstates" WiFi network
 #   - Must be plugged into power (not on battery)
 #   - Runs in background with hybrid notifications
 #
-# ✅ FEATURES:
-#   - Updates Homebrew itself
-#   - Updates all installed packages and casks
-#   - Sends detailed email report with logs
-#   - Sends quick text message summary
-#   - Comprehensive error handling and retry logic
-#   - Logs all activity for troubleshooting
+# FEATURES:
+#   - Updates Homebrew itself and all packages/casks
+#   - Sends detailed email reports with logs and formatting
+#   - Sends quick text message summaries
+#   - Comprehensive error handling and retry logic (up to 3 attempts)
+#   - Network and power condition monitoring
+#   - Professional HTML email formatting
 #   - Safe to run multiple times
 #
-# 📧 EMAIL NOTIFICATIONS:
-# - Uses macOS Mail app (no external dependencies)
-# - Includes detailed logs and update summary
-# - Professional formatting with attachments
+# NOTIFICATION METHODS:
+# 📧 EMAIL: Detailed reports using macOS Mail app (no external dependencies)
+# 📱 TEXT: Quick status summaries via iMessage
 #
-# 📱 TEXT NOTIFICATIONS:
-# - Quick status summary only
-# - Backup notification method
-# - Immediate visibility
+# USAGE:
+# ./auto-update-brew-hybrid.sh             # Manual execution
+# Use setup-hybrid-notifications.sh for configuration and scheduling
 #
-# 🔧 USAGE INSTRUCTIONS:
-# 1. Make sure Homebrew is installed first:
-#      ./install-homebrew.sh
-# 2. Configure notifications:
-#      ./setup-hybrid-notifications.sh
-# 3. Run manually:
-#      ./auto-update-brew-hybrid.sh
-# 4. Set up automatic execution (see README for scheduling)
+# REQUIREMENTS:
+#   - Homebrew must be installed
+#   - macOS with administrator privileges
+#   - Mail app configured for email notifications
+#   - iMessage configured for text notifications
+#   - Connected to "CastleEstates" WiFi
+#   - Device plugged into power
 #
-# 📁 Log output is saved to:
-#      ~/Library/Logs/AutoUpdateBrewHybrid.log
+# CONFIGURATION:
+# Edit EMAIL_ADDRESS and PHONE_NUMBER variables below, or use setup script
 #
-# ⏰ SCHEDULING RECOMMENDATIONS:
-# - DAILY: If you use your Mac daily and want latest updates
-# - WEEKLY: If you want to minimize notifications (recommended)
-# - MANUAL: If you prefer to control when updates happen
+# SCHEDULING RECOMMENDATIONS:
+# - WEEKLY: Minimize notifications while staying current (recommended)
+# - DAILY: Latest updates if you use your Mac heavily
+# - MANUAL: Full control over when updates happen
 #
-# 🚨 FAILURE HANDLING:
-# - Script will retry up to 3 times for network issues
-# - Sends failure notifications if conditions aren't met
-# - Logs all attempts for troubleshooting
-# - Continues working even if one notification method fails
+# LOG FILE:
+#   All operations are logged to: ~/Library/Logs/AutoUpdateBrewHybrid.log
 ###############################################################################
 
 LOG="$HOME/Library/Logs/AutoUpdateBrewHybrid.log"
