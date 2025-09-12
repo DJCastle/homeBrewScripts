@@ -26,8 +26,11 @@
 #   - Provides intelligent scheduling recommendations
 #   - Validates both Mail app and iMessage configuration
 #
-# USAGE:
-# ./setup-hybrid-notifications.sh
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x setup-hybrid-notifications.sh
+# 4. Run the script: ./setup-hybrid-notifications.sh
 # Follow the interactive prompts to configure both notification methods
 #
 # NOTIFICATION METHODS:

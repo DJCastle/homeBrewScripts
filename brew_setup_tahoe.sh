@@ -18,10 +18,14 @@
 # Install Homebrew on macOS, configure environment, and install selected apps
 # with interactive checkpoints for user control.
 #
-# USAGE:
-# bash brew_setup_tahoe.sh                    # Interactive mode
-# bash brew_setup_tahoe.sh --non-interactive  # Automated mode
-# bash brew_setup_tahoe.sh --help            # Show help
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x brew_setup_tahoe.sh
+# 4. Run the script:
+#    ./brew_setup_tahoe.sh                    # Interactive mode (recommended)
+#    ./brew_setup_tahoe.sh --non-interactive  # Automated mode
+#    ./brew_setup_tahoe.sh --help            # Show help
 #
 # FEATURES:
 # This script is idempotent and safe to rerun. It will:

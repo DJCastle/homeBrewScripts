@@ -26,8 +26,11 @@
 #   - Provides disk usage statistics before and after
 #   - Comprehensive logging of all cleanup activities
 #
-# USAGE:
-# ./cleanup-homebrew.sh
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x cleanup-homebrew.sh
+# 4. Run the script: ./cleanup-homebrew.sh
 # Run periodically (monthly recommended) for optimal system maintenance
 #
 # REQUIREMENTS:
