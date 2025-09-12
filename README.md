@@ -43,11 +43,7 @@ chmod +x *.sh
 - **Adobe Creative Cloud** - Creative software suite
 - **Bambu Studio** - 3D printing slicer software
 - **ChatGPT Desktop** - AI assistant desktop app
-- **Epson Printer Utility** - Printer management tools
 - **Grammarly Desktop** - Writing assistant
-- **Icon Composer** - macOS icon creation tool
-- **Microsoft Edge** - Modern web browser
-- **SF Symbols** - Apple's symbol library
 - **Visual Studio Code** - Code editor
 
 ## 📋 Scripts Overview

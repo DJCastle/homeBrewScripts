@@ -22,11 +22,7 @@
 #   - Adobe Creative Cloud (Creative software suite)
 #   - Bambu Studio (3D printing slicer software)
 #   - ChatGPT Desktop (AI assistant desktop app)
-#   - Epson Printer Utility (Printer management tools)
 #   - Grammarly Desktop (Writing assistant)
-#   - Icon Composer (macOS icon creation tool)
-#   - Microsoft Edge (Modern web browser)
-#   - SF Symbols (Apple's symbol library)
 #   - Visual Studio Code (Code editor)
 #
 # USAGE:
@@ -140,22 +136,10 @@ install_app "Bambu Studio" "bambustudio" "Bambu Studio"
 # 3. ChatGPT Desktop
 install_app "ChatGPT" "chatgpt" "ChatGPT Desktop"
 
-# 4. Epson Printer Utility
-install_app "Epson Printer Utility" "epson-printer-utility" "Epson Printer Utility"
-
-# 5. Grammarly Desktop
+# 4. Grammarly Desktop
 install_app "Grammarly Desktop" "grammarly-desktop" "Grammarly Desktop"
 
-# 6. Icon Composer
-install_app "Icon Composer" "icon-composer" "Icon Composer"
-
-# 7. Microsoft Edge
-install_app "Microsoft Edge" "microsoft-edge" "Microsoft Edge"
-
-# 8. SF Symbols
-install_app "SF Symbols" "sf-symbols" "SF Symbols"
-
-# 9. Visual Studio Code
+# 5. Visual Studio Code
 install_app "Visual Studio Code" "visual-studio-code" "Visual Studio Code"
 
 # Post-installation summary
@@ -171,11 +155,7 @@ apps=(
     "Adobe Creative Cloud:adobe-creative-cloud"
     "Bambu Studio:bambustudio"
     "ChatGPT Desktop:chatgpt"
-    "Epson Printer Utility:epson-printer-utility"
     "Grammarly Desktop:grammarly-desktop"
-    "Icon Composer:icon-composer"
-    "Microsoft Edge:microsoft-edge"
-    "SF Symbols:sf-symbols"
     "Visual Studio Code:visual-studio-code"
 )
 
