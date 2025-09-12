@@ -36,9 +36,12 @@
 # 📧 EMAIL: Detailed reports using macOS Mail app (no external dependencies)
 # 📱 TEXT: Quick status summaries via iMessage
 #
-# USAGE:
-# ./auto-update-brew-hybrid.sh             # Manual execution
-# Use setup-hybrid-notifications.sh for configuration and scheduling
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x auto-update-brew-hybrid.sh
+# 4. Run the script: ./auto-update-brew-hybrid.sh
+# Note: Use setup-hybrid-notifications.sh for configuration and scheduling
 #
 # REQUIREMENTS:
 #   - Homebrew must be installed

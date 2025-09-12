@@ -26,15 +26,25 @@ A comprehensive collection of automated scripts for managing Homebrew packages a
 
 ### Installation
 
+#### Step 1: Download the Scripts
+
 ```bash
 # Clone this repository
 git clone https://github.com/DJCastle/homeBrewScripts.git
 cd homeBrewScripts
+```
 
-# Make scripts executable
+#### Step 2: Make Scripts Executable
+
+```bash
+# Make all scripts executable
 chmod +x *.sh
+```
 
-# Run the primary installation script
+#### Step 3: Run Your Desired Script
+
+```bash
+# Run the primary installation script (recommended)
 ./brew_setup_tahoe.sh
 ```
 
@@ -61,6 +71,7 @@ chmod +x *.sh
 - ✅ **Comprehensive error handling** and recovery
 - ✅ **Detailed logging** and status reporting
 
+**How to run:**
 ```bash
 # Interactive mode (recommended)
 ./brew_setup_tahoe.sh
@@ -73,6 +84,7 @@ chmod +x *.sh
 
 **Batch App Installer - Installs all essential apps automatically**
 
+**How to run:**
 ```bash
 ./install-essential-apps.sh
 ```
@@ -87,6 +99,11 @@ chmod +x *.sh
 - Sends text message notifications
 - Smart conditions (WiFi + power required)
 
+**How to run:**
+```bash
+./auto-update-brew.sh
+```
+
 #### 🤖 `auto-update-brew-hybrid.sh`
 
 **Auto-Updater Pro - Advanced updates with email + text notifications**
@@ -95,12 +112,18 @@ chmod +x *.sh
 - Text message summaries
 - Enhanced error handling and retry logic
 
+**How to run:**
+```bash
+./auto-update-brew-hybrid.sh
+```
+
 ### ⚙️ Setup Scripts
 
 #### ⚙️ `setup-auto-update.sh`
 
 **Setup Basic Automation - Configure automatic Homebrew updates**
 
+**How to run:**
 ```bash
 ./setup-auto-update.sh
 ```
@@ -109,6 +132,7 @@ chmod +x *.sh
 
 **Setup Pro Automation - Configure advanced email + text notifications**
 
+**How to run:**
 ```bash
 ./setup-hybrid-notifications.sh
 ```
@@ -119,7 +143,47 @@ chmod +x *.sh
 
 **System Cleaner - Removes old packages and frees up disk space**
 
+**How to run:**
 ```bash
+./cleanup-homebrew.sh
+```
+
+## 🔧 How to Use These Scripts
+
+### Step-by-Step Instructions
+
+#### 1. Open Terminal
+- Press `Cmd + Space` to open Spotlight
+- Type "Terminal" and press Enter
+- Or go to Applications > Utilities > Terminal
+
+#### 2. Navigate to the Scripts
+```bash
+# Change to the directory where you downloaded the scripts
+cd /path/to/homeBrewScripts
+
+# For example, if you downloaded to Downloads folder:
+cd ~/Downloads/homeBrewScripts
+```
+
+#### 3. Make Scripts Executable (One Time Only)
+```bash
+# Make all scripts executable
+chmod +x *.sh
+```
+
+#### 4. Run Your Desired Script
+```bash
+# For first-time setup (recommended):
+./brew_setup_tahoe.sh
+
+# For automated installation without prompts:
+./install-essential-apps.sh
+
+# For setting up automatic updates:
+./setup-hybrid-notifications.sh
+
+# For system cleanup:
 ./cleanup-homebrew.sh
 ```
 

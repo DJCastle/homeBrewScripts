@@ -31,9 +31,12 @@
 #   - Safe to run multiple times
 #   - Intelligent condition checking
 #
-# USAGE:
-# ./auto-update-brew.sh                    # Manual execution
-# Use setup-auto-update.sh for scheduling
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x auto-update-brew.sh
+# 4. Run the script: ./auto-update-brew.sh
+# Note: Use setup-auto-update.sh for scheduling automatic runs
 #
 # REQUIREMENTS:
 #   - Homebrew must be installed

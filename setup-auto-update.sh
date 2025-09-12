@@ -25,8 +25,11 @@
 #   - Provides scheduling options (daily/weekly/manual)
 #   - Validates iMessage configuration
 #
-# USAGE:
-# ./setup-auto-update.sh
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x setup-auto-update.sh
+# 4. Run the script: ./setup-auto-update.sh
 # Follow the interactive prompts to configure
 #
 # NOTIFICATION SETUP:

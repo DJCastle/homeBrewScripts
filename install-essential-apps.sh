@@ -25,8 +25,12 @@
 #   - Grammarly Desktop (Writing assistant)
 #   - Visual Studio Code (Code editor)
 #
-# USAGE:
-# ./install-essential-apps.sh
+# HOW TO RUN IN TERMINAL:
+# 1. Open Terminal application (Applications > Utilities > Terminal)
+# 2. Navigate to script directory: cd /path/to/homeBrewScripts
+# 3. Make script executable: chmod +x install-essential-apps.sh
+# 4. Run the script: ./install-essential-apps.sh
+# This will install all essential applications automatically (no prompts)
 #
 # FEATURES:
 # ✅ Safe to run multiple times — skips apps that are already installed
