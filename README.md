@@ -1,92 +1,214 @@
-# 🍺 Homebrew Scripts for macOS
+# 🍺 Educational Homebrew Scripts for macOS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![macOS](https://img.shields.io/badge/macOS-10.15%2B-blue.svg)](https://www.apple.com/macos/)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
+[![Version](https://img.shields.io/badge/version-2.0.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
+[![Shell Script](https://img.shields.io/badge/Shell-Bash-green.svg)](https://www.gnu.org/software/bash/)
+[![Educational](https://img.shields.io/badge/Purpose-Educational-blue.svg)](https://github.com/DJCastle/homeBrewScripts)
 
-A comprehensive collection of automated scripts for managing Homebrew packages and applications on macOS. Designed for both Intel and Apple Silicon Macs with professional-grade error handling, logging, and user experience.
+**Learn shell scripting while automating your macOS setup!**
+
+This is an educational collection of professional-grade shell scripts for managing Homebrew packages and applications on macOS. Each script is designed to teach best practices in shell scripting while providing real-world automation functionality.
+
+## 🎓 Educational Objectives
+
+**What You'll Learn:**
+- 📚 **Shell Scripting Best Practices** - Error handling, logging, modular design
+- ⚙️ **Configuration Management** - External config files, validation, defaults
+- 🔧 **System Administration** - Package management, environment setup, automation
+- 🛡️ **Safety Patterns** - Dry-run modes, validation, idempotent operations
+- 🎯 **User Experience Design** - Interactive prompts, progress tracking, help systems
+- 📊 **Logging & Monitoring** - Structured logging, error reporting, debugging
 
 ## ✨ Features
 
-- 🎯 **Interactive Installation** - Choose apps individually or install all at once
-- 🤖 **Automated Updates** - Smart background updates with notifications
-- 🛡️ **Safe & Reliable** - Comprehensive error handling and recovery
-- 📱 **Smart Notifications** - Email and text alerts for update status
-- 🔄 **Idempotent Design** - Safe to run multiple times
-- 🏗️ **Architecture Aware** - Optimized for both Intel and Apple Silicon
-- 📊 **Detailed Logging** - Complete operation logs for troubleshooting
+- 🎯 **Interactive & Educational** - Learn while you install with detailed explanations
+- 🔧 **Configurable Everything** - External configuration files for easy customization
+- 🤖 **Smart Automation** - Conditional updates with network and power awareness
+- 🛡️ **Production-Ready Safety** - Comprehensive error handling and recovery
+- 📱 **Multi-Channel Notifications** - Email reports and text message summaries
+- 🔄 **Idempotent Design** - Safe to run multiple times without side effects
+- 🏗️ **Architecture Aware** - Optimized for both Intel and Apple Silicon Macs
+- 📊 **Comprehensive Logging** - Detailed operation logs for learning and troubleshooting
+- 🧪 **Dry-Run Mode** - See what would happen before making changes
+- 📖 **Extensive Documentation** - Every function and concept explained
 
-## 🚀 Quick Start
+## ⚠️ Important Disclaimers
+
+**READ THIS BEFORE USING THESE SCRIPTS**
+
+### 🛡️ Safety Notice
+
+These scripts will modify your system by:
+
+- Installing Homebrew package manager
+- Modifying shell configuration files (`.zshrc`, `.bash_profile`, etc.)
+- Installing applications you select
+- Creating scheduled tasks for automatic updates
+- Creating log files in `~/Library/Logs/`
+
+### 📋 Your Responsibilities
+
+- **Backup your system** before running any system modification scripts
+- **Review the configuration** files before running scripts
+- **Understand what each script does** by reading the documentation
+- **Test in a safe environment** first if you're unsure
+- **Keep your system updated** and maintain good security practices
+
+### 🚫 Limitations
+
+- These scripts are provided "AS IS" without warranty of any kind
+- The authors are not responsible for any damage, data loss, or issues
+- Scripts are designed for macOS 10.15+ only
+- Some features require specific system configurations
+- Network connectivity is required for downloads
+
+### ✅ What Makes These Scripts Safer
+
+- **Dry-run mode** - See what would happen before making changes
+- **Interactive checkpoints** - You control each major step
+- **Comprehensive logging** - All operations are recorded
+- **Idempotent design** - Safe to run multiple times
+- **Configuration validation** - Settings are checked before use
+- **Error recovery** - Scripts handle failures gracefully
+
+## 🚀 Quick Start Guide
 
 ### Prerequisites
 
-- macOS 10.15 (Catalina) or later
-- Administrator privileges
-- Internet connection
+Before you begin, ensure you have:
 
-### Installation
+- **macOS 10.15 (Catalina) or later**
+- **Administrator privileges** (you'll be prompted for your password)
+- **Internet connection** for downloading packages
+- **At least 1GB free disk space**
+- **Basic familiarity with Terminal** (we'll guide you!)
 
-#### Step 1: Download the Scripts
+### Step 1: Download the Scripts
 
 ```bash
 # Clone this repository
 git clone https://github.com/DJCastle/homeBrewScripts.git
 cd homeBrewScripts
+
+# Or download and extract the ZIP file from GitHub
 ```
 
-#### Step 2: Make Scripts Executable
+### Step 2: Understand the Structure
+
+```
+homeBrewScripts/
+├── config/                    # Configuration files
+│   └── homebrew-scripts.conf  # Main configuration
+├── lib/                       # Shared libraries
+│   └── common.sh              # Common functions
+├── homebrew-setup.sh          # Main setup script
+├── auto-update-*.sh           # Automation scripts
+└── README.md                  # This documentation
+```
+
+### Step 3: Configure Your Preferences
 
 ```bash
-# Make all scripts executable
-chmod +x *.sh
+# Edit the configuration file to customize your setup
+nano config/homebrew-scripts.conf
+
+# Or let the script create a default configuration for you
 ```
 
-#### Step 3: Run Your Desired Script
+### Step 4: Run Your First Script
 
 ```bash
-# Run the primary installation script (recommended)
-./brew_setup_tahoe.sh
+# Make the script executable
+chmod +x homebrew-setup.sh
+
+# Run in dry-run mode first to see what would happen
+./homebrew-setup.sh --dry-run
+
+# Run the actual installation
+./homebrew-setup.sh
 ```
 
-## 📦 Applications Included
+## 📦 Configurable Applications
 
+The scripts now use a flexible configuration system that allows you to customize which applications to install. Applications are organized by category:
+
+### 🛠️ Development Tools
+- **Visual Studio Code** - Popular code editor
+- **iTerm2** - Enhanced terminal application
+- **Docker Desktop** - Containerization platform
+- **Postman** - API development tool
+- **Sourcetree** - Git GUI client
+
+### 📊 Productivity Apps
+- **Notion** - All-in-one workspace
+- **Obsidian** - Knowledge management
+- **Alfred** - Productivity launcher
+- **Todoist** - Task management
+
+### 🎨 Creative Tools
 - **Adobe Creative Cloud** - Creative software suite
-- **Bambu Studio** - 3D printing slicer software
-- **ChatGPT Desktop** - AI assistant desktop app
-- **Grammarly Desktop** - Writing assistant
-- **Visual Studio Code** - Code editor
+- **Figma** - Design and prototyping
+- **Sketch** - UI/UX design tool
+- **Blender** - 3D modeling and animation
+
+### 💬 Communication
+- **Slack** - Team communication
+- **Discord** - Gaming and community chat
+- **Zoom** - Video conferencing
+- **Microsoft Teams** - Business communication
+
+### 🔧 Utilities
+- **Rectangle** - Window management
+- **The Unarchiver** - Archive extraction
+- **AppCleaner** - Application removal
+- **1Password** - Password management
+
+> **Note:** You can customize which categories and specific applications to install by editing the configuration file. See [Configuration Examples](examples/sample-configurations.md) for different setups.
 
 ## 📋 Scripts Overview
 
 ### 🎯 Primary Installation
 
-#### 🍺 `brew_setup_tahoe.sh` ⭐ **RECOMMENDED**
+#### 🍺 `homebrew-setup.sh` ⭐ **RECOMMENDED**
 
-**Main Homebrew Installer - Interactive setup with app selection**
+The main educational Homebrew installer with interactive setup and customizable app selection.
 
-- ✅ **Interactive app selection** or batch installation
+**Features:**
+- ✅ **Educational design** with detailed explanations
+- ✅ **Interactive app selection** by category
 - ✅ **Architecture detection** (Intel/Apple Silicon)
-- ✅ **Color-coded progress** tracking
-- ✅ **Non-interactive mode** (`--non-interactive`)
+- ✅ **Dry-run mode** to preview changes
 - ✅ **Comprehensive error handling** and recovery
-- ✅ **Detailed logging** and status reporting
+- ✅ **Detailed logging** and progress tracking
+- ✅ **Configuration validation** before execution
 
-**How to run:**
+**Usage:**
 ```bash
-# Interactive mode (recommended)
-./brew_setup_tahoe.sh
+# Interactive mode with explanations (recommended for learning)
+./homebrew-setup.sh
 
-# Non-interactive mode
-./brew_setup_tahoe.sh --non-interactive
+# See what would be done without making changes
+./homebrew-setup.sh --dry-run
+
+# Non-interactive mode using configuration
+./homebrew-setup.sh --non-interactive
+
+# Configuration setup only
+./homebrew-setup.sh --config-only
 ```
 
 #### 📦 `install-essential-apps.sh`
 
-**Batch App Installer - Installs all essential apps automatically**
+Batch installer for essential applications (now uses configuration system).
 
-**How to run:**
+**Usage:**
 ```bash
+# Install applications based on configuration
 ./install-essential-apps.sh
+
+# Preview what would be installed
+./install-essential-apps.sh --dry-run
 ```
 
 ### 🤖 Automation Scripts
