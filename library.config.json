@@ -1,5 +1,5 @@
 {
-  "_comment": "Configuration for filtering and displaying scripts on the blog",
+  "_comment": "Configuration for filtering and displaying scripts on the blog - updated for manifest generation",
   "include": ["*.sh"],
   "exclude": [
     "README.md",
