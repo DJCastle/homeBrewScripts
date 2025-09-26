@@ -12,7 +12,8 @@
       const items = Array.isArray(data.items) ? data.items : [];
       el.innerHTML = items.map(it => `
         <article class="card">
-          <h3 style="margin:.1em 0 .2em"><a href="${it.html_url}" target="_blank" rel="noopener">${it.name}</a></h3>
+          <h3 style="margin:.1em 0 .2em"><a href="${it.html_url}" target="_blank" rel="noopener">${it.title || it.name}</a></h3>
+          ${it.description ? `<p style="margin:.4em 0;color:#8ef0b7;font-size:14px">${it.description}</p>` : ''}
           <p class="meta">Last updated: ${fmt(it.updated)} ${it.sha ? "· " + it.sha : ""}</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
             <a class="btn" href="${it.html_url}" target="_blank" rel="noopener">View on GitHub</a>

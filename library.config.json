@@ -1,0 +1,40 @@
+{
+  "include": ["*.sh"],
+  "exclude": [
+    "README.md",
+    "readme.md",
+    "LICENSE",
+    "LICENSE.md",
+    "*.md",
+    "*.txt",
+    ".*"
+  ],
+  "order": [
+    "brew_setup_tahoe.sh",
+    "install-essential-apps.sh",
+    "setup-auto-update.sh",
+    "setup-hybrid-notifications.sh",
+    "auto-update-brew.sh",
+    "auto-update-brew-hybrid.sh",
+    "cleanup-homebrew.sh"
+  ],
+  "hidden": [],
+  "titles": {
+    "brew_setup_tahoe.sh": "🍺 Homebrew Setup (Educational)",
+    "install-essential-apps.sh": "📦 Essential Apps Installer",
+    "setup-auto-update.sh": "⚙️ Auto-Update Setup",
+    "setup-hybrid-notifications.sh": "📧 Notification Setup (Email + SMS)",
+    "auto-update-brew.sh": "🔄 Auto-Update (Basic)",
+    "auto-update-brew-hybrid.sh": "🔄 Auto-Update (Advanced)",
+    "cleanup-homebrew.sh": "🧹 Homebrew Cleanup"
+  },
+  "descriptions": {
+    "brew_setup_tahoe.sh": "Educational Homebrew installer with interactive setup, dry-run mode, and comprehensive safety features. Perfect for learning shell scripting while automating macOS setup.",
+    "install-essential-apps.sh": "Batch installer for essential macOS applications using Homebrew. Installs productivity, development, and utility apps automatically.",
+    "setup-auto-update.sh": "Configures automatic Homebrew updates with text notifications. Sets up scheduled maintenance using macOS launchd.",
+    "setup-hybrid-notifications.sh": "Advanced notification setup supporting both email and SMS alerts for system updates and maintenance tasks.",
+    "auto-update-brew.sh": "Basic automatic Homebrew updater with text notifications. Runs scheduled updates and sends status reports.",
+    "auto-update-brew-hybrid.sh": "Advanced automatic updater with email and SMS notifications. Includes detailed reporting and error handling.",
+    "cleanup-homebrew.sh": "Comprehensive Homebrew maintenance script. Removes old packages, clears caches, and optimizes disk usage."
+  }
+}
