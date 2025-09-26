@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![macOS](https://img.shields.io/badge/macOS-10.15%2B-blue.svg)](https://www.apple.com/macos/)
-[![Version](https://img.shields.io/badge/version-2.0.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
+[![Version](https://img.shields.io/badge/version-2.0.1-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
 [![Shell Script](https://img.shields.io/badge/Shell-Bash-green.svg)](https://www.gnu.org/software/bash/)
 [![Educational](https://img.shields.io/badge/Purpose-Educational-blue.svg)](https://github.com/DJCastle/homeBrewScripts)
 
