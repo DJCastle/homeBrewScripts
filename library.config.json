@@ -1,4 +1,5 @@
 {
+  "_comment": "Configuration for filtering and displaying scripts on the blog",
   "include": ["*.sh"],
   "exclude": [
     "README.md",
