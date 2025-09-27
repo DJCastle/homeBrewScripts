@@ -1,16 +1,17 @@
 {
   "_comment": "Configuration for filtering and displaying scripts on the blog - updated for manifest generation",
-  "include": ["*.sh"],
+  "include": ["*.sh", "README.md"],
   "exclude": [
-    "README.md",
     "readme.md",
     "LICENSE",
     "LICENSE.md",
-    "*.md",
+    "CONTRIBUTING.md",
+    "PROJECT-OVERVIEW.md",
     "*.txt",
     ".*"
   ],
   "order": [
+    "README.md",
     "brew_setup_tahoe.sh",
     "install-essential-apps.sh",
     "setup-auto-update.sh",
@@ -21,6 +22,7 @@
   ],
   "hidden": [],
   "titles": {
+    "README.md": "📚 Documentation & Getting Started",
     "brew_setup_tahoe.sh": "🍺 Homebrew Setup (Educational)",
     "install-essential-apps.sh": "📦 Essential Apps Installer",
     "setup-auto-update.sh": "⚙️ Auto-Update Setup",
@@ -30,6 +32,7 @@
     "cleanup-homebrew.sh": "🧹 Homebrew Cleanup"
   },
   "descriptions": {
+    "README.md": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively.",
     "brew_setup_tahoe.sh": "Educational Homebrew installer with interactive setup, dry-run mode, and comprehensive safety features. Perfect for learning shell scripting while automating macOS setup.",
     "install-essential-apps.sh": "Batch installer for essential macOS applications using Homebrew. Installs productivity, development, and utility apps automatically.",
     "setup-auto-update.sh": "Configures automatic Homebrew updates with text notifications. Sets up scheduled maintenance using macOS launchd.",
