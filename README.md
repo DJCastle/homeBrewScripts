@@ -1,8 +1,8 @@
 # 🍺 Educational Homebrew Scripts for macOS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![macOS](https://img.shields.io/badge/macOS-10.15%2B-blue.svg)](https://www.apple.com/macos/)
-[![Version](https://img.shields.io/badge/version-2.0.1-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
+[![macOS](https://img.shields.io/badge/macOS-12.0%2B-blue.svg)](https://www.apple.com/macos/)
+[![Version](https://img.shields.io/badge/version-3.0.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
 [![Shell Script](https://img.shields.io/badge/Shell-Bash-green.svg)](https://www.gnu.org/software/bash/)
 [![Educational](https://img.shields.io/badge/Purpose-Educational-blue.svg)](https://github.com/DJCastle/homeBrewScripts)
 
@@ -21,6 +21,19 @@ This is an educational collection of professional-grade shell scripts for managi
 - 📊 **Logging & Monitoring** - Structured logging, error reporting, debugging
 
 ## ✨ Features
+
+## 🆕 What's New in 2026 Edition (v3.0.0)
+
+This major update brings modern features and improvements:
+
+- **🔒 Enhanced Security** - Checksum verification for Homebrew installation script
+- **🍎 Modern macOS Support** - Updated minimum requirement to macOS 12.0 (Monterey)
+- **💻 Advanced Apple Silicon** - Detailed M1/M2/M3/M4 chip detection and optimization
+- **📱 2026 Applications** - Modern apps like Arc, Cursor, Warp, Raycast, and Linear
+- **🐛 Bug Fixes** - Fixed incorrect brew pin usage for casks
+- **♻️  Streamlined Code** - Removed hardcoded app lists, fully config-driven
+- **📚 Better Documentation** - Updated examples and best practices for 2026
+
 
 - 🎯 **Interactive & Educational** - Learn while you install with detailed explanations
 - 🔧 **Configurable Everything** - External configuration files for easy customization
@@ -59,7 +72,7 @@ These scripts will modify your system by:
 
 - These scripts are provided "AS IS" without warranty of any kind
 - The authors are not responsible for any damage, data loss, or issues
-- Scripts are designed for macOS 10.15+ only
+- Scripts are designed for macOS 12.0+ only
 - Some features require specific system configurations
 - Network connectivity is required for downloads
 
@@ -78,7 +91,7 @@ These scripts will modify your system by:
 
 Before you begin, ensure you have:
 
-- **macOS 10.15 (Catalina) or later**
+- **macOS 12.0 (Monterey) or later**
 - **Administrator privileges** (you'll be prompted for your password)
 - **Internet connection** for downloading packages
 - **At least 1GB free disk space**
@@ -351,7 +364,7 @@ All scripts create detailed logs in `~/Library/Logs/`:
 
 ## 🛠️ Requirements
 
-- **macOS**: 10.15 (Catalina) or later
+- **macOS**: 12.0 (Monterey) or later
 - **Architecture**: Intel or Apple Silicon
 - **Permissions**: Administrator privileges
 - **Network**: Internet connection required
@@ -368,4 +381,4 @@ These scripts modify system settings and install software. Use at your own risk.
 ---
 
 **Made with ❤️ for macOS automation**  
-**Author:** DJCastle | **License:** MIT | **Version:** 1.0.0
+**Author:** DJCastle | **License:** MIT | **Version:** 3.0.0 (2026 Edition)

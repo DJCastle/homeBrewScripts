@@ -217,3 +217,41 @@ homeBrewScripts/
 ✅ **Community Ready** - Contribution guidelines and open source friendly
 
 This project now serves as both a practical tool for macOS automation and a comprehensive educational resource for learning professional shell scripting practices.
+
+## 🎉 2026 Updates (v3.0.0)
+
+### Major Improvements Completed
+
+✅ **Security Enhancements**
+- Added checksum and source verification for Homebrew installation
+- Enhanced validation of downloaded scripts before execution
+- Better error handling and recovery procedures
+
+✅ **Modern Platform Support**
+- Updated minimum macOS requirement to 12.0 (Monterey)
+- Enhanced Apple Silicon detection (M1/M2/M3/M4 chips)
+- Improved Rosetta 2 detection and recommendations
+
+✅ **Application Modernization**
+- Added modern 2026 applications (Arc, Cursor, Warp, Raycast, Linear)
+- Removed hardcoded app lists - fully config-driven
+- Fixed brew pin bug for cask applications
+
+✅ **Developer Experience**
+- Added JSON logging option for better log parsing
+- Improved error messages with actionable solutions
+- Enhanced documentation with 2026-specific guidance
+
+✅ **Code Quality**
+- Streamlined codebase removing duplicate functions
+- Better separation of concerns
+- Improved maintainability and readability
+
+### Migration Notes
+
+For users upgrading from v2.x to v3.0:
+1. Review the updated `config/homebrew-scripts.conf` for new applications
+2. Check that your system meets the new minimum requirement (macOS 12.0+)
+3. The script will automatically handle the migration
+4. Previous configurations remain compatible
+

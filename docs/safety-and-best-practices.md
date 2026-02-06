@@ -64,8 +64,8 @@ checkpoint() {
 LOG_FILE="$HOME/Library/Logs/HomebrewSetup.log"
 
 # Example log entry
-[2025-01-11 14:30:15] [INFO] Installing Visual Studio Code...
-[2025-01-11 14:30:45] [SUCCESS] Visual Studio Code installed successfully
+[2026-02-06 14:30:15] [INFO] Installing Visual Studio Code...
+[2026-02-06 14:30:45] [SUCCESS] Visual Studio Code installed successfully
 ```
 
 **What's logged:**
@@ -135,7 +135,7 @@ retry_with_backoff() {
 ## 📋 Pre-Installation Checklist
 
 ### System Requirements
-- [ ] macOS 10.15 (Catalina) or later
+- [ ] macOS 12.0 (Monterey) or later
 - [ ] Administrator privileges (you know your password)
 - [ ] At least 1GB free disk space
 - [ ] Stable internet connection

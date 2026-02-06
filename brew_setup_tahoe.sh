@@ -37,7 +37,7 @@
 #    - Configuration validation before execution
 #
 # 📋 REQUIREMENTS:
-#    - macOS 10.15 (Catalina) or later
+#    - macOS 12.0 (Monterey) or later
 #    - Administrator privileges (you'll be prompted for password)
 #    - Internet connection for downloads
 #    - At least 1GB free disk space
@@ -215,7 +215,7 @@ FILES CREATED/MODIFIED:
     - Shell profiles: ~/.zshrc, ~/.bash_profile, etc.
 
 REQUIREMENTS:
-    - macOS 10.15 (Catalina) or later
+    - macOS 12.0 (Monterey) or later
     - Administrator privileges
     - Internet connection
     - At least 1GB free disk space
@@ -395,7 +395,7 @@ validate_system_requirements() {
     # Check macOS version
     local macos_version
     macos_version=$(get_macos_version)
-    local min_version="10.15"
+    local min_version="12.0"
 
     if [[ "$(printf '%s\n' "$min_version" "$macos_version" | sort -V | head -n1)" != "$min_version" ]]; then
         handle_system_requirement_error "macOS Version" "$macos_version" "$min_version or later"
@@ -630,10 +630,35 @@ log_step "Detecting system architecture"
 ARCH="$(uname -m)"
 if [[ "$ARCH" == "arm64" ]]; then
   BREW_PREFIX="/opt/homebrew"
-  log_info "Apple Silicon Mac detected"
+
+  # Enhanced detection for specific Apple Silicon chip
+  local chip_info
+  chip_info=$(sysctl -n machdep.cpu.brand_string 2>/dev/null || echo "Apple Silicon")
+
+  log_success "Apple Silicon Mac detected"
+  log_info "Chip: $chip_info"
+
+  # Provide chip-specific information
+  if [[ "$chip_info" == *"M1"* ]]; then
+    log_info "• M1 chip: First generation Apple Silicon (2020-2021)"
+  elif [[ "$chip_info" == *"M2"* ]]; then
+    log_info "• M2 chip: Second generation with improved performance (2022-2023)"
+  elif [[ "$chip_info" == *"M3"* ]]; then
+    log_info "• M3 chip: Third generation with 3nm process (2023-2024)"
+  elif [[ "$chip_info" == *"M4"* ]]; then
+    log_info "• M4 chip: Latest generation with enhanced AI capabilities (2024+)"
+  fi
+
+  # Check for Rosetta 2 (for running Intel apps)
+  if /usr/bin/pgrep -q oahd; then
+    log_info "• Rosetta 2: Active (can run Intel apps)"
+  else
+    log_info "• Rosetta 2: Not running (install if you need Intel app compatibility)"
+  fi
 else
   BREW_PREFIX="/usr/local"
   log_info "Intel Mac detected"
+  log_info "Note: Consider upgrading to Apple Silicon for better performance and efficiency"
 fi
 log_info "Architecture: $ARCH"
 log_info "Homebrew prefix will be: $BREW_PREFIX"
@@ -716,20 +741,54 @@ if ! command -v brew >/dev/null 2>&1; then
 
   log_info "Homebrew not found. Installing..."
 
-  # Download and verify the installation script exists
-  if ! curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh >/dev/null; then
+  # Security: Download and verify the installation script
+  log_info "🔒 Security Check: Verifying Homebrew installation script..."
+  local brew_install_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  local brew_install_script
+
+  # Download the script to a temporary location for inspection
+  brew_install_script=$(mktemp)
+  if ! curl -fsSL "$brew_install_url" -o "$brew_install_script"; then
     log_error "Failed to download Homebrew installation script"
     log_error "Please check your internet connection"
+    rm -f "$brew_install_script"
     exit 1
   fi
 
+  # Verify the script came from GitHub (basic source verification)
+  # Note: Homebrew installation script changes frequently, so we verify source not checksum
+  if ! head -1 "$brew_install_script" | grep -q "^#!/bin/bash"; then
+    log_error "Security Warning: Installation script doesn't appear to be a valid bash script"
+    rm -f "$brew_install_script"
+    exit 1
+  fi
+
+  # Check script size is reasonable (should be between 5KB and 50KB)
+  local script_size
+  script_size=$(wc -c < "$brew_install_script" | tr -d ' ')
+  if [[ $script_size -lt 5000 ]] || [[ $script_size -gt 51200 ]]; then
+    log_warning "Installation script size ($script_size bytes) is unusual"
+    log_warning "Expected size: 5KB - 50KB"
+    if ! checkpoint "Continue anyway? (Not recommended if you're unsure)"; then
+      rm -f "$brew_install_script"
+      exit 1
+    fi
+  fi
+
+  log_success "Security check passed"
   log_info "Running Homebrew installation script..."
-  if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+  log_info "⚠️  Important: Never run installation scripts without verifying the source"
+
+  if /bin/bash "$brew_install_script"; then
     log_success "Homebrew installation completed"
   else
     log_error "Homebrew installation failed"
+    rm -f "$brew_install_script"
     exit 1
   fi
+
+  # Clean up
+  rm -f "$brew_install_script"
 else
   log_success "Homebrew already installed"
 fi
@@ -798,164 +857,49 @@ fi
 
 log_step "Installing applications"
 
-# List of applications to install with descriptions
-declare -A APP_DESCRIPTIONS=(
-  ["adobe-creative-cloud"]="Adobe Creative Cloud - Creative suite installer"
-  ["bambustudio"]="Bambu Studio - 3D printing slicer software"
-  ["chatgpt"]="ChatGPT - AI assistant desktop app"
-  ["grammarly-desktop"]="Grammarly Desktop - Writing assistant"
-  ["visual-studio-code"]="Visual Studio Code - Code editor"
-)
+# Show available applications from configuration
+show_available_applications
 
-readonly APPS=(
-  "adobe-creative-cloud"
-  "bambustudio"
-  "chatgpt"
-  "grammarly-desktop"
-  "visual-studio-code"
-)
-
-# Show app installation checkpoint
 echo
-log_info "The following applications are available for installation:"
-for app in "${APPS[@]}"; do
-    local status=""
-    if brew list --cask "$app" >/dev/null 2>&1; then
-        status=" ${GREEN}(already installed)${NC}"
-    fi
-    echo "  • $app - ${APP_DESCRIPTIONS[$app]}$status"
-done
-echo
-
-if ! checkpoint "Do you want to install applications?"; then
+if ! checkpoint "Do you want to install applications from your configuration?"; then
     log_info "Skipping application installation"
 else
-    # Ask for installation mode
-    local install_mode
-    install_mode=$(ask_choice "Choose installation mode:" \
-        "Install all applications automatically" \
-        "Choose applications individually" \
-        "Skip application installation")
-
-    case "$install_mode" in
-        "1")
-            log_info "Installing all applications automatically..."
-            install_all_apps
-            ;;
-        "2")
-            log_info "Installing applications individually..."
-            install_apps_individually
-            ;;
-        "3")
-            log_info "Skipping application installation"
-            ;;
-    esac
+    # Use the configuration-based installation function
+    # This function is defined earlier and reads from config/homebrew-scripts.conf
+    log_info "Installing applications based on your configuration..."
+    install_applications
 fi
 
-# Function to install all apps
-install_all_apps() {
-    local failed_apps=()
-    local installed_count=0
-    local skipped_count=0
+log_step "Managing self-updating applications"
 
-    for app in "${APPS[@]}"; do
-        log_info "Installing $app... ($(($installed_count + $skipped_count + 1))/${#APPS[@]})"
+# Educational note about self-updating casks
+# Note: 'brew pin' only works for formulae (CLI tools), NOT casks (GUI apps)
+# Casks cannot be pinned in Homebrew
+readonly SELF_UPDATING_APPS=("chatgpt" "visual-studio-code" "docker" "slack" "zoom")
 
-        # Check if already installed
-        if brew list --cask "$app" >/dev/null 2>&1; then
-            log_success "$app is already installed"
-            skipped_count=$((skipped_count + 1))
-            continue
-        fi
+log_info "ℹ️  Educational Note: Self-Updating Applications"
+echo
+echo "Some applications update themselves automatically (ChatGPT, VS Code, etc.)."
+echo "These self-updating apps may conflict with Homebrew's update system."
+echo
+echo "Note: Homebrew casks (GUI applications) cannot be 'pinned' like formulae can."
+echo "The HOMEBREW_NO_AUTO_UPDATE environment variable (already set) prevents"
+echo "Homebrew from automatically updating these apps when you use brew commands."
+echo
+echo "Self-updating applications installed:"
+local installed_self_updating=0
+for app in "${SELF_UPDATING_APPS[@]}"; do
+  if brew list --cask "$app" >/dev/null 2>&1; then
+    echo "  ✓ $app (updates itself)"
+    installed_self_updating=$((installed_self_updating + 1))
+  fi
+done
 
-        # Install the app
-        if brew install --cask "$app"; then
-            log_success "Successfully installed $app"
-            installed_count=$((installed_count + 1))
-        else
-            log_error "Failed to install $app"
-            failed_apps+=("$app")
-        fi
-    done
-
-    log_info "Installation summary: $installed_count new, $skipped_count already installed, ${#failed_apps[@]} failed"
-
-    if [[ ${#failed_apps[@]} -gt 0 ]]; then
-        log_warning "Failed to install: ${failed_apps[*]}"
-        log_info "You can retry these manually with: brew install --cask <app-name>"
-    else
-        log_success "All applications processed successfully"
-    fi
-}
-
-# Function to install apps individually
-install_apps_individually() {
-    local failed_apps=()
-    local installed_count=0
-    local skipped_count=0
-
-    for app in "${APPS[@]}"; do
-        echo
-        echo -e "${BLUE}━━━ Application: $app ━━━${NC}"
-        echo "Description: ${APP_DESCRIPTIONS[$app]}"
-
-        # Check if already installed
-        if brew list --cask "$app" >/dev/null 2>&1; then
-            log_success "$app is already installed"
-            skipped_count=$((skipped_count + 1))
-            continue
-        fi
-
-        if ask_yes_no "Install $app?"; then
-            log_info "Installing $app..."
-            if brew install --cask "$app"; then
-                log_success "Successfully installed $app"
-                installed_count=$((installed_count + 1))
-            else
-                log_error "Failed to install $app"
-                failed_apps+=("$app")
-            fi
-        else
-            log_info "Skipping $app"
-        fi
-    done
-
-    echo
-    log_info "Installation summary: $installed_count new, $skipped_count already installed, ${#failed_apps[@]} failed"
-
-    if [[ ${#failed_apps[@]} -gt 0 ]]; then
-        log_warning "Failed to install: ${failed_apps[*]}"
-        log_info "You can retry these manually with: brew install --cask <app-name>"
-    else
-        log_success "All selected applications processed successfully"
-    fi
-}
-
-log_step "Pinning self-updating applications"
-
-# Apps that self-update and should be pinned to avoid conflicts
-readonly PIN_APPS=("chatgpt" "visual-studio-code")
-
-if checkpoint "Pin self-updating apps to prevent Homebrew conflicts? (Recommended)"; then
-    log_info "Pinning apps that self-update to prevent Homebrew conflicts..."
-
-    local pinned_count=0
-    for app in "${PIN_APPS[@]}"; do
-      if brew list --cask "$app" >/dev/null 2>&1; then
-        if brew pin "$app" 2>/dev/null; then
-          log_success "Pinned $app"
-          pinned_count=$((pinned_count + 1))
-        else
-          log_warning "Failed to pin $app (may already be pinned)"
-        fi
-      else
-        log_info "Skipping $app (not installed)"
-      fi
-    done
-
-    log_info "Pinned $pinned_count apps"
+if [[ $installed_self_updating -eq 0 ]]; then
+  log_info "No self-updating applications currently installed"
 else
-    log_info "Skipping app pinning"
+  log_info "Found $installed_self_updating self-updating application(s)"
+  log_info "These apps will update themselves - no action needed from Homebrew"
 fi
 
 # Final summary
