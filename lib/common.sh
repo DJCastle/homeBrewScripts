@@ -175,21 +175,33 @@ log_message() {
     local message="$4"
     local current_level_num
     current_level_num=$(get_log_level_num)
-    
+
     # Check if message should be logged based on log level
     if [[ $level_num -lt $current_level_num ]]; then
         return 0
     fi
-    
+
     local timestamp
     timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    
+    local iso_timestamp
+    iso_timestamp=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+
     # Print to console with color
     echo -e "${color}[$level]${NC} $message"
-    
-    # Write to log file without color codes
+
+    # Write to standard log file without color codes
     if [[ -n "${LOG_FILE:-}" ]]; then
         echo "[$timestamp] [$level] $message" >> "$LOG_FILE"
+    fi
+
+    # Write to JSON log file if enabled (NEW in 2026)
+    if [[ "${ENABLE_JSON_LOGS:-false}" == "true" ]] && [[ -n "${LOG_FILE:-}" ]]; then
+        local json_log_file="${LOG_FILE%.log}.json"
+        # Escape quotes and backslashes in message for JSON
+        local escaped_message
+        escaped_message=$(echo "$message" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
+        # Write JSON log entry
+        echo "{\"timestamp\":\"$iso_timestamp\",\"level\":\"$level\",\"message\":\"$escaped_message\",\"script\":\"${0##*/}\",\"user\":\"$(whoami)\",\"pid\":$$}" >> "$json_log_file"
     fi
 }
 

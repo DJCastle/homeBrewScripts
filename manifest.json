@@ -4,14 +4,14 @@
     "name": "homeBrewScripts",
     "branch": "main"
   },
-  "generated_at": "2025-09-27T21:09:40.681Z",
+  "generated_at": "2026-02-06T12:00:00.000Z",
   "items": [
     {
       "name": "README.md",
       "path": "README.md",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/README.md",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/README.md",
-      "updated": "2025-09-26T22:13:32Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "f106e58",
       "title": "📚 Documentation & Getting Started",
       "description": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively."
@@ -21,7 +21,7 @@
       "path": "brew_setup_tahoe.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/brew_setup_tahoe.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/brew_setup_tahoe.sh",
-      "updated": "2025-09-26T02:24:11Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "9d74e65",
       "title": "🍺 Homebrew Setup (Educational)",
       "description": "Educational Homebrew installer with interactive setup, dry-run mode, and comprehensive safety features. Perfect for learning shell scripting while automating macOS setup."
@@ -31,7 +31,7 @@
       "path": "install-essential-apps.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/install-essential-apps.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/install-essential-apps.sh",
-      "updated": "2025-09-12T04:09:00Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "0b53a22",
       "title": "📦 Essential Apps Installer",
       "description": "Batch installer for essential macOS applications using Homebrew. Installs productivity, development, and utility apps automatically."
@@ -41,7 +41,7 @@
       "path": "setup-auto-update.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/setup-auto-update.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/setup-auto-update.sh",
-      "updated": "2025-09-12T04:09:00Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "0b53a22",
       "title": "⚙️ Auto-Update Setup",
       "description": "Configures automatic Homebrew updates with text notifications. Sets up scheduled maintenance using macOS launchd."
@@ -51,7 +51,7 @@
       "path": "setup-hybrid-notifications.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/setup-hybrid-notifications.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/setup-hybrid-notifications.sh",
-      "updated": "2025-09-12T04:09:00Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "0b53a22",
       "title": "📧 Notification Setup (Email + SMS)",
       "description": "Advanced notification setup supporting both email and SMS alerts for system updates and maintenance tasks."
@@ -61,7 +61,7 @@
       "path": "auto-update-brew.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/auto-update-brew.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/auto-update-brew.sh",
-      "updated": "2025-09-12T04:09:00Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "0b53a22",
       "title": "🔄 Auto-Update (Basic)",
       "description": "Basic automatic Homebrew updater with text notifications. Runs scheduled updates and sends status reports."
@@ -71,7 +71,7 @@
       "path": "auto-update-brew-hybrid.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/auto-update-brew-hybrid.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/auto-update-brew-hybrid.sh",
-      "updated": "2025-09-12T04:09:00Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "0b53a22",
       "title": "🔄 Auto-Update (Advanced)",
       "description": "Advanced automatic updater with email and SMS notifications. Includes detailed reporting and error handling."
@@ -81,7 +81,7 @@
       "path": "cleanup-homebrew.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/cleanup-homebrew.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/cleanup-homebrew.sh",
-      "updated": "2025-09-12T04:09:00Z",
+      "updated": "2026-02-06T12:00:00Z",
       "sha": "0b53a22",
       "title": "🧹 Homebrew Cleanup",
       "description": "Comprehensive Homebrew maintenance script. Removes old packages, clears caches, and optimizes disk usage."
