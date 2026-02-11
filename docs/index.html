@@ -41,21 +41,77 @@
           <span class="hero-badge">MIT License</span>
           <span class="hero-badge">Apple Silicon Ready</span>
         </div>
+        <div class="hero-actions">
+          <a href="https://github.com/DJCastle/homeBrewScripts/archive/refs/heads/main.zip" class="btn-primary">Download All Scripts (.zip)</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" class="btn-secondary" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
       </div>
     </section>
 
-    <!-- Quick Start -->
+    <!-- Disclaimer -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="disclaimer">
+          <div class="disclaimer-icon">&#9888;&#65039;</div>
+          <div class="disclaimer-content">
+            <h3>Use at Your Own Risk</h3>
+            <p>These scripts <strong>modify your system</strong> by installing software, changing shell configurations, and creating scheduled tasks. They are provided "as is" without warranty. Always <strong>back up your system</strong> before use, <strong>review the code</strong> before running, and use <strong><code>--dry-run</code></strong> to preview changes first. See the full <a href="terms.html">Terms of Service</a> for details.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Use -->
     <section class="section">
       <div class="container">
-        <h2 class="section-title">Quick Start</h2>
-        <p class="section-subtitle">Get up and running in three commands.</p>
-        <div class="code-block">
-          <span class="comment"># Clone the repository</span><br>
-          <span class="command">git clone https://github.com/DJCastle/homeBrewScripts.git</span><br><br>
-          <span class="comment"># Make scripts executable</span><br>
-          <span class="command">cd homeBrewScripts && chmod +x *.sh</span><br><br>
-          <span class="comment"># Run the interactive setup (dry-run first)</span><br>
-          <span class="command">./brew_setup_tahoe.sh --dry-run</span>
+        <h2 class="section-title">How to Use</h2>
+        <p class="section-subtitle">Two ways to get started. Pick whichever you prefer.</p>
+
+        <div class="instructions-grid">
+          <div class="instruction-card">
+            <div class="instruction-number">Option A</div>
+            <h3>Download Everything</h3>
+            <p>Best if you want the full toolkit.</p>
+            <div class="code-block">
+              <span class="comment"># Download and unzip</span><br>
+              <span class="command">curl -L -o brewscripts.zip https://github.com/DJCastle/homeBrewScripts/archive/refs/heads/main.zip</span><br>
+              <span class="command">unzip brewscripts.zip && cd homeBrewScripts-main</span><br><br>
+              <span class="comment"># Make scripts executable</span><br>
+              <span class="command">chmod +x *.sh</span><br><br>
+              <span class="comment"># Preview what would happen (safe, no changes made)</span><br>
+              <span class="command">./brew_setup_tahoe.sh --dry-run</span><br><br>
+              <span class="comment"># Run for real when ready</span><br>
+              <span class="command">./brew_setup_tahoe.sh</span>
+            </div>
+          </div>
+
+          <div class="instruction-card">
+            <div class="instruction-number">Option B</div>
+            <h3>Clone with Git</h3>
+            <p>Best if you want to stay updated or contribute.</p>
+            <div class="code-block">
+              <span class="comment"># Clone the repository</span><br>
+              <span class="command">git clone https://github.com/DJCastle/homeBrewScripts.git</span><br>
+              <span class="command">cd homeBrewScripts</span><br><br>
+              <span class="comment"># Make scripts executable</span><br>
+              <span class="command">chmod +x *.sh</span><br><br>
+              <span class="comment"># Preview what would happen (safe, no changes made)</span><br>
+              <span class="command">./brew_setup_tahoe.sh --dry-run</span><br><br>
+              <span class="comment"># Run for real when ready</span><br>
+              <span class="command">./brew_setup_tahoe.sh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scripts Library -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Scripts Library</h2>
+        <p class="section-subtitle">Browse individual scripts. Download only what you need, or grab them all above.</p>
+        <div id="brew-list" class="scripts-grid">
+          <p class="loading">Loading scripts library...</p>
         </div>
       </div>
     </section>
@@ -63,14 +119,14 @@
     <!-- Features -->
     <section class="section">
       <div class="container">
-        <h2 class="section-title">Features</h2>
+        <h2 class="section-title">What You Get</h2>
         <p class="section-subtitle">Professional tools designed to teach and automate.</p>
         <div class="features-grid">
 
           <div class="feature-card">
-            <div class="feature-icon">🎓</div>
-            <h3>Learn While You Build</h3>
-            <p>Every function is documented with educational comments explaining shell scripting concepts, patterns, and best practices.</p>
+            <div class="feature-icon">🍺</div>
+            <h3>Interactive Setup</h3>
+            <p>Full Homebrew installation with architecture detection, shell configuration, and guided app selection. Works on Intel and Apple Silicon.</p>
           </div>
 
           <div class="feature-card">
@@ -80,15 +136,15 @@
           </div>
 
           <div class="feature-card">
-            <div class="feature-icon">🍎</div>
-            <h3>Apple Silicon Native</h3>
-            <p>Full M1/M2/M3/M4 detection with chip-specific optimizations and Rosetta 2 compatibility checks.</p>
+            <div class="feature-icon">📦</div>
+            <h3>App Management</h3>
+            <p>Batch install development tools, productivity apps, creative software, and utilities. Fully configurable through a single config file.</p>
           </div>
 
           <div class="feature-card">
-            <div class="feature-icon">🔧</div>
-            <h3>Fully Configurable</h3>
-            <p>External configuration files let you customize everything without modifying script code. Add your own apps and preferences.</p>
+            <div class="feature-icon">🔄</div>
+            <h3>Auto Updates</h3>
+            <p>Scheduled Homebrew updates with network and power awareness. Runs only when conditions are right.</p>
           </div>
 
           <div class="feature-card">
@@ -98,69 +154,41 @@
           </div>
 
           <div class="feature-card">
-            <div class="feature-icon">🔒</div>
-            <h3>Security Verified</h3>
-            <p>Installation scripts are downloaded, verified, and inspected before execution. Source validation and size checks built in.</p>
+            <div class="feature-icon">🎓</div>
+            <h3>Learn While You Build</h3>
+            <p>Every function is documented with educational comments explaining shell scripting concepts, patterns, and best practices.</p>
           </div>
 
         </div>
       </div>
     </section>
 
-    <!-- Scripts Library -->
+    <!-- Requirements -->
     <section class="section">
       <div class="container">
-        <h2 class="section-title">Scripts Library</h2>
-        <p class="section-subtitle">Browse all available scripts and documentation.</p>
-        <div id="brew-list" class="scripts-grid">
-          <p class="loading">Loading scripts library...</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- What's Included -->
-    <section class="section">
-      <div class="container">
-        <h2 class="section-title">What's Included</h2>
-        <p class="section-subtitle">A complete toolkit for macOS setup and maintenance.</p>
-        <div class="features-grid">
-
-          <div class="feature-card">
-            <div class="feature-icon">🍺</div>
-            <h3>Interactive Setup</h3>
-            <p>Full Homebrew installation with architecture detection, shell configuration, and guided app selection.</p>
+        <h2 class="section-title">Requirements</h2>
+        <p class="section-subtitle">What you need before running these scripts.</p>
+        <div class="requirements-list">
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>macOS 12.0 (Monterey) or later</strong> &mdash; Intel or Apple Silicon</div>
           </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📦</div>
-            <h3>App Management</h3>
-            <p>Batch install development tools, productivity apps, creative software, and utilities from a single config file.</p>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>Administrator privileges</strong> &mdash; you'll be prompted for your password</div>
           </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🔄</div>
-            <h3>Auto Updates</h3>
-            <p>Scheduled Homebrew updates with network and power awareness. Basic and advanced notification options.</p>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>Internet connection</strong> &mdash; for downloading Homebrew and packages</div>
           </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🧹</div>
-            <h3>System Cleanup</h3>
-            <p>Remove old packages, clear caches, and optimize disk usage with comprehensive cleanup scripts.</p>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>Terminal access</strong> &mdash; Applications &rarr; Utilities &rarr; Terminal</div>
           </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📧</div>
-            <h3>Hybrid Notifications</h3>
-            <p>Dual notification system with detailed HTML email reports and quick iMessage text summaries.</p>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>At least 1 GB free disk space</strong> &mdash; for Homebrew and installed apps</div>
           </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3>Structured Logging</h3>
-            <p>Multi-level logging with optional JSON output for parsing and analysis. Debug, info, warning, and error levels.</p>
-          </div>
-
         </div>
       </div>
     </section>
@@ -207,17 +235,26 @@
         if (!res.ok) throw new Error(res.status + " " + res.statusText);
         const data = await res.json();
         const items = Array.isArray(data.items) ? data.items : [];
-        el.innerHTML = items.map(it => `
+        el.innerHTML = items.map(it => {
+          const isScript = it.name.endsWith('.sh');
+          const isDoc = it.name.endsWith('.md');
+          const typeLabel = isScript ? 'Script' : isDoc ? 'Docs' : 'File';
+          const typeClass = isScript ? 'badge-script' : isDoc ? 'badge-docs' : 'badge-file';
+          return `
           <article class="card">
+            <div class="card-header">
+              <span class="card-type ${typeClass}">${typeLabel}</span>
+              <span class="card-filename">${it.name}</span>
+            </div>
             <h3><a href="${it.html_url}" target="_blank" rel="noopener">${it.title || it.name}</a></h3>
-            ${it.description ? `<p>${it.description}</p>` : ''}
-            <p class="meta">Updated: ${fmt(it.updated)} ${it.sha ? "\u00b7 " + it.sha : ""}</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+            ${it.description ? `<p class="card-desc">${it.description}</p>` : ''}
+            <p class="meta">Updated: ${fmt(it.updated)}</p>
+            <div class="card-actions">
+              <a class="btn btn-download" href="${it.raw_url}" download="${it.name}">Download</a>
               <a class="btn" href="${it.html_url}" target="_blank" rel="noopener">View on GitHub</a>
-              <a class="btn" href="${it.raw_url}" target="_blank" rel="noopener">Raw file</a>
             </div>
           </article>
-        `).join("") || `<p>No scripts found.</p>`;
+        `}).join("") || `<p>No scripts found.</p>`;
       } catch(e) {
         console.error("Manifest load failed:", e);
         el.innerHTML = `<p style="color:var(--text-muted)">Failed to load scripts library. <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener">View on GitHub</a> instead.</p>`;
