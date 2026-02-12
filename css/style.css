@@ -271,6 +271,9 @@ main {
   border-radius: var(--radius);
   padding: 28px;
   transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .feature-card:hover {
@@ -296,6 +299,7 @@ main {
   color: var(--text-secondary);
   font-size: 0.9rem;
   line-height: 1.55;
+  flex-grow: 1;
 }
 
 /* --- Scripts Library (dynamic cards) --- */
@@ -314,6 +318,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .card:hover {
@@ -537,6 +542,9 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 28px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .instruction-card h3 {
@@ -604,6 +612,7 @@ main {
   line-height: 1.7;
   overflow-x: auto;
   margin: 16px 0;
+  flex-grow: 1;
 }
 
 .code-block .comment {
@@ -612,6 +621,7 @@ main {
 
 .code-block .command {
   color: var(--accent);
+  word-break: break-all;
 }
 
 /* --- Loading State --- */
@@ -820,5 +830,15 @@ main {
   .feature-card,
   .instruction-card {
     padding: 22px;
+  }
+
+  .code-block {
+    padding: 16px;
+    font-size: 0.75rem;
+  }
+
+  .card .btn {
+    flex: 1;
+    justify-content: center;
   }
 }
