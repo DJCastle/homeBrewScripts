@@ -78,7 +78,6 @@ main {
 /* --- Header / Nav --- */
 .site-header {
   border-bottom: 1px solid var(--border);
-  padding: 16px 0;
   position: sticky;
   top: 0;
   background: rgba(15, 17, 23, 0.85);
@@ -91,6 +90,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 64px;
 }
 
 .site-logo {
@@ -125,11 +125,17 @@ main {
 .nav-toggle {
   display: none;
   background: none;
-  border: none;
+  border: 1px solid var(--border);
   color: var(--text-primary);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease;
+}
+
+.nav-toggle:hover {
+  border-color: var(--accent);
 }
 
 /* --- Hero Section --- */
@@ -255,7 +261,7 @@ main {
 /* --- Features Grid --- */
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 20px;
 }
 
@@ -295,8 +301,8 @@ main {
 /* --- Scripts Library (dynamic cards) --- */
 .scripts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 16px;
 }
 
 .card {
@@ -473,10 +479,56 @@ main {
   text-underline-offset: 2px;
 }
 
+/* --- Brew Info Callout --- */
+.brew-info {
+  background: var(--accent-soft);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+}
+
+.brew-info p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.brew-info strong {
+  color: var(--text-primary);
+}
+
+.brew-info-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.brew-info-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  transition: all 0.2s ease;
+}
+
+.brew-info-links a:hover {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
 /* --- Instructions Grid --- */
 .instructions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr));
   gap: 20px;
 }
 
@@ -705,7 +757,15 @@ main {
   .features-grid,
   .scripts-grid,
   .instructions-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  .card,
+  .feature-card,
+  .instruction-card {
+    width: 100%;
+    padding: 24px;
   }
 
   .page-header {
@@ -716,14 +776,20 @@ main {
     font-size: 1.75rem;
   }
 
-  /* Mobile nav */
+  /* Mobile nav — frosted glass dropdown */
+  .nav-toggle {
+    display: block;
+  }
+
   .site-nav {
     display: none;
     position: absolute;
-    top: 100%;
+    top: 64px;
     left: 0;
     right: 0;
-    background: var(--bg-secondary);
+    background: rgba(15, 17, 23, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     flex-direction: column;
     padding: 16px 24px;
@@ -734,27 +800,25 @@ main {
     display: flex;
   }
 
-  .nav-toggle {
-    display: block;
-  }
-
   .footer-content {
     flex-direction: column;
+    gap: 16px;
     text-align: center;
   }
 }
 
 @media (max-width: 480px) {
-  .hero h1 {
-    font-size: 1.65rem;
-  }
-
   .container {
     padding: 0 16px;
   }
 
+  .hero h1 {
+    font-size: 1.65rem;
+  }
+
+  .card,
   .feature-card,
-  .card {
+  .instruction-card {
     padding: 22px;
   }
 }
