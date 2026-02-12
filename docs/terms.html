@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — Brew Scripts</title>
+  <meta name="description" content="Terms of Service for Brew Scripts, an open-source Homebrew automation toolkit by CodeCraftedApps.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.site-nav').classList.toggle('open')">&#9776;</button>
+      <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html" class="active">Terms</a>
+        <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://codecraftedapps.com">CodeCraftedApps</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Terms of Service</h1>
+        <p>Last updated: February 11, 2026</p>
+      </div>
+    </div>
+
+    <section class="content-section">
+      <div class="container">
+        <div class="content-body">
+
+          <p>Welcome to Brew Scripts. By downloading, cloning, or using the scripts, tools, and resources provided in this repository (collectively, the "Scripts"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree, please do not use the Scripts.</p>
+
+          <h2>1. Open-Source License</h2>
+          <p>Brew Scripts is released under the <a href="https://github.com/DJCastle/homeBrewScripts/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>. Your use of the Scripts is governed by the terms of that license. In the event of a conflict between these Terms and the MIT License, the MIT License shall prevail for matters related to code usage, modification, and distribution.</p>
+
+          <h2>2. System Modification Disclaimer</h2>
+          <p>The Scripts are designed to modify your macOS system. By using them, you acknowledge that the Scripts will:</p>
+          <ul>
+            <li>Install Homebrew package manager on your system</li>
+            <li>Modify shell configuration files (<code>.zshrc</code>, <code>.bash_profile</code>, <code>.zprofile</code>, <code>.bashrc</code>)</li>
+            <li>Install third-party applications via Homebrew casks</li>
+            <li>Create scheduled tasks (launchd agents) for automatic updates</li>
+            <li>Create log files in <code>~/Library/Logs/</code></li>
+            <li>Modify system PATH and environment variables</li>
+          </ul>
+          <p>You are solely responsible for understanding what each script does before running it. We strongly recommend using the <code>--dry-run</code> flag to preview changes before execution.</p>
+
+          <h2>3. Your Responsibilities</h2>
+          <p>By using Brew Scripts, you agree to:</p>
+          <ul>
+            <li><strong>Back up your system</strong> before running any scripts that modify system settings</li>
+            <li><strong>Review the source code</strong> and configuration files before execution</li>
+            <li><strong>Understand the operations</strong> each script performs on your system</li>
+            <li><strong>Test in a safe environment</strong> if you are uncertain about the effects</li>
+            <li><strong>Keep your system updated</strong> and maintain good security practices</li>
+            <li><strong>Customize configuration files</strong> with your own settings before use (default placeholder values like phone numbers and email addresses must be replaced)</li>
+          </ul>
+
+          <h2>4. Disclaimer of Warranties</h2>
+          <p>The Scripts are provided "AS IS" and "AS AVAILABLE" without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+          <p>We do not warrant that:</p>
+          <ul>
+            <li>The Scripts will be error-free, uninterrupted, or free of vulnerabilities</li>
+            <li>The Scripts will be compatible with all macOS versions or system configurations</li>
+            <li>Third-party applications installed by the Scripts will function correctly</li>
+            <li>Automated updates will complete successfully in all network and power conditions</li>
+            <li>The Scripts will not conflict with other software or system modifications</li>
+          </ul>
+
+          <h2>5. Limitation of Liability</h2>
+          <p>To the fullest extent permitted by applicable law, CodeCraftedApps and its contributors shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, including but not limited to:</p>
+          <ul>
+            <li>Data loss or corruption resulting from script execution</li>
+            <li>System instability or misconfiguration</li>
+            <li>Unintended software installations or removals</li>
+            <li>Network or notification failures</li>
+            <li>Loss of productivity or business interruption</li>
+            <li>Any costs associated with system recovery or repair</li>
+          </ul>
+
+          <h2>6. Third-Party Software</h2>
+          <p>The Scripts install and manage third-party software through Homebrew. We are not affiliated with, endorsed by, or responsible for any third-party software installed by the Scripts. Each third-party application is governed by its own license and terms of service.</p>
+          <p>Specifically:</p>
+          <ul>
+            <li><strong>Homebrew:</strong> Subject to the <a href="https://github.com/Homebrew/brew/blob/HEAD/LICENSE.txt" target="_blank" rel="noopener">Homebrew License</a></li>
+            <li><strong>Installed applications:</strong> Subject to their respective licenses and EULAs</li>
+            <li><strong>Apple system components:</strong> Subject to Apple's Terms of Service</li>
+          </ul>
+
+          <h2>7. Security Considerations</h2>
+          <p>While we implement security measures (source verification, script inspection, dry-run mode), you should:</p>
+          <ul>
+            <li>Always review scripts before running them with elevated privileges</li>
+            <li>Never run scripts from untrusted sources without inspection</li>
+            <li>Keep your operating system and security software updated</li>
+            <li>Be cautious with scripts that request administrator (sudo) access</li>
+            <li>Verify the integrity of the repository before use</li>
+          </ul>
+
+          <h2>8. Educational Purpose</h2>
+          <p>Brew Scripts is designed as an educational resource for learning shell scripting. While the scripts are functional and production-ready, their primary purpose is to demonstrate best practices in shell scripting, system administration, and automation. The educational comments and documentation are provided for learning purposes and should not be considered professional system administration training.</p>
+
+          <h2>9. Contributions</h2>
+          <p>Contributions to the Brew Scripts repository are welcome and governed by the <a href="https://github.com/DJCastle/homeBrewScripts/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing Guidelines</a>. By submitting a contribution, you agree that your contribution will be licensed under the same MIT License as the project.</p>
+
+          <h2>10. Modifications to Scripts</h2>
+          <p>We reserve the right to modify, update, or discontinue any part of the Scripts at any time without prior notice. We encourage you to review changes by monitoring the repository's commit history and release notes.</p>
+
+          <h2>11. Changes to These Terms</h2>
+          <p>We may update these Terms from time to time. Changes will be posted on this page with an updated date. Significant changes will also be reflected in the repository's commit history. Your continued use of the Scripts after changes are posted constitutes acceptance of the revised Terms.</p>
+
+          <h2>12. Governing Law</h2>
+          <p>These Terms shall be governed by and construed in accordance with the laws of the United States, without regard to conflict of law principles.</p>
+
+          <h2>13. Parent Organization</h2>
+          <p>Brew Scripts is a project of CodeCraftedApps. For the general terms covering all CodeCraftedApps projects, please see the <a href="https://codecraftedapps.com/terms.html">CodeCraftedApps Terms of Service</a>. Where these tool-specific terms provide more detail, they take precedence for matters related to Brew Scripts.</p>
+
+          <h2>14. Contact</h2>
+          <p>If you have questions about these Terms, please reach out through the <a href="https://codecraftedapps.com/contact.html">CodeCraftedApps Contact page</a> or open an issue on <a href="https://github.com/DJCastle/homeBrewScripts/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-copyright">&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+        <nav class="footer-links">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://codecraftedapps.com">CodeCraftedApps</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
