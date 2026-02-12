@@ -111,8 +111,8 @@ cd homeBrewScripts
 
 ```
 homeBrewScripts/
-├── config/                    # Configuration files
-│   └── homebrew-scripts.conf  # Main configuration
+├── config/                                # Configuration files
+│   └── homebrew-scripts.example.conf  # Example config (copy to .conf)
 ├── lib/                       # Shared libraries
 │   └── common.sh              # Common functions
 ├── homebrew-setup.sh          # Main setup script
@@ -123,10 +123,9 @@ homeBrewScripts/
 ### Step 3: Configure Your Preferences
 
 ```bash
-# Edit the configuration file to customize your setup
+# Copy the example config and customize it
+cp config/homebrew-scripts.example.conf config/homebrew-scripts.conf
 nano config/homebrew-scripts.conf
-
-# Or let the script create a default configuration for you
 ```
 
 ### Step 4: Run Your First Script
