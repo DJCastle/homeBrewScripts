@@ -235,7 +235,7 @@ check_power_status() {
 # Function to check if Homebrew is installed
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
-        print_error "Homebrew is not installed. Please run ./install-homebrew.sh first."
+        print_error "Homebrew is not installed. Please run ./brew_setup_tahoe.sh first."
         return 1
     fi
     return 0
@@ -363,7 +363,7 @@ main() {
     # Check prerequisites
     if ! check_homebrew; then
         send_text_message "❌ Auto Update Brew: Homebrew not installed"
-        send_email_notification "❌ Auto Update Brew Failed" "Homebrew is not installed. Please run ./install-homebrew.sh first." "$LOG"
+        send_email_notification "❌ Auto Update Brew Failed" "Homebrew is not installed. Please run ./brew_setup_tahoe.sh first." "$LOG"
         exit 1
     fi
     

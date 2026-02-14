@@ -34,9 +34,9 @@ This tutorial uses the Homebrew automation scripts as a practical example to tea
 ### Script Metadata
 ```bash
 ###############################################################################
-# Script Name: homebrew-setup.sh
+# Script Name: brew_setup_tahoe.sh
 # Description: Educational Homebrew installer
-# Version: 2.0.0
+# Version: 3.0.0
 # License: MIT
 ###############################################################################
 ```
@@ -76,7 +76,7 @@ declare -A CUSTOM_APPS=(
 
 # Regular arrays for lists
 CONFIG_LOCATIONS=(
-    "$PROJECT_ROOT/config/homebrew-scripts.conf"
+    "$PROJECT_ROOT/config/homebrew-scripts.conf"  # Copy from .example.conf
     "$HOME/.config/homebrew-scripts/config.conf"
 )
 ```

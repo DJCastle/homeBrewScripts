@@ -31,7 +31,7 @@ These scripts will modify your system. While they include extensive safety measu
 ### 1. Dry-Run Mode
 ```bash
 # See what would happen without making changes
-./homebrew-setup.sh --dry-run
+./brew_setup_tahoe.sh --dry-run
 ```
 
 **What it does:**
@@ -169,8 +169,8 @@ INSTALL_UTILITIES=true
 ### 2. Use Dry-Run Mode First
 ```bash
 # Always test before applying
-./homebrew-setup.sh --dry-run
-./homebrew-setup.sh --debug --dry-run  # For detailed output
+./brew_setup_tahoe.sh --dry-run
+./brew_setup_tahoe.sh --debug --dry-run  # For detailed output
 ```
 
 ### 3. Review Logs Regularly
@@ -184,6 +184,9 @@ grep ERROR ~/Library/Logs/HomebrewSetup.log
 
 ### 4. Keep Configuration Under Version Control
 ```bash
+# Create your config from the example file
+cp config/homebrew-scripts.example.conf config/homebrew-scripts.conf
+
 # Track your configuration changes
 git init config/
 git add config/homebrew-scripts.conf
@@ -284,7 +287,7 @@ When you encounter issues:
 ## 🎯 Customization Guidelines
 
 ### Safe Modifications
-- **Configuration changes**: Modify `config/homebrew-scripts.conf`
+- **Configuration changes**: Modify `config/homebrew-scripts.conf` (copy from `homebrew-scripts.example.conf` if needed)
 - **Application lists**: Add/remove applications in configuration
 - **Scheduling**: Adjust update schedules to your needs
 - **Notification preferences**: Customize alert methods
