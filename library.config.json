@@ -5,8 +5,6 @@
     "readme.md",
     "LICENSE",
     "LICENSE.md",
-    "CONTRIBUTING.md",
-    "PROJECT-OVERVIEW.md",
     "*.txt",
     ".*"
   ],

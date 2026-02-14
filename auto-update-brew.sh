@@ -140,7 +140,7 @@ check_power_status() {
 # Function to check if Homebrew is installed
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
-        print_error "Homebrew is not installed. Please run ./install-homebrew.sh first."
+        print_error "Homebrew is not installed. Please run ./brew_setup_tahoe.sh first."
         return 1
     fi
     return 0

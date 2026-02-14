@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 ###############################################################################
-# Script Name: homebrew-setup.sh (formerly brew_setup_tahoe.sh)
+# Script Name: brew_setup_tahoe.sh
 # Description: 🍺 Educational Homebrew Installer - Interactive setup with customizable app selection
-# Version: 2.0.0
+# Version: 3.0.0
 # License: MIT
 #
 # EDUCATIONAL PURPOSE:
@@ -45,18 +45,18 @@
 # 🚀 QUICK START:
 # 1. Open Terminal (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homebrew-scripts
-# 3. Make executable: chmod +x homebrew-setup.sh
-# 4. Run: ./homebrew-setup.sh
+# 3. Make executable: chmod +x brew_setup_tahoe.sh
+# 4. Run: ./brew_setup_tahoe.sh
 #
 # 📖 USAGE OPTIONS:
-#    ./homebrew-setup.sh                    # Interactive mode (recommended)
-#    ./homebrew-setup.sh --dry-run          # Show what would be done
-#    ./homebrew-setup.sh --non-interactive  # Automated mode
-#    ./homebrew-setup.sh --config-only      # Just create/edit configuration
-#    ./homebrew-setup.sh --help             # Show detailed help
+#    ./brew_setup_tahoe.sh                    # Interactive mode (recommended)
+#    ./brew_setup_tahoe.sh --dry-run          # Show what would be done
+#    ./brew_setup_tahoe.sh --non-interactive  # Automated mode
+#    ./brew_setup_tahoe.sh --config-only      # Just create/edit configuration
+#    ./brew_setup_tahoe.sh --help             # Show detailed help
 #
 # 📁 FILES CREATED/MODIFIED:
-#    - Configuration: config/homebrew-scripts.conf
+#    - Configuration: config/homebrew-scripts.conf (copy from .example.conf)
 #    - Logs: ~/Library/Logs/HomebrewSetup.log
 #    - Shell profiles: ~/.zshrc, ~/.bash_profile, etc.
 #
@@ -165,7 +165,7 @@ DESCRIPTION:
     while providing a robust, user-friendly installation experience.
 
 USAGE:
-    ./homebrew-setup.sh [OPTIONS]
+    ./brew_setup_tahoe.sh [OPTIONS]
 
 OPTIONS:
     -h, --help              Show this help message and exit
@@ -176,16 +176,16 @@ OPTIONS:
 
 EXAMPLES:
     # Interactive installation (recommended for first-time users)
-    ./homebrew-setup.sh
+    ./brew_setup_tahoe.sh
 
     # See what the script would do without making changes
-    ./homebrew-setup.sh --dry-run
+    ./brew_setup_tahoe.sh --dry-run
 
     # Automated installation using configuration file
-    ./homebrew-setup.sh --non-interactive
+    ./brew_setup_tahoe.sh --non-interactive
 
     # Just set up configuration
-    ./homebrew-setup.sh --config-only
+    ./brew_setup_tahoe.sh --config-only
 
 WHAT THIS SCRIPT DOES:
     1. Validates system requirements (macOS version, architecture)
@@ -210,7 +210,7 @@ SAFETY FEATURES:
     - Safe to run multiple times
 
 FILES CREATED/MODIFIED:
-    - Configuration: config/homebrew-scripts.conf
+    - Configuration: config/homebrew-scripts.conf (copy from .example.conf)
     - Logs: ~/Library/Logs/HomebrewSetup.log
     - Shell profiles: ~/.zshrc, ~/.bash_profile, etc.
 
@@ -584,7 +584,7 @@ cleanup() {
         echo "5. Use --dry-run to test without making changes"
         echo
         echo -e "${BLUE}🔍 For more help:${NC}"
-        echo "• See docs/safety-and-best-practices.md for troubleshooting"
+        echo "• See safety-and-best-practices.md for troubleshooting"
         echo "• Run with --debug for more detailed output"
         echo "• Check the GitHub issues for similar problems"
         echo
@@ -632,7 +632,6 @@ if [[ "$ARCH" == "arm64" ]]; then
   BREW_PREFIX="/opt/homebrew"
 
   # Enhanced detection for specific Apple Silicon chip
-  local chip_info
   chip_info=$(sysctl -n machdep.cpu.brand_string 2>/dev/null || echo "Apple Silicon")
 
   log_success "Apple Silicon Mac detected"
@@ -703,8 +702,8 @@ if ! xcode-select -p >/dev/null 2>&1; then
   fi
 
   log_info "Waiting up to 15 minutes for installation to complete..."
-  local waited=0
-  local max_wait=900  # 15 minutes
+  waited=0
+  max_wait=900  # 15 minutes
 
   while [[ $waited -lt $max_wait ]]; do
     if xcode-select -p >/dev/null 2>&1; then
@@ -714,7 +713,7 @@ if ! xcode-select -p >/dev/null 2>&1; then
 
     # Show progress every 30 seconds
     if [[ $((waited % 30)) -eq 0 ]] && [[ $waited -gt 0 ]]; then
-      local remaining=$((max_wait - waited))
+      remaining=$((max_wait - waited))
       log_info "Still waiting... ${remaining}s remaining"
     fi
 
@@ -743,8 +742,8 @@ if ! command -v brew >/dev/null 2>&1; then
 
   # Security: Download and verify the installation script
   log_info "🔒 Security Check: Verifying Homebrew installation script..."
-  local brew_install_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-  local brew_install_script
+  brew_install_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  brew_install_script=""
 
   # Download the script to a temporary location for inspection
   brew_install_script=$(mktemp)
@@ -764,7 +763,7 @@ if ! command -v brew >/dev/null 2>&1; then
   fi
 
   # Check script size is reasonable (should be between 5KB and 50KB)
-  local script_size
+  script_size=""
   script_size=$(wc -c < "$brew_install_script" | tr -d ' ')
   if [[ $script_size -lt 5000 ]] || [[ $script_size -gt 51200 ]]; then
     log_warning "Installation script size ($script_size bytes) is unusual"
@@ -817,7 +816,7 @@ readonly BASHRC="${HOME}/.bashrc"
 log_info "Configuring Homebrew environment in shell profiles..."
 
 # Configure Homebrew environment
-local brew_shellenv='eval "$('"$BREW_PREFIX"'/bin/brew shellenv)"'
+brew_shellenv='eval "$('"$BREW_PREFIX"'/bin/brew shellenv)"'
 append_line_if_missing "$brew_shellenv" "$ZPROFILE"
 append_line_if_missing "$brew_shellenv" "$ZSHRC"
 append_line_if_missing "$brew_shellenv" "$BASH_PROFILE"
@@ -887,7 +886,7 @@ echo "The HOMEBREW_NO_AUTO_UPDATE environment variable (already set) prevents"
 echo "Homebrew from automatically updating these apps when you use brew commands."
 echo
 echo "Self-updating applications installed:"
-local installed_self_updating=0
+installed_self_updating=0
 for app in "${SELF_UPDATING_APPS[@]}"; do
   if brew list --cask "$app" >/dev/null 2>&1; then
     echo "  ✓ $app (updates itself)"
@@ -912,7 +911,7 @@ log_info "  • Homebrew installed at: $BREW_PREFIX"
 log_info "  • PATH configured in shell profiles"
 log_info "  • Auto-update checks disabled"
 log_info "  • Analytics disabled"
-log_info "  • Applications available: ${#APPS[@]} total"
+log_info "  • Applications available: ${#CUSTOM_APPS[@]} total"
 echo
 log_info "Next steps:"
 log_info "  • Restart your terminal or run: source ~/.zshrc"

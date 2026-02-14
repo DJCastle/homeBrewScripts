@@ -2,7 +2,7 @@
 ###############################################################################
 # Library: common.sh
 # Description: 📚 Common functions and utilities for Homebrew scripts
-# Version: 2.0.0
+# Version: 3.0.0
 #
 # EDUCATIONAL PURPOSE:
 # This library demonstrates modular shell scripting practices, showing how to:
@@ -612,7 +612,7 @@ report_error() {
     echo -e "${BLUE}🔍 For more help:${NC}"
     echo "  • Check the log file: ${LOG_FILE:-~/Library/Logs/HomebrewScripts.log}"
     echo "  • Run with --debug for more details"
-    echo "  • See docs/safety-and-best-practices.md for troubleshooting"
+    echo "  • See safety-and-best-practices.md for troubleshooting"
     echo
 }
 
