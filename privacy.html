@@ -25,7 +25,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -34,13 +37,13 @@
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
-      <button class="nav-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.site-nav').classList.toggle('open')">&#9776;</button>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
       <nav class="site-nav">
         <a href="index.html">Home</a>
         <a href="privacy.html" class="active">Privacy</a>
         <a href="terms.html">Terms</a>
-        <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+        <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
       </nav>
     </div>
   </header>
@@ -90,9 +93,9 @@
           <h2>Third-Party Services</h2>
           <p>The scripts interact with the following third-party services as part of their core functionality:</p>
           <ul>
-            <li><strong>Homebrew (brew.sh):</strong> The scripts download and manage packages through Homebrew, which is subject to <a href="https://brew.sh/" target="_blank" rel="noopener">Homebrew's own policies</a></li>
-            <li><strong>GitHub:</strong> Source code is hosted on GitHub. Downloading or cloning the repository is subject to <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's Privacy Statement</a></li>
-            <li><strong>Apple iMessage/Mail:</strong> If you configure notifications, the scripts use macOS built-in Mail and iMessage apps, which are subject to <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's Privacy Policy</a></li>
+            <li><strong>Homebrew (brew.sh):</strong> The scripts download and manage packages through Homebrew, which is subject to <a href="https://brew.sh/" target="_blank" rel="noopener noreferrer">Homebrew's own policies</a></li>
+            <li><strong>GitHub:</strong> Source code is hosted on GitHub. Downloading or cloning the repository is subject to <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub's Privacy Statement</a></li>
+            <li><strong>Apple iMessage/Mail:</strong> If you configure notifications, the scripts use macOS built-in Mail and iMessage apps, which are subject to <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener noreferrer">Apple's Privacy Policy</a></li>
           </ul>
 
           <h2>Website Data</h2>
@@ -100,14 +103,14 @@
           <h3>This Website</h3>
           <p>This website (brewscripts.codecraftedapps.com) is a static site hosted on GitHub Pages. We do not use cookies, tracking pixels, or analytics services on this site.</p>
           <ul>
-            <li>GitHub Pages may collect standard server logs (IP address, browser type, pages visited) as part of hosting. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's Privacy Statement</a> for details</li>
-            <li>Google Fonts are loaded from Google's CDN, which is subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a></li>
-            <li>The scripts library loads manifest data from jsDelivr CDN, which is subject to <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net" target="_blank" rel="noopener">jsDelivr's Privacy Policy</a></li>
-            <li>A Buy Me a Coffee support widget is loaded from buymeacoffee.com, which is subject to <a href="https://www.buymeacoffee.com/privacy-policy" target="_blank" rel="noopener">Buy Me a Coffee's Privacy Policy</a></li>
+            <li>GitHub Pages may collect standard server logs (IP address, browser type, pages visited) as part of hosting. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub's Privacy Statement</a> for details</li>
+            <li>Google Fonts are loaded from Google's CDN, which is subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a></li>
+            <li>The scripts library loads manifest data from jsDelivr CDN, which is subject to <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net" target="_blank" rel="noopener noreferrer">jsDelivr's Privacy Policy</a></li>
+            <li>A Buy Me a Coffee support widget is loaded from buymeacoffee.com, which is subject to <a href="https://www.buymeacoffee.com/privacy-policy" target="_blank" rel="noopener noreferrer">Buy Me a Coffee's Privacy Policy</a></li>
           </ul>
 
           <h2>Open-Source Transparency</h2>
-          <p>As an open-source project, all code is publicly available for review on <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener">GitHub</a>. You can inspect exactly what the scripts do before running them. This transparency is a core part of our privacy commitment.</p>
+          <p>As an open-source project, all code is publicly available for review on <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>. You can inspect exactly what the scripts do before running them. This transparency is a core part of our privacy commitment.</p>
 
           <h2>Children's Privacy</h2>
           <p>Brew Scripts is a developer tool and is not directed at children under the age of 13. We do not knowingly collect any personal information from children.</p>
@@ -119,7 +122,7 @@
           <p>Brew Scripts is a project of CodeCraftedApps. For the general privacy policy covering all CodeCraftedApps projects, please see the <a href="https://codecraftedapps.com/privacy.html">CodeCraftedApps Privacy Policy</a>. Where this tool-specific policy provides more detail, it takes precedence for matters related to Brew Scripts.</p>
 
           <h2>Contact</h2>
-          <p>If you have questions about this Privacy Policy, please reach out through the <a href="https://codecraftedapps.com/contact.html">CodeCraftedApps Contact page</a> or open an issue on <a href="https://github.com/DJCastle/homeBrewScripts/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+          <p>If you have questions about this Privacy Policy, please reach out through the <a href="https://codecraftedapps.com/contact.html">CodeCraftedApps Contact page</a> or open an issue on <a href="https://github.com/DJCastle/homeBrewScripts/issues" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
 
         </div>
       </div>
@@ -136,12 +139,28 @@
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
           <a href="mailto:brew@codecraftedapps.com">Contact</a>
-          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://codecraftedapps.com" target="_blank" rel="noopener">CodeCraftedApps</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
         </nav>
       </div>
     </div>
   </footer>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+  })();
+  </script>
 
   <!-- Buy Me a Coffee -->
   <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
