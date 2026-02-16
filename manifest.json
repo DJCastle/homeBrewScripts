@@ -4,17 +4,27 @@
     "name": "homeBrewScripts",
     "branch": "main"
   },
-  "generated_at": "2026-02-14T19:40:53.246Z",
+  "generated_at": "2026-02-16T21:19:36.819Z",
   "items": [
     {
       "name": "README.md",
       "path": "README.md",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/README.md",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/README.md",
-      "updated": "2026-02-12T16:01:07Z",
-      "sha": "65ec2a8",
+      "updated": "2026-02-16T21:19:07Z",
+      "sha": "3567b8c",
       "title": "📚 Documentation & Getting Started",
       "description": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively."
+    },
+    {
+      "name": "quick-setup.sh",
+      "path": "quick-setup.sh",
+      "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/quick-setup.sh",
+      "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/quick-setup.sh",
+      "updated": "2026-02-16T21:19:07Z",
+      "sha": "3567b8c",
+      "title": "🚀 Quick Dev Environment Setup",
+      "description": "Lightweight bootstrap script — installs CLI tools via Brewfile, configures VSCode extensions, and sets up Git in one command."
     },
     {
       "name": "brew_setup_tahoe.sh",
