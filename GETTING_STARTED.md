@@ -56,24 +56,29 @@ You only need to do this once.
 
 ## Step 4 — Run Your First Script
 
-Always start with a dry run to preview what will happen — nothing gets installed or changed:
+**Option A: Quick Setup** (fast, opinionated — no config file needed)
 
 ```bash
-./brew_setup_tahoe.sh --dry-run
+./quick-setup.sh --dry-run   # Preview first
+./quick-setup.sh             # Run for real
 ```
 
-When you're ready, run it for real:
+Installs CLI tools via Brewfile, configures VSCode extensions, and sets up Git in one pass.
+
+**Option B: Full Interactive Setup** (config-driven, educational)
 
 ```bash
-./brew_setup_tahoe.sh
+./brew_setup_tahoe.sh --dry-run   # Preview first
+./brew_setup_tahoe.sh             # Run for real
 ```
 
-The script will walk you through each step interactively. You can skip any step you're not comfortable with.
+Walks you through each step interactively. You can skip any step you're not comfortable with.
 
 ## What Each Script Does
 
 | Script | Purpose |
 |--------|---------|
+| `quick-setup.sh` | Quick bootstrap — CLI tools, VSCode extensions, Git config |
 | `brew_setup_tahoe.sh` | Full interactive setup — installs Homebrew, configures your shell, installs apps |
 | `install-essential-apps.sh` | Batch-installs apps from your config |
 | `auto-update-brew.sh` | Runs Homebrew updates with text notifications |

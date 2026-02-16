@@ -1,0 +1,9 @@
+{
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.enable": { "*": false },
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "geminicodeassist.project": "YOUR_PROJECT_ID",
+  "http.systemCertificatesNode": true,
+  "claudeCode.preferredLocation": "panel"
+}

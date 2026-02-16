@@ -1,0 +1,5 @@
+GitHub.copilot
+GitHub.copilot-chat
+eamodio.gitlens
+Google.geminicodeassist
+anthropic.claude-code
