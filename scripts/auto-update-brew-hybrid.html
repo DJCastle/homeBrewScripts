@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto-Update with Email &amp; Text — Brew Scripts</title>
+  <meta name="description" content="Advanced auto-update script that sends both email reports and text message summaries after completing Homebrew updates. Best for users who want comprehensive update tracking.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/scripts/auto-update-brew-hybrid.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Auto-Update with Email &amp; Text — Brew Scripts">
+  <meta property="og:description" content="Advanced auto-update script that sends both email reports and text message summaries after completing Homebrew updates. Best for users who want comprehensive update tracking.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/scripts/auto-update-brew-hybrid.html">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Auto-Update with Email &amp; Text — Brew Scripts">
+  <meta name="twitter:description" content="Advanced auto-update script that sends both email reports and text message summaries after completing Homebrew updates. Best for users who want comprehensive update tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <nav class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Auto-Update with Email &amp; Text
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Auto-Update with Email &amp; Text</h1>
+        <p>Advanced Homebrew auto-updates with dual notification support for comprehensive update tracking.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">&#128196; auto-update-brew-hybrid.sh</span>
+          <span class="script-meta-item">&#128737; Automation</span>
+          <span class="script-meta-item">&#128187; macOS 12.0+</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/auto-update-brew-hybrid.sh" class="btn-primary" download>Download Script</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts/blob/main/auto-update-brew-hybrid.sh" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What This Script Does</h2>
+          <p>The <code>auto-update-brew-hybrid.sh</code> script is the most fully-featured auto-update option in the Brew Scripts toolkit. It performs the same core Homebrew maintenance operations as the basic auto-update script &mdash; updating the package index, upgrading installed packages, and cleaning up old versions &mdash; but adds a comprehensive dual-notification system that keeps you informed through both email and text message.</p>
+          <p>The hybrid approach to notifications addresses a common trade-off. Text messages are great for quick, at-a-glance status updates that you can read in seconds, but they are not ideal for detailed information. Email, on the other hand, can accommodate a full report with all the technical details you might want to review, but emails are easy to miss or ignore if you are not checking your inbox regularly. By sending both, this script ensures you get the quick notification via text and the detailed report via email, covering both use cases.</p>
+          <p>The email report is the more substantial of the two notifications. It includes a complete list of every package that was updated, with both the old and new version numbers. If any packages failed to update, the error messages are included so you can diagnose the issue. The report also shows the total number of packages on your system, how many were outdated before the update, how many were successfully upgraded, and how much disk space was recovered during the cleanup phase. This level of detail makes it easy to audit your system's update history over time.</p>
+          <p>The text message notification is deliberately brief. It provides a one-line summary with the total number of packages updated and a pass/fail status indicator. If there were any errors, the text mentions that details are available in the email. This design means you can glance at the text on your phone's lock screen and immediately know whether everything went smoothly, without needing to read through a full report unless you want to.</p>
+          <p>Email delivery uses the macOS built-in Mail app via AppleScript. This means you do not need to configure an SMTP server, install any third-party email tools, or manage API keys for an email service. The script simply tells Mail.app to compose and send a message to your configured email address. The only prerequisite is that Mail.app is set up with at least one email account, which is the case for most Mac users. Text message delivery uses the same iMessage integration as the basic auto-update script, communicating with the Messages app through AppleScript.</p>
+          <p>Like all auto-update scripts in the toolkit, the hybrid version performs pre-flight checks before running. It verifies that your Mac is connected to the correct Wi-Fi network and optionally checks that AC power is connected. If either condition is not met, the script exits gracefully and logs the reason for skipping. This prevents unwanted updates from running on metered connections or draining your battery during a portable work session.</p>
+          <p>The script produces detailed logs that complement the email and text notifications. Even if both notification channels fail for some reason, the log file at <code>~/Library/Logs/</code> captures every detail of the update run. Each log entry includes a timestamp and severity level, making it straightforward to trace through the sequence of events and identify where any problems occurred.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Usage</h2>
+          <p>This script can be run manually or scheduled for automatic execution. Make sure both your email and phone number are configured in the config file for full notification support.</p>
+          <pre><code># Preview what would be updated and how notifications would be sent
+./auto-update-brew-hybrid.sh --dry-run
+
+# Run the hybrid update with email and text notifications
+./auto-update-brew-hybrid.sh</code></pre>
+          <p>For automatic scheduling, use the <a href="setup-hybrid-notifications.html">Schedule Hybrid Updates</a> script, which creates a launchd agent specifically configured to trigger this script on a recurring basis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Options and Flags</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--dry-run</code></td>
+                <td>Simulate the entire update and notification process. Shows which packages would be updated and previews the email and text message content without sending anything.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Configuration</h2>
+          <p>This script uses the most configuration settings of any script in the toolkit. Make sure the following are set in your <code>config/homebrew-scripts.conf</code> file:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>EMAIL_ADDRESS</code></td>
+                <td>The email address where detailed update reports are sent. Must be reachable from an account configured in Mail.app.</td>
+              </tr>
+              <tr>
+                <td><code>PHONE_NUMBER</code></td>
+                <td>Your iMessage-compatible phone number for brief text message summaries. Include the country code.</td>
+              </tr>
+              <tr>
+                <td><code>WIFI_NETWORK</code></td>
+                <td>The name of your preferred Wi-Fi network. Updates only run when connected to this network. Leave empty to skip the network check.</td>
+              </tr>
+              <tr>
+                <td><code>REQUIRE_AC_POWER</code></td>
+                <td>When set to <code>true</code>, updates only run when the Mac is connected to AC power.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>If <code>EMAIL_ADDRESS</code> is not configured, the script still runs updates and sends the text message, but skips the email report. Similarly, if <code>PHONE_NUMBER</code> is not set, the text message is skipped but the email is still sent. Both notification channels operate independently.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What Gets Changed</h2>
+          <ul>
+            <li><strong>Homebrew packages</strong> &mdash; All installed formulae and casks are updated to their latest versions.</li>
+            <li><strong>Old package versions</strong> &mdash; Previous versions of upgraded packages are removed to reclaim disk space.</li>
+            <li><strong>Download cache</strong> &mdash; Cached installer files are cleared during the cleanup phase.</li>
+            <li><strong>Email via Mail.app</strong> &mdash; A detailed update report is composed and sent using the macOS Mail application. The email appears in your sent folder in Mail.app.</li>
+            <li><strong>iMessage via Messages.app</strong> &mdash; A brief summary text message is sent through the macOS Messages application.</li>
+            <li><strong>Log file</strong> &mdash; A comprehensive log is created at <code>~/Library/Logs/</code> with full details of every operation performed.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Related Scripts</h2>
+          <ul>
+            <li><a href="auto-update-brew.html">Auto-Update (Basic)</a> &mdash; A simpler version that sends only text message notifications. Choose this if you do not need email reports or want to keep things minimal.</li>
+            <li><a href="setup-hybrid-notifications.html">Schedule Hybrid Updates</a> &mdash; Creates a launchd agent to run this hybrid update script automatically on a schedule you define.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

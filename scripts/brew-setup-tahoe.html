@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Interactive Homebrew Setup — Brew Scripts</title>
+  <meta name="description" content="The main setup script. Provides a complete, interactive Homebrew installation experience with architecture detection, shell configuration, and guided app selection.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/scripts/brew-setup-tahoe.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Full Interactive Homebrew Setup — Brew Scripts">
+  <meta property="og:description" content="The main setup script. Provides a complete, interactive Homebrew installation experience with architecture detection, shell configuration, and guided app selection.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/scripts/brew-setup-tahoe.html">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Full Interactive Homebrew Setup — Brew Scripts">
+  <meta name="twitter:description" content="The main setup script. Provides a complete, interactive Homebrew installation experience with architecture detection, shell configuration, and guided app selection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <nav class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Full Interactive Homebrew Setup
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Full Interactive Homebrew Setup</h1>
+        <p>The recommended starting point for first-time users who want full control over their Mac setup.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">&#128196; brew_setup_tahoe.sh</span>
+          <span class="script-meta-item">&#128737; Setup</span>
+          <span class="script-meta-item">&#128187; macOS 12.0+</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/brew_setup_tahoe.sh" class="btn-primary" download>Download Script</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts/blob/main/brew_setup_tahoe.sh" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What This Script Does</h2>
+          <p>The <code>brew_setup_tahoe.sh</code> script is the flagship entry point for the entire Brew Scripts toolkit. It provides a complete, end-to-end Homebrew installation and configuration experience that is designed to be both thorough and approachable, even for users who have never opened Terminal before. Rather than making assumptions about what you need, it walks you through every step interactively and lets you decide what to install, what to skip, and how to configure your system.</p>
+          <p>When you launch the script, the first thing it does is detect your Mac's processor architecture. This matters because Apple Silicon Macs (M1, M2, M3, M4, and later) use a different Homebrew installation path than older Intel-based Macs. On Apple Silicon, Homebrew installs to <code>/opt/homebrew</code>, while Intel Macs use <code>/usr/local</code>. The script handles this distinction automatically, ensuring that all subsequent PATH configurations and package installations point to the correct location for your hardware.</p>
+          <p>Next, the script checks whether Homebrew is already installed. If it is, the script validates the installation and moves on. If Homebrew is not present, the script downloads and runs the official Homebrew installer. It also checks for and installs the Xcode Command Line Tools if they are not already available, since many Homebrew packages depend on these tools for compilation.</p>
+          <p>Once Homebrew is ready, the script configures your shell environment by adding the appropriate Homebrew PATH entries to your shell profile. It detects whether you are using zsh (the default on modern macOS) or bash, and edits the corresponding configuration file &mdash; <code>~/.zshrc</code> or <code>~/.bash_profile</code>. This ensures that the <code>brew</code> command is available every time you open a new terminal window.</p>
+          <p>The interactive app installation phase is where the script truly shines. It reads your configuration file to determine which categories of applications you want to install &mdash; development tools, productivity apps, creative software, communication tools, and utilities. For each category, the script presents you with the list of apps and asks for confirmation before proceeding. You can accept the entire category, skip it entirely, or install apps one at a time. This level of control means you never install anything you did not explicitly approve.</p>
+          <p>Throughout the entire process, the script writes detailed logs to a file at <code>~/Library/Logs/HomebrewSetup.log</code>. Every action, every success, and every error is recorded with timestamps and severity levels. If something goes wrong, the log file is your first resource for diagnosing the issue. The script also supports a <code>--debug</code> flag that produces even more verbose output for advanced troubleshooting scenarios.</p>
+          <p>Perhaps the most important safety feature is <code>--dry-run</code> mode. When you pass this flag, the script simulates the entire setup process without actually making any changes to your system. It shows you exactly what would happen &mdash; which packages would be installed, which files would be modified, and which system checks would pass or fail &mdash; without touching anything. This is strongly recommended for your first run so you can verify that everything looks correct before committing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Usage</h2>
+          <p>Run the script from the root of the Brew Scripts project directory. Make sure you have already made the script executable with <code>chmod +x brew_setup_tahoe.sh</code> before your first run.</p>
+          <pre><code># Preview all changes without modifying your system
+./brew_setup_tahoe.sh --dry-run
+
+# Run the full interactive setup
+./brew_setup_tahoe.sh
+
+# Run with verbose debug output for troubleshooting
+./brew_setup_tahoe.sh --debug</code></pre>
+          <p>The script will prompt you at each major step, so you always have the opportunity to review what is about to happen and decide whether to proceed. If you need to stop the script at any point, press <code>Ctrl+C</code> to cancel safely.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Options and Flags</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--dry-run</code></td>
+                <td>Simulate the entire setup process without making any changes. Shows what would be installed, configured, and modified.</td>
+              </tr>
+              <tr>
+                <td><code>--debug</code></td>
+                <td>Enable verbose output that prints detailed information about each step, including system calls and their results. Useful for diagnosing issues.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Configuration</h2>
+          <p>This script reads from your <code>config/homebrew-scripts.conf</code> file to determine which applications to install. The key settings that affect this script are:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>INSTALL_DEVELOPMENT_TOOLS</code></td>
+                <td>When set to <code>true</code>, includes development tools like Visual Studio Code, Docker, and iTerm2 in the installation options.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_PRODUCTIVITY_APPS</code></td>
+                <td>When set to <code>true</code>, includes productivity applications like Notion, Obsidian, and Raycast.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_CREATIVE_APPS</code></td>
+                <td>When set to <code>true</code>, includes creative tools like Figma and Affinity Designer.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_COMMUNICATION_APPS</code></td>
+                <td>When set to <code>true</code>, includes communication apps like Slack, Discord, and Zoom.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_UTILITIES</code></td>
+                <td>When set to <code>true</code>, includes utility apps like AppCleaner, The Unarchiver, and Rectangle.</td>
+              </tr>
+              <tr>
+                <td><code>CUSTOM_APPS</code></td>
+                <td>An array of additional Homebrew cask names to install beyond the category defaults.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>If no configuration file is found, the script will still run but will skip the app installation phase and focus on installing and configuring Homebrew itself.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What Gets Changed</h2>
+          <p>Understanding exactly what this script modifies on your system is important. Here is a complete list of changes the script may make:</p>
+          <ul>
+            <li><strong>Homebrew installation</strong> &mdash; Installed to <code>/opt/homebrew</code> on Apple Silicon Macs or <code>/usr/local</code> on Intel Macs. This includes the Homebrew core, tap repositories, and the package cache directory.</li>
+            <li><strong>Shell profile</strong> &mdash; Your <code>~/.zshrc</code> (or <code>~/.bash_profile</code> for bash users) is updated with the Homebrew PATH entry so the <code>brew</code> command is available in all future terminal sessions.</li>
+            <li><strong>Xcode Command Line Tools</strong> &mdash; If not already present, these are installed via Apple's software update mechanism. They provide essential compilers, libraries, and headers needed by many Homebrew packages.</li>
+            <li><strong>Applications</strong> &mdash; Any apps you approve during the interactive selection are installed via <code>brew install --cask</code> and placed in your <code>/Applications</code> directory.</li>
+            <li><strong>Log file</strong> &mdash; A detailed log is created at <code>~/Library/Logs/HomebrewSetup.log</code> recording every action taken during the setup process.</li>
+          </ul>
+          <p>No changes are made to system preferences, system-level configurations, or files outside of the directories listed above. All modifications are confined to your user account.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Related Scripts</h2>
+          <ul>
+            <li><a href="quick-setup.html">Quick Bootstrap</a> &mdash; A faster, opinionated alternative that requires no configuration file and installs a curated set of development tools.</li>
+            <li><a href="install-essential-apps.html">Essential Apps Installer</a> &mdash; If Homebrew is already installed and you just need to batch-install your apps from the config file, this focused script is a lighter option.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

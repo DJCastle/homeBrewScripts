@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homebrew Cleanup — Brew Scripts</title>
+  <meta name="description" content="Removes old package versions, clears the Homebrew download cache, and reports disk space recovered. Run this periodically to keep your system lean. Supports --dry-run.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/scripts/cleanup-homebrew.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Homebrew Cleanup — Brew Scripts">
+  <meta property="og:description" content="Removes old package versions, clears the Homebrew download cache, and reports disk space recovered. Run this periodically to keep your system lean. Supports --dry-run.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/scripts/cleanup-homebrew.html">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Homebrew Cleanup — Brew Scripts">
+  <meta name="twitter:description" content="Removes old package versions, clears the Homebrew download cache, and reports disk space recovered. Run this periodically to keep your system lean. Supports --dry-run.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <nav class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Homebrew Cleanup
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Homebrew Cleanup</h1>
+        <p>Remove old package versions, clear caches, and reclaim disk space with a single command.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">&#128196; cleanup-homebrew.sh</span>
+          <span class="script-meta-item">&#128737; Maintenance</span>
+          <span class="script-meta-item">&#128187; macOS 12.0+</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/cleanup-homebrew.sh" class="btn-primary" download>Download Script</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts/blob/main/cleanup-homebrew.sh" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What This Script Does</h2>
+          <p>The <code>cleanup-homebrew.sh</code> script is a maintenance utility that removes accumulated cruft from your Homebrew installation and recovers disk space. Over time, as you install and upgrade packages, Homebrew retains old versions of formulae, cached download files, and dependencies that are no longer needed by any installed package. This script systematically cleans up all of these artifacts and provides a clear report of how much disk space was recovered in the process.</p>
+          <p>Homebrew's default behavior is to keep old versions of packages around even after you upgrade to newer ones. This is actually a useful safety feature &mdash; if a new version of a package causes problems, you can switch back to the previous version quickly because it is still on disk. However, over weeks and months of regular updates, these old versions accumulate and can consume a significant amount of storage. On machines with limited SSD space, this wasted storage adds up noticeably. The cleanup script addresses this by removing all old versions, keeping only the currently installed version of each package.</p>
+          <p>In addition to old package versions, the script clears Homebrew's download cache. Every time you install or upgrade a package, Homebrew downloads the package file (a compressed archive or installer) and stores it in its cache directory. These cached files serve as a local backup &mdash; if you uninstall and reinstall a package, Homebrew can use the cached file instead of downloading it again. But for most users, these cached files just take up space without providing much practical benefit. The cleanup script removes them, and Homebrew simply re-downloads any needed files the next time you install something.</p>
+          <p>The third cleanup operation is <code>brew autoremove</code>, which identifies and removes packages that were originally installed as dependencies of other packages but are no longer needed. This can happen when you uninstall a package that brought in several dependencies &mdash; those dependencies may still be installed even though nothing depends on them anymore. The autoremove command finds these orphaned dependencies and removes them cleanly.</p>
+          <p>Before performing any cleanup, the script measures the current disk space used by Homebrew's cellar (where packages are stored) and cache directories. After cleanup is complete, it measures again and calculates the difference. This before-and-after comparison is displayed prominently so you can see exactly how much space was recovered. For long-running systems that have not been cleaned up in a while, it is not unusual to recover several gigabytes of space.</p>
+          <p>The <code>--dry-run</code> flag is particularly useful with this script. When you run <code>./cleanup-homebrew.sh --dry-run</code>, the script identifies everything that would be cleaned up and shows you the list without actually deleting anything. This lets you review what is about to be removed and verify that nothing you want to keep is on the list. Once you are satisfied with the dry run output, run the script without the flag to perform the actual cleanup.</p>
+          <p>This script is completely safe to run at any time. It does not remove currently active packages, modify running applications, or touch anything outside of Homebrew's own directories. After cleanup, all your installed packages continue to work exactly as before. The only difference is that old, unused versions and cached files are gone, and you have more free disk space. You can run this script as often as you like &mdash; if there is nothing to clean up, it simply reports that everything is already tidy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Usage</h2>
+          <p>Run this script whenever you want to reclaim disk space from your Homebrew installation. There are no prerequisites beyond having Homebrew installed.</p>
+          <pre><code># See what would be cleaned up without deleting anything
+./cleanup-homebrew.sh --dry-run
+
+# Run the full cleanup
+./cleanup-homebrew.sh</code></pre>
+          <p>A monthly cleanup is a good practice for most users. If you use the auto-update scripts, cleanup is already included in each update run, so you may not need to run this separately.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Options and Flags</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--dry-run</code></td>
+                <td>Preview what would be removed without actually deleting anything. Lists old package versions, cached downloads, and orphaned dependencies that would be cleaned up.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What Gets Changed</h2>
+          <ul>
+            <li><strong>Old package versions</strong> &mdash; Previous versions of installed formulae and casks are removed from the Homebrew cellar. Only the current version of each package is retained.</li>
+            <li><strong>Download cache</strong> &mdash; Cached package download files stored in Homebrew's cache directory are deleted. Homebrew will re-download files as needed for future installations.</li>
+            <li><strong>Orphaned dependencies</strong> &mdash; Packages that were installed as dependencies but are no longer required by any installed formula are uninstalled via <code>brew autoremove</code>.</li>
+            <li><strong>Log file</strong> &mdash; A log file is created recording which packages were cleaned up, how much space each item consumed, and the total disk space recovered.</li>
+          </ul>
+          <p>No currently active packages are affected. All installed formulae and casks remain fully functional after cleanup. The script only removes data that is no longer needed by your current Homebrew installation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Related Scripts</h2>
+          <ul>
+            <li><a href="install-essential-apps.html">Essential Apps Installer</a> &mdash; After batch-installing many applications, running a cleanup removes the cached installer files and frees up the space they were using.</li>
+            <li><a href="auto-update-brew.html">Auto-Update (Basic)</a> &mdash; The auto-update scripts include a cleanup step as part of their update cycle, so if you have scheduled updates running, manual cleanup is less frequently needed.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

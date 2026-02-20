@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shell Scripting Guide — Brew Scripts</title>
+  <meta name="description" content="Learn shell scripting through real-world Homebrew automation examples. Covers script structure, variables, functions, error handling, logging, system detection, and practical exercises.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/shell-scripting-guide.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Shell Scripting Guide — Brew Scripts">
+  <meta property="og:description" content="Learn shell scripting through real-world Homebrew automation examples. Covers script structure, variables, functions, error handling, logging, system detection, and practical exercises.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/shell-scripting-guide.html">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Shell Scripting Guide — Brew Scripts">
+  <meta name="twitter:description" content="Learn shell scripting through real-world Homebrew automation examples. Covers script structure, variables, functions, error handling, logging, system detection, and practical exercises.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="guides.html" class="active">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span><a href="guides.html">Guides</a><span class="separator">/</span>Shell Scripting Guide
+    </nav>
+    <div class="page-header">
+      <div class="container">
+        <h1>Shell Scripting Guide</h1>
+        <p>Learn professional shell scripting by studying the real-world patterns and techniques used in the Brew Scripts automation toolkit.</p>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-with-toc">
+          <div class="content-body">
+
+            <p>This guide uses the Homebrew automation scripts as practical, real-world examples to teach shell scripting concepts. Rather than learning from contrived examples, you will study code that solves actual problems &mdash; automating package management, detecting system architecture, handling errors gracefully, and building interactive tools. Each section builds on the previous one, taking you from fundamental concepts through to professional-level patterns.</p>
+
+            <div class="callout callout-info">
+              <div class="callout-icon">&#8505;</div>
+              <div class="callout-content">
+                <p><strong>How to use this guide:</strong> Read each section and study the code examples carefully. The examples are taken directly from the Brew Scripts source code, so you can see how these patterns work in a production context. Try the exercises at the end to reinforce what you have learned.</p>
+              </div>
+            </div>
+
+            <!-- 1. Basic Script Structure -->
+            <h2 id="basic-structure">1. Basic Script Structure</h2>
+            <p>Every well-written shell script begins with a consistent structure that establishes the execution environment, documents the script's purpose, and sets up error handling. Getting this foundation right is essential because it determines how reliably your script behaves across different systems and under different conditions.</p>
+
+            <h3>The Shebang Line</h3>
+            <p>The very first line of any shell script is the shebang (also called a hashbang). This special comment tells the operating system which interpreter should execute the script. Without it, the system would not know whether your file is a Bash script, a Python script, or something else entirely.</p>
+            <pre><code>#!/usr/bin/env bash</code></pre>
+            <p>You might wonder why we use <code>#!/usr/bin/env bash</code> instead of the simpler <code>#!/bin/bash</code>. The answer is portability. On most macOS systems, <code>/bin/bash</code> is an older version of Bash (3.2), while a newer version installed via Homebrew lives at <code>/opt/homebrew/bin/bash</code> or <code>/usr/local/bin/bash</code>. By using <code>env</code>, the script finds whichever <code>bash</code> executable appears first in the user's PATH, which is typically the most up-to-date version available.</p>
+
+            <h3>Script Metadata</h3>
+            <p>After the shebang, professional scripts include a metadata block that describes the script's purpose, author, version, and license. This block is formatted as comments and serves as built-in documentation for anyone who opens the file.</p>
+            <pre><code>###############################################################################
+# Script Name: brew_setup_tahoe.sh
+# Description: Educational Homebrew installer with interactive setup
+# Version:     3.0.0
+# Author:      CodeCraftedApps
+# License:     MIT
+###############################################################################</code></pre>
+            <p>This metadata is not just decoration. When someone encounters your script months or years later &mdash; possibly yourself &mdash; this header immediately communicates what the script does, who wrote it, and what rules govern its use. It takes seconds to write and saves significant time when maintaining or debugging scripts.</p>
+
+            <h3>Strict Error Handling</h3>
+            <p>One of the most important lines in any production shell script is the error handling configuration. Bash's default behavior is surprisingly permissive: it silently ignores failed commands and continues executing. This is almost never what you want in an automation script, where a failed step could mean downstream operations are working with bad data or missing prerequisites.</p>
+            <pre><code>set -euo pipefail</code></pre>
+            <p>This single line enables three critical protections:</p>
+            <ul>
+              <li><code>set -e</code> (errexit) &mdash; Exit immediately if any command returns a non-zero status. Without this, your script would happily continue running even after a command fails, potentially compounding the problem.</li>
+              <li><code>set -u</code> (nounset) &mdash; Treat unset variables as an error rather than silently expanding to an empty string. This catches typos in variable names, which are one of the most common and frustrating bugs in shell scripts.</li>
+              <li><code>set -o pipefail</code> &mdash; If any command in a pipeline fails, the entire pipeline's exit status reflects that failure. Without this, only the last command's exit status is considered, meaning errors in earlier pipeline stages are silently ignored.</li>
+            </ul>
+            <p>Together, these flags transform Bash from a forgiving interactive shell into a strict scripting language that fails fast and loud, which is exactly the behavior you want when automating system operations. If an error occurs, you want to know about it immediately rather than discovering the consequences later.</p>
+
+            <!-- 2. Variables and Configuration -->
+            <h2 id="variables">2. Variables and Configuration</h2>
+            <p>Variables are the foundation of any configurable script. Shell scripting distinguishes between constants (values that should never change during execution) and variables (values that may be modified). Understanding this distinction and using the right type for each situation makes your scripts more robust and easier to reason about.</p>
+
+            <h3>Constants</h3>
+            <p>Constants are values determined at script startup that remain fixed throughout execution. In Bash, you declare constants using the <code>readonly</code> keyword, which prevents them from being accidentally reassigned later in the script. Common constants include the script's directory path, project root, and configuration file locations.</p>
+            <pre><code># Constants (readonly) — determined at startup, never change
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &amp;&amp; pwd)"
+readonly PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." &amp;&amp; pwd)"
+readonly VERSION="3.0.0"
+readonly LOG_FILE="$HOME/Library/Logs/HomebrewSetup.log"</code></pre>
+            <p>The <code>SCRIPT_DIR</code> pattern deserves special attention. It uses <code>BASH_SOURCE[0]</code> to find the actual location of the script file, then resolves it to an absolute path using <code>cd</code> and <code>pwd</code>. This works correctly regardless of how the script was invoked &mdash; whether by absolute path, relative path, or via a symlink. This is a pattern you will use frequently and is worth memorizing.</p>
+
+            <h3>Arrays</h3>
+            <p>Bash supports two types of arrays: indexed arrays (regular lists) and associative arrays (key-value pairs, like dictionaries in other languages). Arrays are essential for managing lists of items such as applications to install, configuration file locations, or required commands to check.</p>
+            <pre><code># Regular arrays — ordered lists of values
+CONFIG_LOCATIONS=(
+    "$PROJECT_ROOT/config/homebrew-scripts.conf"
+    "$HOME/.config/homebrew-scripts/config.conf"
+)
+
+# Associative arrays — key-value pairs for structured data
+declare -A CUSTOM_APPS=(
+    ["visual-studio-code"]="Visual Studio Code:development"
+    ["docker"]="Docker Desktop:development"
+    ["slack"]="Slack:communication"
+    ["1password"]="1Password:utilities"
+)</code></pre>
+            <p>The associative array example shows a common pattern for encoding multiple pieces of information in a single data structure. Each key is the Homebrew package name, and the value contains the display name and category separated by a colon. This lets the script look up both the human-readable name and the category for any package by its identifier.</p>
+
+            <h3>Variables</h3>
+            <p>Unlike constants, variables may change during script execution. They are used for counters, status tracking, and accumulating results. Always initialize variables with sensible defaults to avoid issues with <code>set -u</code> (the nounset option from our strict error handling).</p>
+            <pre><code># Variables (can change during execution)
+CURRENT_STEP=0
+TOTAL_STEPS=8
+INSTALL_COUNT=0
+ERROR_COUNT=0
+DRY_RUN=false</code></pre>
+
+            <!-- 3. Functions and Modularity -->
+            <h2 id="functions">3. Functions and Modularity</h2>
+            <p>Functions are the building blocks of maintainable shell scripts. By encapsulating logic into discrete, named units, you create code that is easier to read, test, debug, and reuse. In the Brew Scripts project, functions are organized into a shared library (<code>lib/common.sh</code>) that all scripts can import, eliminating code duplication and ensuring consistent behavior.</p>
+
+            <h3>Function Design Principles</h3>
+            <p>Every function should follow the Single Responsibility Principle: it should do one thing and do it well. The function's name should clearly communicate its purpose, and its inputs and outputs should be well-defined. Here is an example that validates an email address:</p>
+            <pre><code># Good: Single responsibility, clear name, parameter validation
+validate_email() {
+    local email="$1"
+
+    # Input validation — reject empty strings immediately
+    if [[ -z "$email" ]]; then
+        return 1
+    fi
+
+    # Business logic — check against a regex pattern
+    if [[ "$email" =~ ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ ]]; then
+        return 0
+    else
+        return 1
+    fi
+}</code></pre>
+            <p>Notice several important patterns in this function. First, it uses <code>local</code> to declare its variables. Without <code>local</code>, variables would be global, potentially overwriting values used by the calling code. This is one of the most common sources of subtle bugs in shell scripts. Second, it validates its input before doing any work. Third, it communicates success or failure through return codes (0 for success, non-zero for failure) rather than printing output, which makes it composable with other functions.</p>
+
+            <h3>Function Libraries</h3>
+            <p>When you have functions that are used by multiple scripts, extract them into a shared library file. The <code>source</code> command (or its synonym <code>.</code>) loads the library's functions into the current script's environment, making them available for use.</p>
+            <pre><code># Source external functions from a shared library
+if [[ -f "$LIB_DIR/common.sh" ]]; then
+    # shellcheck source=lib/common.sh
+    source "$LIB_DIR/common.sh"
+else
+    echo "ERROR: Common library not found at $LIB_DIR/common.sh" &gt;&amp;2
+    exit 1
+fi</code></pre>
+            <p>The <code># shellcheck source=</code> comment is a directive for ShellCheck, the static analysis tool for shell scripts. It tells ShellCheck where to find the sourced file so it can check function calls and variable references across files. The defensive check for the library file's existence ensures that the script fails with a clear error message rather than a confusing "command not found" error if the library is missing.</p>
+
+            <h3>Key Design Concepts</h3>
+            <ul>
+              <li><strong>Single Responsibility</strong> &mdash; Each function should do exactly one thing. If you find yourself adding "and" to a function's description, it probably needs to be split into two functions.</li>
+              <li><strong>Parameter Validation</strong> &mdash; Always check that inputs are valid before processing them. Catching bad input at the function boundary is much easier than debugging the effects of invalid data flowing through multiple layers of logic.</li>
+              <li><strong>Return Codes</strong> &mdash; Use return code 0 for success and non-zero for failure. This is the universal convention in Unix systems, and it allows your functions to work seamlessly with <code>if</code> statements, <code>&amp;&amp;</code>/<code>||</code> operators, and <code>set -e</code>.</li>
+              <li><strong>Local Variables</strong> &mdash; Always use <code>local</code> for variables inside functions. Global variables in shell scripts are a recipe for hard-to-find bugs, especially as your script grows larger.</li>
+            </ul>
+
+            <!-- 4. User Input and Interaction -->
+            <h2 id="user-input">4. User Input and Interaction</h2>
+            <p>Interactive scripts need to communicate clearly with the user and handle a wide variety of inputs gracefully. Users will type unexpected things, press enter without typing anything, and make mistakes. A well-designed interactive function anticipates all of these scenarios and handles them without crashing or producing confusing results.</p>
+
+            <h3>Interactive Prompts with Validation</h3>
+            <p>The <code>ask_yes_no</code> function is a cornerstone of the Brew Scripts interactive experience. It presents a yes/no question to the user, handles default values, validates the response, and loops until it gets a valid answer.</p>
+            <pre><code>ask_yes_no() {
+    local prompt="$1"
+    local default="${2:-y}"
+
+    while true; do
+        if [[ "$default" == "y" ]]; then
+            echo -ne "${YELLOW}$prompt [Y/n]: ${NC}"
+        else
+            echo -ne "${YELLOW}$prompt [y/N]: ${NC}"
+        fi
+
+        read -r response
+        response=${response,,}  # Convert to lowercase
+
+        case "$response" in
+            ""|"y"|"yes")
+                [[ "$default" == "y" || "$response" != "" ]] &amp;&amp; return 0 || return 1
+                ;;
+            "n"|"no")
+                return 1
+                ;;
+            *)
+                echo -e "${RED}Please answer yes or no.${NC}"
+                ;;
+        esac
+    done
+}</code></pre>
+            <p>This function demonstrates several important interactive scripting techniques. The <code>${2:-y}</code> syntax provides a default value if the second argument is not supplied. The <code>${response,,}</code> syntax converts the response to lowercase, so "Yes," "YES," and "yes" are all treated the same way. The <code>case</code> statement handles multiple possible inputs clearly, and the <code>while true</code> loop ensures the user cannot proceed until they provide a valid answer.</p>
+
+            <h3>Color Coding</h3>
+            <p>Color makes terminal output dramatically easier to read. The Brew Scripts project defines color constants at the top of the script and uses them consistently throughout to signal different types of information: yellow for prompts, green for success, red for errors, and blue for informational messages.</p>
+            <pre><code># Define color constants for terminal output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly NC='\033[0m'  # No Color — resets to default
+
+# Usage examples
+echo -e "${GREEN}[SUCCESS]${NC} Application installed"
+echo -e "${RED}[ERROR]${NC} Installation failed"
+echo -e "${YELLOW}[WARNING]${NC} Skipping optional step"
+echo -e "${BLUE}[INFO]${NC} Checking system requirements..."</code></pre>
+            <p>Always use the <code>NC</code> (No Color) reset code after colored text. Without it, all subsequent terminal output would inherit the last color set, which can make the entire terminal display unreadable. The <code>-e</code> flag on <code>echo</code> enables interpretation of these escape sequences.</p>
+
+            <!-- 5. Error Handling and Validation -->
+            <h2 id="error-handling">5. Error Handling and Validation</h2>
+            <p>Robust error handling separates amateur scripts from professional-grade automation. In a production environment, network connections drop, disks fill up, permissions change, and commands that worked yesterday fail today. Your script needs to anticipate these situations and respond intelligently rather than simply crashing.</p>
+
+            <h3>Defensive Programming</h3>
+            <p>Defensive programming means checking prerequisites before attempting operations. The <code>check_prerequisites</code> function examines the system environment at startup, identifies all issues, and reports them together rather than failing on the first problem found. This saves the user from a frustrating cycle of fixing one issue, rerunning, finding the next issue, and repeating.</p>
+            <pre><code>check_prerequisites() {
+    local errors=0
+
+    # Check operating system
+    if [[ "$(uname)" != "Darwin" ]]; then
+        log_error "This script requires macOS"
+        ((errors++))
+    fi
+
+    # Check required commands exist
+    local required_commands=("curl" "git" "xcode-select")
+    for cmd in "${required_commands[@]}"; do
+        if ! command -v "$cmd" &gt;/dev/null 2&gt;&amp;1; then
+            log_error "Required command not found: $cmd"
+            ((errors++))
+        fi
+    done
+
+    # Check available disk space
+    local available_space
+    available_space=$(df -h "$HOME" | awk 'NR==2 {print $4}' | sed 's/G//')
+    if [[ "${available_space%.*}" -lt 1 ]]; then
+        log_error "Insufficient disk space (need at least 1GB)"
+        ((errors++))
+    fi
+
+    return $errors
+}</code></pre>
+            <p>The <code>command -v</code> pattern is the most reliable way to check whether a command exists on the system. Unlike <code>which</code>, it works correctly in all shells and does not produce unwanted output. The error counter pattern allows all checks to run so the user sees every issue at once, rather than fixing them one at a time.</p>
+
+            <h3>Retry Logic with Exponential Backoff</h3>
+            <p>Network operations are inherently unreliable. A server might be temporarily overloaded, a DNS lookup might time out, or a connection might be briefly interrupted. Rather than failing immediately, professional scripts retry the operation with increasing delays between attempts. This pattern is called exponential backoff because the delay doubles with each retry.</p>
+            <pre><code>retry_with_backoff() {
+    local max_attempts="${MAX_RETRIES:-3}"
+    local delay="${RETRY_DELAY:-5}"
+    local attempt=1
+
+    while [[ $attempt -le $max_attempts ]]; do
+        if "$@"; then
+            return 0
+        fi
+
+        if [[ $attempt -lt $max_attempts ]]; then
+            log_warning "Attempt $attempt failed, retrying in ${delay}s..."
+            sleep "$delay"
+            delay=$((delay * 2))  # Double the delay each time
+        fi
+
+        ((attempt++))
+    done
+
+    log_error "All $max_attempts attempts failed for: $*"
+    return 1
+}</code></pre>
+            <p>The <code>"$@"</code> variable expands to all arguments passed to the function, preserving quoting. This means you can pass any command and its arguments to <code>retry_with_backoff</code> and it will retry that exact command. For example: <code>retry_with_backoff brew install visual-studio-code</code>. The increasing delay prevents overwhelming a recovering service and gives transient issues time to resolve.</p>
+
+            <!-- 6. Logging and Debugging -->
+            <h2 id="logging">6. Logging and Debugging</h2>
+            <p>A good logging system is your best friend when something goes wrong. It provides a complete record of what happened, when it happened, and in what order. The Brew Scripts logging system writes to both the console (with colors for readability) and a file (with timestamps for debugging), and supports multiple severity levels so you can filter for the information you need.</p>
+
+            <h3>Structured Logging System</h3>
+            <p>The logging system uses numeric severity levels to control which messages are displayed. In normal operation, you might only see INFO and above. During debugging, you can lower the threshold to see DEBUG messages that provide detailed information about every operation.</p>
+            <pre><code># Define log levels with numeric values for comparison
+readonly LOG_LEVEL_DEBUG=0
+readonly LOG_LEVEL_INFO=1
+readonly LOG_LEVEL_WARNING=2
+readonly LOG_LEVEL_ERROR=3
+
+log_message() {
+    local level="$1"
+    local level_num="$2"
+    local color="$3"
+    local message="$4"
+
+    # Check if this message meets the current log level threshold
+    local current_level_num
+    current_level_num=$(get_log_level_num)
+    if [[ $level_num -lt $current_level_num ]]; then
+        return 0
+    fi
+
+    local timestamp
+    timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+    # Console output with color for readability
+    echo -e "${color}[$level]${NC} $message"
+
+    # File output without color codes for clean log files
+    if [[ -n "${LOG_FILE:-}" ]]; then
+        echo "[$timestamp] [$level] $message" &gt;&gt; "$LOG_FILE"
+    fi
+}
+
+# Convenience wrappers for each log level
+log_debug()   { log_message "DEBUG"   $LOG_LEVEL_DEBUG   "$BLUE"   "$1"; }
+log_info()    { log_message "INFO"    $LOG_LEVEL_INFO    "$NC"     "$1"; }
+log_warning() { log_message "WARNING" $LOG_LEVEL_WARNING "$YELLOW" "$1"; }
+log_error()   { log_message "ERROR"   $LOG_LEVEL_ERROR   "$RED"    "$1"; }
+log_success() { log_message "SUCCESS" $LOG_LEVEL_INFO    "$GREEN"  "$1"; }</code></pre>
+            <p>The dual-output design is intentional. Console output uses colors because they are easy to scan visually. File output strips colors (which would appear as garbage escape sequences in a text file) and adds timestamps, which are essential for understanding the sequence and timing of operations when reviewing logs after the fact.</p>
+
+            <h3>Debug Mode</h3>
+            <p>Debug mode provides maximum visibility into what a script is doing. It is activated by passing the <code>--debug</code> flag and enables Bash's command tracing feature, which prints every command before it executes.</p>
+            <pre><code># Enable debug mode when the --debug flag is passed
+if [[ "${DEBUG_MODE:-false}" == "true" ]]; then
+    set -x          # Print every command before execution
+    LOG_LEVEL="DEBUG"  # Show all log messages including debug level
+fi</code></pre>
+            <p>The <code>set -x</code> flag is incredibly powerful for troubleshooting. It shows you the exact command being executed after all variable expansion, quoting, and globbing have been applied. This is often the fastest way to find out why a command is not doing what you expect &mdash; you can see exactly what arguments it is receiving.</p>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Debugging tip:</strong> You can enable <code>set -x</code> for just a section of code by using <code>set -x</code> before the section and <code>set +x</code> after it. This focuses the trace output on the specific area you are investigating, rather than flooding your terminal with trace output from the entire script.</p>
+              </div>
+            </div>
+
+            <!-- 7. System Detection and Adaptation -->
+            <h2 id="system-detection">7. System Detection and Adaptation</h2>
+            <p>macOS runs on two different processor architectures (Intel x86_64 and Apple Silicon arm64), and Homebrew installs to different directories depending on which architecture is in use. Scripts that need to work on both platforms must detect the architecture at runtime and adapt their behavior accordingly. This section shows how to write portable scripts that work correctly on any Mac.</p>
+
+            <h3>Architecture Detection</h3>
+            <p>The <code>uname -m</code> command returns the machine's hardware architecture. By wrapping this in a function, you create a clean abstraction that the rest of your script can use without needing to know the details of how architecture detection works.</p>
+            <pre><code>detect_architecture() {
+    local arch
+    arch="$(uname -m)"
+
+    case "$arch" in
+        "arm64")
+            echo "apple_silicon"
+            ;;
+        "x86_64")
+            echo "intel"
+            ;;
+        *)
+            echo "unknown"
+            ;;
+    esac
+}
+
+get_homebrew_prefix() {
+    local arch
+    arch=$(detect_architecture)
+
+    case "$arch" in
+        "apple_silicon")
+            echo "/opt/homebrew"
+            ;;
+        "intel")
+            echo "/usr/local"
+            ;;
+        *)
+            log_error "Unknown architecture: $arch"
+            return 1
+            ;;
+    esac
+}</code></pre>
+            <p>This is a real-world example of the adapter pattern. On Apple Silicon Macs, Homebrew installs to <code>/opt/homebrew</code>, while on Intel Macs it installs to <code>/usr/local</code>. By encapsulating this logic in a function, every other part of the script can simply call <code>get_homebrew_prefix</code> and get the correct path without worrying about which architecture it is running on.</p>
+
+            <h3>Power and Network Awareness</h3>
+            <p>Automated tasks that run in the background should be aware of system conditions. You probably do not want a large update to start downloading packages when your laptop is on battery power or connected to a tethered phone connection. The following functions check these conditions before proceeding.</p>
+            <pre><code>check_power_status() {
+    local power_info
+    power_info=$(pmset -g ps 2&gt;/dev/null)
+
+    if [[ "${REQUIRE_AC_POWER:-true}" == "true" ]]; then
+        if echo "$power_info" | grep -q "AC Power"; then
+            log_success "Device is connected to AC power"
+            return 0
+        else
+            log_warning "Device is running on battery power"
+            return 1
+        fi
+    fi
+
+    return 0  # AC power not required, always pass
+}
+
+check_network() {
+    local target_network="${WIFI_NETWORK:-}"
+
+    # If no specific network is required, just check for connectivity
+    if [[ -z "$target_network" ]]; then
+        if curl -s --max-time 5 -o /dev/null https://github.com; then
+            log_success "Network connectivity confirmed"
+            return 0
+        else
+            log_error "No network connectivity"
+            return 1
+        fi
+    fi
+
+    # Check if connected to the specified network
+    local current_network
+    current_network=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/ SSID/ {print $2}')
+
+    if [[ "$current_network" == "$target_network" ]]; then
+        log_success "Connected to required network: $target_network"
+        return 0
+    else
+        log_warning "Not connected to required network ($target_network), currently on: $current_network"
+        return 1
+    fi
+}</code></pre>
+            <p>These environmental awareness functions demonstrate an important principle: scripts that run unattended need to be smarter about when and how they operate. By checking power and network status before starting, the auto-update scripts avoid draining your battery or consuming metered data. The configuration variables (<code>REQUIRE_AC_POWER</code> and <code>WIFI_NETWORK</code>) let users control this behavior through the config file.</p>
+
+            <!-- 8. Practical Exercises -->
+            <h2 id="exercises">8. Practical Exercises</h2>
+            <p>The best way to learn shell scripting is to write shell scripts. These exercises are designed to reinforce the concepts covered in this guide. Each exercise builds on the patterns you have seen in the Brew Scripts source code. Try to complete them on your own before looking at the hints, and test your solutions using <code>bash -n</code> for syntax checking and <code>shellcheck</code> for best practice analysis.</p>
+
+            <h3>Exercise 1: Directory Management</h3>
+            <p>Write a function called <code>ensure_directory</code> that takes a directory path as an argument. If the directory exists, it should log a success message and return. If it does not exist, it should create it (including any parent directories) and log what it did. The function should handle errors such as permission denied and return appropriate exit codes.</p>
+            <pre><code>ensure_directory() {
+    local dir_path="$1"
+
+    # Your implementation here:
+    # 1. Validate that dir_path is not empty
+    # 2. Check if the directory already exists
+    # 3. If not, create it with mkdir -p
+    # 4. Handle errors and log the result
+}</code></pre>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Hint:</strong> Use <code>[[ -d "$dir_path" ]]</code> to test if a directory exists. Use <code>mkdir -p</code> to create the directory and all parent directories in one command. Remember to use <code>local</code> for your variables and to return 0 on success and 1 on failure.</p>
+              </div>
+            </div>
+
+            <h3>Exercise 2: Configuration Validation</h3>
+            <p>Create a function called <code>validate_config_file</code> that takes a file path and verifies that the file exists, is readable, and is not empty. It should return 0 if the config file is valid and 1 otherwise, logging specific error messages for each failure mode so the user knows exactly what is wrong.</p>
+            <pre><code>validate_config_file() {
+    local config_path="$1"
+
+    # Your implementation here:
+    # 1. Check if the file exists (-f test)
+    # 2. Check if the file is readable (-r test)
+    # 3. Check if the file is non-empty (-s test)
+    # 4. Log specific errors for each failure case
+    # 5. Return 0 if all checks pass, 1 otherwise
+}</code></pre>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Hint:</strong> Bash provides file test operators for all of these checks: <code>-f</code> tests if a file exists and is a regular file, <code>-r</code> tests if it is readable, and <code>-s</code> tests if it is non-empty. Chain your checks to report all issues, not just the first one.</p>
+              </div>
+            </div>
+
+            <h3>Exercise 3: Interactive Choice Menu</h3>
+            <p>Build a function called <code>show_menu</code> that presents a numbered list of options to the user and returns their selection. The function should accept an array of option strings, display them with numbers, validate that the user's input is a valid number within range, and loop until a valid choice is made.</p>
+            <pre><code>show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    # Your implementation here:
+    # 1. Print the title
+    # 2. Print each option with a number
+    # 3. Prompt for a choice
+    # 4. Validate the input is a number in range
+    # 5. Echo the selected option text
+    # 6. Loop until valid input is received
+}</code></pre>
+
+            <div class="callout callout-tip">
+              <div class="callout-icon">&#9733;</div>
+              <div class="callout-content">
+                <p><strong>Hint:</strong> Use <code>${#options[@]}</code> to get the array length. Use a regex check <code>[[ "$choice" =~ ^[0-9]+$ ]]</code> to verify numeric input. Remember that array indices start at 0, but you will probably want to display numbers starting at 1 for a better user experience.</p>
+              </div>
+            </div>
+
+            <!-- 9. Next Steps and Resources -->
+            <h2 id="next-steps">9. Next Steps and Resources</h2>
+            <p>This guide has covered the core patterns used in professional shell scripting: strict error handling, structured configuration, modular functions, interactive user input, defensive programming, structured logging, and system-aware automation. These are the same patterns used in production environments at companies of all sizes.</p>
+
+            <p>To continue your learning journey, here are the recommended next steps:</p>
+            <ol>
+              <li><strong>Study the actual scripts</strong> in the <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">Brew Scripts repository</a>. Now that you understand the patterns, reading the full source code will reinforce your knowledge and show you how the pieces fit together in a complete application.</li>
+              <li><strong>Modify the configuration</strong> and observe how changes affect script behavior. Experimenting with the config file is a safe, low-risk way to learn how configuration-driven scripts work.</li>
+              <li><strong>Add your own functions</strong> to extend the scripts. Start with small additions and use the existing functions as templates for your code's style and structure.</li>
+              <li><strong>Create your own scripts</strong> using the patterns from this guide. The best way to internalize these techniques is to use them to solve your own problems.</li>
+              <li><strong>Share your improvements</strong> with the community. If you build something useful, consider opening a pull request or sharing it with other learners.</li>
+            </ol>
+
+            <h3>Recommended Resources</h3>
+            <p>These external resources complement this guide and provide deeper dives into specific topics:</p>
+            <ul>
+              <li><a href="https://www.gnu.org/software/bash/manual/" target="_blank" rel="noopener noreferrer">Bash Reference Manual</a> &mdash; The official Bash documentation. Comprehensive and authoritative, this is the definitive reference for every Bash feature and syntax detail.</li>
+              <li><a href="https://www.shellcheck.net/" target="_blank" rel="noopener noreferrer">ShellCheck</a> &mdash; A static analysis tool for shell scripts. Paste your script into the web interface or install it locally, and it will identify bugs, portability issues, and style problems with detailed explanations.</li>
+              <li><a href="https://google.github.io/styleguide/shellguide.html" target="_blank" rel="noopener noreferrer">Google Shell Style Guide</a> &mdash; Google's internal guidelines for writing shell scripts. Even if you do not follow every recommendation, it provides a well-reasoned framework for consistent, readable shell code.</li>
+              <li><a href="https://tldp.org/LDP/abs/html/" target="_blank" rel="noopener noreferrer">Advanced Bash-Scripting Guide</a> &mdash; A comprehensive, freely available guide that covers advanced topics like process substitution, signal handling, and regular expressions in Bash.</li>
+            </ul>
+
+            <div class="callout callout-info">
+              <div class="callout-icon">&#8505;</div>
+              <div class="callout-content">
+                <p><strong>Remember:</strong> Shell scripting is a skill that improves with practice. Do not try to memorize everything at once. Instead, bookmark this guide and the resources above, write scripts to solve real problems, and refer back when you need a refresher on a specific technique. Every professional shell scripter started where you are now.</p>
+              </div>
+            </div>
+
+          </div>
+          <aside class="toc" aria-label="Table of Contents">
+            <h3>On This Page</h3>
+            <ul class="toc-list">
+              <li><a href="#basic-structure">Basic Script Structure</a></li>
+              <li><a href="#variables">Variables and Configuration</a></li>
+              <li><a href="#functions">Functions and Modularity</a></li>
+              <li><a href="#user-input">User Input and Interaction</a></li>
+              <li><a href="#error-handling">Error Handling and Validation</a></li>
+              <li><a href="#logging">Logging and Debugging</a></li>
+              <li><a href="#system-detection">System Detection and Adaptation</a></li>
+              <li><a href="#exercises">Practical Exercises</a></li>
+              <li><a href="#next-steps">Next Steps and Resources</a></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

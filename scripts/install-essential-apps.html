@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Essential Apps Installer — Brew Scripts</title>
+  <meta name="description" content="Batch-installs applications from your configuration file. Reads the CUSTOM_APPS setting and installs each app via Homebrew Cask. Ideal for rebuilding your app collection after a clean macOS install.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/scripts/install-essential-apps.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Essential Apps Installer — Brew Scripts">
+  <meta property="og:description" content="Batch-installs applications from your configuration file. Reads the CUSTOM_APPS setting and installs each app via Homebrew Cask. Ideal for rebuilding your app collection after a clean macOS install.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/scripts/install-essential-apps.html">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Essential Apps Installer — Brew Scripts">
+  <meta name="twitter:description" content="Batch-installs applications from your configuration file. Reads the CUSTOM_APPS setting and installs each app via Homebrew Cask. Ideal for rebuilding your app collection after a clean macOS install.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <nav class="site-nav">
+        <a href="../index.html">Home</a>
+        <a href="../getting-started.html">Getting Started</a>
+        <a href="../guides.html">Guides</a>
+        <a href="../scripts.html" class="active">Scripts</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="../index.html">Home</a><span class="separator">/</span><a href="../scripts.html">Scripts</a><span class="separator">/</span>Essential Apps Installer
+    </nav>
+
+    <div class="page-header">
+      <div class="container">
+        <h1>Essential Apps Installer</h1>
+        <p>Batch-install your favorite applications from a configuration file using Homebrew Cask.</p>
+        <div class="script-meta">
+          <span class="script-meta-item">&#128196; install-essential-apps.sh</span>
+          <span class="script-meta-item">&#128737; Installation</span>
+          <span class="script-meta-item">&#128187; macOS 12.0+</span>
+        </div>
+        <div class="script-actions">
+          <a href="https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/install-essential-apps.sh" class="btn-primary" download>Download Script</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts/blob/main/install-essential-apps.sh" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What This Script Does</h2>
+          <p>The <code>install-essential-apps.sh</code> script is a focused, single-purpose tool designed to batch-install macOS applications from your Brew Scripts configuration file. While the full interactive setup script handles everything from Homebrew installation to shell configuration, this script assumes that Homebrew is already installed and working. Its sole job is to read your app preferences and install them efficiently using Homebrew Cask.</p>
+          <p>This script is particularly valuable in two scenarios. The first is after a clean macOS installation, when you have already set up Homebrew (perhaps using the full setup script or manually) and now need to rebuild your application collection. Instead of visiting dozens of websites, downloading individual installers, and dragging apps into your Applications folder one by one, this script handles the entire process in a single command. The second scenario is when you want to synchronize your app collection across multiple Macs &mdash; simply copy your config file to the new machine and run this script.</p>
+          <p>When executed, the script reads your <code>config/homebrew-scripts.conf</code> file and examines the category toggle flags. Each category &mdash; development tools, productivity apps, creative software, communication apps, and utilities &mdash; has its own boolean flag. For each enabled category, the script gathers the list of applications associated with that category and adds them to the installation queue. It also reads the <code>CUSTOM_APPS</code> array, which lets you specify additional applications beyond the predefined categories.</p>
+          <p>Before attempting to install any application, the script performs a duplicate check. It queries Homebrew to determine whether each app is already installed, either as a cask or as a formula. If an app is already present, the script skips it and moves on to the next one. This makes the script idempotent &mdash; you can run it as many times as you want without worrying about duplicate installations or wasted time reinstalling apps you already have.</p>
+          <p>As each application is processed, the script reports its status in real time. You see a clear indication of whether each app was successfully installed, was already present, or encountered an error during installation. Common errors include incorrect cask names, network connectivity issues, or insufficient disk space. When an error occurs, the script logs the details and continues with the remaining applications rather than stopping entirely.</p>
+          <p>At the end of the run, the script produces a summary report showing the total number of apps processed, how many were newly installed, how many were skipped because they were already present, and how many encountered errors. This summary is also written to the log file for future reference. The combination of real-time feedback and a final summary makes it easy to verify that everything was installed correctly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Usage</h2>
+          <p>Make sure your configuration file is set up before running this script. See the <a href="../getting-started.html">Getting Started</a> guide for instructions on creating your config file.</p>
+          <pre><code># Preview which apps would be installed
+./install-essential-apps.sh --dry-run
+
+# Install all configured applications
+./install-essential-apps.sh</code></pre>
+          <p>The script requires an active internet connection to download applications. A wired connection or strong Wi-Fi signal is recommended, as some applications can be several hundred megabytes in size.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Options and Flags</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Flag</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--dry-run</code></td>
+                <td>List all applications that would be installed without actually installing them. Useful for verifying your configuration before committing.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Configuration</h2>
+          <p>This script is entirely driven by your configuration file. The following settings control its behavior:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>INSTALL_DEVELOPMENT_TOOLS</code></td>
+                <td>Set to <code>true</code> to include development applications like IDEs, Docker, terminal emulators, and database clients.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_PRODUCTIVITY_APPS</code></td>
+                <td>Set to <code>true</code> to include productivity tools like note-taking apps, task managers, and launcher utilities.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_CREATIVE_APPS</code></td>
+                <td>Set to <code>true</code> to include creative and design applications.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_COMMUNICATION_APPS</code></td>
+                <td>Set to <code>true</code> to include messaging, video conferencing, and collaboration tools.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_UTILITIES</code></td>
+                <td>Set to <code>true</code> to include system utilities like window managers, archive tools, and cleanup apps.</td>
+              </tr>
+              <tr>
+                <td><code>CUSTOM_APPS</code></td>
+                <td>An array of additional Homebrew cask names. Any app available as a Homebrew cask can be added here.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>You can find the complete list of available Homebrew casks by searching the <a href="https://formulae.brew.sh/cask/" target="_blank" rel="noopener noreferrer">Homebrew Formulae</a> directory. Add the cask name exactly as it appears in the directory to your <code>CUSTOM_APPS</code> array.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What Gets Changed</h2>
+          <ul>
+            <li><strong>Applications directory</strong> &mdash; New applications are installed to <code>/Applications</code> via Homebrew Cask. Each app appears in your Applications folder just as if you had installed it manually from the developer's website.</li>
+            <li><strong>Homebrew cask cache</strong> &mdash; Downloaded application installers are cached by Homebrew in its cache directory. You can reclaim this space later using the <a href="cleanup-homebrew.html">Homebrew Cleanup</a> script.</li>
+            <li><strong>Log file</strong> &mdash; A detailed log recording each installation attempt, its outcome, and any errors encountered.</li>
+          </ul>
+          <p>This script does not modify your shell profile, system preferences, or any existing application configurations. It strictly handles installation of new applications.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Related Scripts</h2>
+          <ul>
+            <li><a href="brew-setup-tahoe.html">Full Interactive Homebrew Setup</a> &mdash; If Homebrew is not yet installed, start with the full setup script first, which handles Homebrew installation and can also install apps interactively.</li>
+            <li><a href="cleanup-homebrew.html">Homebrew Cleanup</a> &mdash; After installing many apps, run the cleanup script to remove cached installer files and free up disk space.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="../index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="../getting-started.html">Getting Started</a>
+          <a href="../guides.html">Guides</a>
+          <a href="../scripts.html">Scripts</a>
+          <a href="../faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="../about.html">About</a>
+          <a href="../contact.html">Contact</a>
+          <a href="../privacy.html">Privacy Policy</a>
+          <a href="../terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>

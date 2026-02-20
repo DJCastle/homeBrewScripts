@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started — Brew Scripts</title>
+  <meta name="description" content="Step-by-step guide to setting up and using Brew Scripts on your Mac. Download, configure, and run your first Homebrew automation script in minutes.">
+  <meta name="author" content="CodeCraftedApps">
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/getting-started.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Getting Started — Brew Scripts">
+  <meta property="og:description" content="Step-by-step guide to setting up and using Brew Scripts on your Mac. Download, configure, and run your first Homebrew automation script in minutes.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/getting-started.html">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Getting Started — Brew Scripts">
+  <meta name="twitter:description" content="Step-by-step guide to setting up and using Brew Scripts on your Mac. Download, configure, and run your first Homebrew automation script in minutes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+      <nav class="site-nav">
+        <a href="index.html">Home</a>
+        <a href="getting-started.html" class="active">Getting Started</a>
+        <a href="guides.html">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <nav class="breadcrumbs container" aria-label="Breadcrumb">
+      <a href="index.html">Home</a><span class="separator">/</span>Getting Started
+    </nav>
+    <div class="page-header">
+      <div class="container">
+        <h1>Getting Started</h1>
+        <p>A step-by-step guide to setting up and using Brew Scripts on your Mac. You will be up and running in just a few minutes.</p>
+      </div>
+    </div>
+
+    <!-- Requirements -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Requirements</h2>
+          <p>Before you begin, make sure your system meets the following requirements. These scripts are designed to work on modern macOS systems and require a few basic prerequisites to function properly. If you are unsure about any of these, read through the notes below each item for guidance.</p>
+          <ul>
+            <li><strong>macOS 12.0 (Monterey) or later</strong> &mdash; Both Intel and Apple Silicon Macs are fully supported. The scripts automatically detect your processor architecture and adjust Homebrew paths accordingly. You can check your macOS version by clicking the Apple menu and selecting "About This Mac."</li>
+            <li><strong>Administrator privileges</strong> &mdash; You will be prompted for your password during installation. Homebrew requires administrator access to install packages into system directories. If you are not an administrator on your Mac, you will need to ask someone who is to enter their credentials when prompted.</li>
+            <li><strong>Internet connection</strong> &mdash; A stable connection is needed to download Homebrew itself as well as any packages and applications you choose to install. Wired or strong Wi-Fi connections are recommended, especially for the initial setup which may download several hundred megabytes of data.</li>
+            <li><strong>At least 1GB free disk space</strong> &mdash; Homebrew, its cache, and the applications you install will need room on your drive. The actual space required depends on how many applications you choose to install. You can check your available storage in System Settings under General &gt; Storage.</li>
+          </ul>
+          <p>If your system does not meet one or more of these requirements, the scripts will detect the issue during the pre-flight check and let you know what needs to be resolved before continuing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 1 — Download -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 1 &mdash; Download</h2>
+          <p>There are two ways to get the scripts onto your Mac. Choose the option that best fits your workflow. If you are comfortable with Git and want to receive updates easily, cloning is the way to go. If you just want to grab the files quickly and do not plan to track upstream changes, downloading the ZIP is perfectly fine.</p>
+
+          <h3>Option A: Clone with Git</h3>
+          <p>Cloning creates a local copy of the repository that is linked to the original on GitHub. This makes it easy to pull down updates later with a single <code>git pull</code> command, and also lets you contribute back if you find improvements to share.</p>
+          <pre><code># Clone the repository to your current directory
+git clone https://github.com/DJCastle/homeBrewScripts.git
+
+# Move into the project folder
+cd homeBrewScripts</code></pre>
+          <p>If you do not have Git installed yet, do not worry. macOS will prompt you to install the Xcode Command Line Tools when you first run <code>git</code>, which includes Git along with other useful developer utilities.</p>
+
+          <h3>Option B: Download ZIP</h3>
+          <p>If you prefer not to use Git, you can download the entire project as a ZIP file. This is a quick option if you want to get started right away without setting up Git first.</p>
+          <pre><code># Download the latest version as a ZIP file
+curl -L -o brewscripts.zip https://github.com/DJCastle/homeBrewScripts/archive/refs/heads/main.zip
+
+# Unzip and move into the project folder
+unzip brewscripts.zip && cd homeBrewScripts-main</code></pre>
+          <p>Alternatively, you can visit the <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub repository</a> in your browser, click the green "Code" button, and select "Download ZIP." Once downloaded, double-click the file in Finder to unzip it, then open Terminal and navigate to the extracted folder.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 2 — Set Up Your Config -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 2 &mdash; Set Up Your Config</h2>
+          <p>Before running any scripts, you should create and customize your configuration file. The config file controls which applications get installed, how notifications are delivered, and various other behaviors. An example configuration ships with the project so you can see all available options and their default values.</p>
+          <p>Start by copying the example configuration to create your own personal config file:</p>
+          <pre><code># Create your config from the example template
+cp config/homebrew-scripts.example.conf config/homebrew-scripts.conf</code></pre>
+          <p>Next, open the file in any text editor to review and customize the settings. You can use <code>nano</code> directly in the terminal, or open it in a graphical editor like TextEdit or Visual Studio Code:</p>
+          <pre><code># Open in nano (terminal-based editor)
+nano config/homebrew-scripts.conf
+
+# Or open in your default text editor
+open config/homebrew-scripts.conf</code></pre>
+          <p>Here are the key settings you will want to review and customize:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Setting</th>
+                <th>What It Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>WIFI_NETWORK</code></td>
+                <td>Only run auto-updates when connected to this specific Wi-Fi network. Leave empty to allow updates on any network. This is useful to prevent large downloads on metered or slow connections.</td>
+              </tr>
+              <tr>
+                <td><code>EMAIL_ADDRESS</code></td>
+                <td>Where to send update reports. After each automatic update, you will receive a summary of what was updated, what failed, and any action items.</td>
+              </tr>
+              <tr>
+                <td><code>PHONE_NUMBER</code></td>
+                <td>Your iMessage number for quick text alerts. Great for getting a quick heads-up that an update ran without needing to check email.</td>
+              </tr>
+              <tr>
+                <td><code>INSTALL_*</code></td>
+                <td>Toggle entire categories of applications on or off. Categories include development tools, productivity apps, creative software, communication apps, and utilities.</td>
+              </tr>
+              <tr>
+                <td><code>CUSTOM_APPS</code></td>
+                <td>Add or remove specific applications from the install list. This lets you fine-tune exactly which apps are installed beyond the category toggles.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>The example config file includes detailed comments explaining every setting, so take a moment to read through it. You do not need to configure everything right away &mdash; the defaults are sensible and safe starting points.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 3 — Make Scripts Executable -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 3 &mdash; Make Scripts Executable</h2>
+          <p>By default, downloaded files on macOS are not marked as executable. Before you can run the shell scripts, you need to give them execute permission. This is a standard security measure that prevents scripts from running unintentionally.</p>
+          <pre><code># Make all shell scripts in the project executable
+chmod +x *.sh</code></pre>
+          <p>You only need to do this once. The <code>chmod +x</code> command adds the "execute" permission to each <code>.sh</code> file, telling macOS that these files are programs that can be run directly from the terminal. If you later download updated versions of the scripts, you may need to run this command again on the new files.</p>
+          <p>If you want to verify that the permissions were set correctly, you can list the files with their permissions:</p>
+          <pre><code># List files with permissions — look for 'x' in the output
+ls -la *.sh</code></pre>
+          <p>You should see <code>-rwxr-xr-x</code> (or similar) at the beginning of each line, where the <code>x</code> characters indicate that execute permission has been granted.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4 — Run Your First Script -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Step 4 &mdash; Run Your First Script</h2>
+          <p>Now that everything is set up, it is time to run your first script. There are two main entry points depending on how much control you want over the process. Both support a <code>--dry-run</code> flag, which is strongly recommended for your first run so you can see exactly what will happen without making any actual changes to your system.</p>
+
+          <h3>Option A: Quick Setup (fast, opinionated)</h3>
+          <p>The quick setup script is designed for experienced users who want a rapid bootstrap with sensible defaults. It installs CLI tools via a Brewfile, configures Visual Studio Code extensions, and sets up Git &mdash; all in one pass. No config file is needed for this option.</p>
+          <pre><code># Preview what would happen (safe — no changes are made)
+./quick-setup.sh --dry-run
+
+# Run for real when you are satisfied with the preview
+./quick-setup.sh</code></pre>
+
+          <h3>Option B: Full Interactive Setup (config-driven, educational)</h3>
+          <p>The full interactive setup is the flagship script. It walks you through each step with clear explanations and interactive checkpoints. You can skip any step you are not comfortable with, and the script will respect your choices. This is the recommended option for first-time users or anyone who wants to learn while they set up.</p>
+          <pre><code># Preview what would happen (safe — no changes are made)
+./brew_setup_tahoe.sh --dry-run
+
+# Run for real when you are ready
+./brew_setup_tahoe.sh</code></pre>
+          <p>During the interactive setup, the script will ask for confirmation before each major operation. Simply answer <code>y</code> to continue or <code>n</code> to skip. If you are ever unsure, skipping is always the safe choice &mdash; you can come back and run the script again later for any steps you skipped.</p>
+
+          <div class="callout callout-tip">
+            <div class="callout-icon">&#9733;</div>
+            <div class="callout-content">
+              <p><strong>Pro tip:</strong> Always run with <code>--dry-run</code> first. This shows you exactly what the script would do without making any changes. It validates your configuration, checks system requirements, and tests network connectivity. Think of it as a dress rehearsal for the real thing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What Each Script Does -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>What Each Script Does</h2>
+          <p>The Brew Scripts project includes several specialized scripts, each designed for a specific purpose. Here is an overview of every script in the collection and what it does. You do not need to run all of them &mdash; pick the ones that match your needs.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Script</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>quick-setup.sh</code></td>
+                <td>Quick bootstrap &mdash; installs CLI tools via Brewfile, sets up VSCode extensions, and configures Git. Ideal for developers who want to get a new machine ready fast.</td>
+              </tr>
+              <tr>
+                <td><code>brew_setup_tahoe.sh</code></td>
+                <td>Full interactive setup &mdash; installs Homebrew, configures your shell, and installs applications with guided, step-by-step checkpoints. The most comprehensive and educational script.</td>
+              </tr>
+              <tr>
+                <td><code>install-essential-apps.sh</code></td>
+                <td>Batch-installs applications from your config file. Useful if Homebrew is already installed and you just want to add your app collection.</td>
+              </tr>
+              <tr>
+                <td><code>auto-update-brew.sh</code></td>
+                <td>Runs Homebrew updates with text message notifications via iMessage. Designed to be run as a scheduled task.</td>
+              </tr>
+              <tr>
+                <td><code>auto-update-brew-hybrid.sh</code></td>
+                <td>Runs Homebrew updates with both email and text notifications. Provides more detailed reporting than the text-only version.</td>
+              </tr>
+              <tr>
+                <td><code>setup-auto-update.sh</code></td>
+                <td>Schedules automatic Homebrew updates using macOS launchd. Creates a background job that runs updates on your preferred schedule.</td>
+              </tr>
+              <tr>
+                <td><code>setup-hybrid-notifications.sh</code></td>
+                <td>Schedules automatic updates with both email and text notifications. The most fully-featured automated update option.</td>
+              </tr>
+              <tr>
+                <td><code>cleanup-homebrew.sh</code></td>
+                <td>Removes old package versions, clears the download cache, and frees disk space. Safe to run periodically to keep your system tidy.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optional — Set Up Auto-Updates -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Optional &mdash; Set Up Auto-Updates</h2>
+          <p>Once you have Homebrew and your applications installed, you can set up automatic updates to keep everything current without manual intervention. The auto-update system uses macOS launchd to schedule periodic update checks. It is smart enough to verify network connectivity and power status before running, so it will not interrupt you or use battery power unexpectedly.</p>
+          <pre><code># Set up automatic updates with email and text notifications
+./setup-hybrid-notifications.sh</code></pre>
+          <p>This creates a scheduled task that runs updates in the background at the interval you specify in your config file. Each time an update runs, you will receive a notification summarizing what was updated and whether any issues were encountered. If the conditions are not right &mdash; for example, if your Mac is on battery power or not connected to your preferred Wi-Fi network &mdash; the update will be skipped and reattempted at the next scheduled interval.</p>
+          <p>You can verify that the scheduled task was created successfully by listing your launchd jobs:</p>
+          <pre><code># List your scheduled Homebrew update jobs
+launchctl list | grep homebrew</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Logs -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Logs</h2>
+          <p>All scripts produce detailed logs that record every action taken, along with timestamps and status indicators. Logs are your best friend when troubleshooting &mdash; they contain a complete record of what happened, what succeeded, and what failed. Every log entry includes a severity level (INFO, WARNING, ERROR, SUCCESS) so you can quickly scan for issues.</p>
+          <p>Log files are stored in the standard macOS logs directory:</p>
+          <pre><code># List all Brew Scripts log files
+ls ~/Library/Logs/Homebrew*.log
+
+# View the most recent log entries
+tail -50 ~/Library/Logs/HomebrewSetup.log
+
+# Search logs for errors
+grep ERROR ~/Library/Logs/HomebrewSetup.log</code></pre>
+          <p>If something goes wrong during a script run, the log file should be the first place you check. It will show you exactly which step failed and usually includes an error message from the underlying tool that explains why. You can also enable debug mode by passing the <code>--debug</code> flag to any script, which produces even more detailed output that can help diagnose tricky issues.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tips -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Tips for Success</h2>
+          <div class="callout callout-tip">
+            <div class="callout-icon">&#9733;</div>
+            <div class="callout-content">
+              <p><strong>Use <code>--dry-run</code> on any script</strong> to preview exactly what it will do before committing to any changes. This is the single most important safety feature and should always be your first step.</p>
+              <p><strong>Back up your system</strong> before running scripts that modify system files. Time Machine is the easiest option &mdash; just make sure you have a recent backup before starting.</p>
+              <p><strong>Review the config file</strong> before running &mdash; the example config has sensible defaults, but it is worth understanding what each setting controls so there are no surprises.</p>
+              <p><strong>Read the code</strong> &mdash; every script is heavily commented to explain what it does and why. This is an educational project, and you will learn a lot by reading through the scripts even if you do not modify them.</p>
+              <p><strong>Start with one script at a time</strong> rather than running everything at once. This gives you a clear understanding of what each script does and makes troubleshooting simpler if anything does not work as expected.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Steps -->
+    <section class="content-section reveal">
+      <div class="container">
+        <div class="content-body">
+          <h2>Need More Info?</h2>
+          <p>Now that you are set up, here are some resources to help you go further:</p>
+          <ul>
+            <li><a href="safety-best-practices.html">Safety &amp; Best Practices</a> &mdash; Understand the safety features and learn best practices for working with system automation scripts.</li>
+            <li><a href="shell-scripting-guide.html">Shell Scripting Guide</a> &mdash; Learn shell scripting concepts by studying the real-world patterns used in these scripts.</li>
+            <li><a href="faq.html">FAQ</a> &mdash; Answers to common questions about installation, configuration, and troubleshooting.</li>
+            <li><a href="https://github.com/DJCastle/homeBrewScripts/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog</a> &mdash; See what has changed in each version of the project.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+</body>
+</html>
