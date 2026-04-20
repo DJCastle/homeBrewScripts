@@ -150,19 +150,33 @@ EOF
     fi
 }
 
+# Escape a string for safe use as the replacement side of a sed s||| expression.
+# Delimiter is assumed to be '|'. Escapes backslash, ampersand, and pipe so that
+# caller-supplied values can't break the sed command or inject replacement syntax.
+sed_escape_replacement() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//&/\\&}"
+    s="${s//|/\\|}"
+    printf '%s' "$s"
+}
+
 # Function to update configuration in hybrid script
 update_script_config() {
     local email_address="$1"
     local phone_number="$2"
-    local temp_file=$(mktemp)
-    
-    # Update both email and phone number in the script
-    sed -e "s/EMAIL_ADDRESS=\"[^\"]*\"/EMAIL_ADDRESS=\"$email_address\"/" \
-        -e "s/PHONE_NUMBER=\"[^\"]*\"/PHONE_NUMBER=\"$phone_number\"/" \
+    local email_escaped phone_escaped
+    email_escaped="$(sed_escape_replacement "$email_address")"
+    phone_escaped="$(sed_escape_replacement "$phone_number")"
+    local temp_file
+    temp_file=$(mktemp)
+
+    sed -e "s|EMAIL_ADDRESS=\"[^\"]*\"|EMAIL_ADDRESS=\"$email_escaped\"|" \
+        -e "s|PHONE_NUMBER=\"[^\"]*\"|PHONE_NUMBER=\"$phone_escaped\"|" \
         "$HYBRID_SCRIPT" > "$temp_file"
-    
+
     mv "$temp_file" "$HYBRID_SCRIPT"
-    
+
     print_success "Configuration updated in hybrid script"
 }
 
