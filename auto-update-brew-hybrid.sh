@@ -179,11 +179,18 @@ send_text_message() {
         return 1
     fi
     
-    # Send message using AppleScript
-    osascript <<EOF
-tell application "Messages"
-    send "$message" to buddy "$PHONE_NUMBER" of (service 1 whose service type is iMessage)
-end tell
+    # Send message using AppleScript. Pass phone number and message body as
+    # osascript argv instead of interpolating them into the heredoc — the
+    # message is built from brew output and could contain AppleScript
+    # metacharacters (quotes, backslashes) that would otherwise break it.
+    osascript - "$PHONE_NUMBER" "$message" <<'EOF'
+on run argv
+    set phoneNumber to item 1 of argv
+    set theMessage to item 2 of argv
+    tell application "Messages"
+        send theMessage to buddy phoneNumber of (service 1 whose service type is iMessage)
+    end tell
+end run
 EOF
     
     if [ $? -eq 0 ]; then
