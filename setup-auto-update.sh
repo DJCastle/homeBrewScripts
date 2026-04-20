@@ -112,15 +112,29 @@ EOF
     fi
 }
 
+# Escape a string for safe use as the replacement side of a sed s||| expression.
+# Delimiter is assumed to be '|'. Escapes backslash, ampersand, and pipe so that
+# caller-supplied values (phone numbers, emails) can't break the sed command or
+# inject arbitrary replacement syntax.
+sed_escape_replacement() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//&/\\&}"
+    s="${s//|/\\|}"
+    printf '%s' "$s"
+}
+
 # Function to update phone number in auto-update script
 update_phone_number() {
     local phone_number="$1"
-    local temp_file=$(mktemp)
-    
-    # Update the phone number in the script
-    sed "s/PHONE_NUMBER=\"[^\"]*\"/PHONE_NUMBER=\"$phone_number\"/" "$AUTO_UPDATE_SCRIPT" > "$temp_file"
+    local escaped
+    escaped="$(sed_escape_replacement "$phone_number")"
+    local temp_file
+    temp_file=$(mktemp)
+
+    sed "s|PHONE_NUMBER=\"[^\"]*\"|PHONE_NUMBER=\"$escaped\"|" "$AUTO_UPDATE_SCRIPT" > "$temp_file"
     mv "$temp_file" "$AUTO_UPDATE_SCRIPT"
-    
+
     print_success "Phone number updated in auto-update script"
 }
 
