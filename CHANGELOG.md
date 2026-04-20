@@ -5,7 +5,7 @@
 ### New Features
 
 - **Quick setup script** — `quick-setup.sh` bootstraps a dev environment in one command (Brewfile, VSCode extensions, Git config, gh auth)
-- **Brewfile** — Declarative package list for CLI tools (gh, swiftlint, xcbeautify, node, jq, tree) and GUI apps using `brew bundle`
+- **Brewfile** — Declarative package list for CLI tools (gh, xcbeautify, node, jq, tree) and GUI apps using `brew bundle`
 - **VSCode extension management** — Install AI coding extensions (Copilot, GitLens, Gemini, Claude Code) from `dotfiles/vscode/extensions.txt`
 - **Dotfiles backups** — Reference VSCode settings and Git config in `dotfiles/`
 - **Disclaimer** — Added dedicated DISCLAIMER.md for third-party software notice
