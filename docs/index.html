@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7QKHH6QPWV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-7QKHH6QPWV');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brew Scripts — Homebrew Automation Scripts for macOS</title>
+  <meta name="description" content="Free, open-source shell scripts for automating Homebrew package management on macOS. Install apps, schedule updates, and learn shell scripting.">
+  <meta name="keywords" content="Homebrew, macOS, shell scripts, bash, automation, package manager, Apple Silicon, Mac setup">
+  <meta name="author" content="CodeCraftedApps">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://brewscripts.codecraftedapps.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Brew Scripts — Homebrew Automation for macOS">
+  <meta property="og:description" content="Free, open-source shell scripts for automating Homebrew package management on macOS. Install apps, schedule updates, and learn shell scripting.">
+  <meta property="og:url" content="https://brewscripts.codecraftedapps.com/">
+  <meta property="og:site_name" content="Brew Scripts">
+  <meta property="og:image" content="https://brewscripts.codecraftedapps.com/favicon.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Brew Scripts — Homebrew Automation for macOS">
+  <meta name="twitter:description" content="Free, open-source shell scripts for automating Homebrew package management on macOS.">
+  <meta name="twitter:image" content="https://brewscripts.codecraftedapps.com/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Brew Scripts",
+    "description": "Free, open-source shell scripts for automating Homebrew package management on macOS. Install apps, schedule updates, and learn shell scripting.",
+    "url": "https://brewscripts.codecraftedapps.com/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS 12.0+",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "CodeCraftedApps",
+      "url": "https://codecraftedapps.com"
+    },
+    "softwareVersion": "3.0.0",
+    "programmingLanguage": "Bash",
+    "codeRepository": "https://github.com/DJCastle/homeBrewScripts",
+    "downloadUrl": "https://github.com/DJCastle/homeBrewScripts/archive/refs/heads/main.zip"
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" >&#9776;</button>
+      <nav class="site-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="getting-started.html">Getting Started</a>
+        <a href="guides.html">Guides</a>
+        <a href="scripts.html">Scripts</a>
+        <a href="faq.html">FAQ</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <h1>Automate your Mac.<br><span>Learn the craft.</span></h1>
+        <p class="tagline">Educational shell scripts for Homebrew package management on macOS. Set up your Mac the right way while learning professional scripting.</p>
+        <p class="sub-tagline">Open source. Production-ready safety. Built for learning.</p>
+        <div class="hero-badges">
+          <span class="hero-badge">v3.0.0</span>
+          <span class="hero-badge">macOS 12.0+</span>
+          <span class="hero-badge">MIT License</span>
+          <span class="hero-badge">Apple Silicon Ready</span>
+        </div>
+        <div class="hero-actions">
+          <a href="https://github.com/DJCastle/homeBrewScripts/archive/refs/heads/main.zip" class="btn-primary">Download All Scripts (.zip)</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" class="btn-secondary" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="section reveal" style="padding-top:0;">
+      <div class="container">
+        <div class="disclaimer">
+          <div class="disclaimer-icon">&#9888;&#65039;</div>
+          <div class="disclaimer-content">
+            <h3>Use at Your Own Risk</h3>
+            <p>These scripts <strong>modify your system</strong> by installing software, changing shell configurations, and creating scheduled tasks. They are provided "as is" without warranty. Always <strong>back up your system</strong> before use, <strong>review the code</strong> before running, and use <strong><code>--dry-run</code></strong> to preview changes first. See the full <a href="terms.html">Terms of Service</a> for details.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- What is Homebrew -->
+    <section class="section reveal" style="padding-top:0;padding-bottom:20px;">
+      <div class="container">
+        <div class="brew-info">
+          <p><strong>What is Homebrew?</strong> Homebrew is a free, open-source package manager for macOS &mdash; like an app store for your terminal. Instead of downloading installers from the web, you run one command and Homebrew handles the rest.</p>
+          <div class="brew-info-links">
+            <a href="https://brew.sh" target="_blank" rel="noopener noreferrer">brew.sh</a>
+            <a href="https://docs.brew.sh" target="_blank" rel="noopener noreferrer">Documentation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to Use -->
+    <section class="section reveal">
+      <div class="container">
+        <h2 class="section-title">How to Use</h2>
+        <p class="section-subtitle">Two ways to get started. Pick whichever you prefer.</p>
+
+        <div class="instructions-grid">
+          <div class="instruction-card">
+            <div class="instruction-number">Option A</div>
+            <h3>Download Everything</h3>
+            <p>Best if you want the full toolkit.</p>
+            <div class="code-block">
+              <span class="comment"># Download and unzip</span><br>
+              <span class="command">curl -L -o brewscripts.zip https://github.com/DJCastle/homeBrewScripts/archive/refs/heads/main.zip</span><br>
+              <span class="command">unzip brewscripts.zip && cd homeBrewScripts-main</span><br><br>
+              <span class="comment"># Make scripts executable</span><br>
+              <span class="command">chmod +x *.sh</span><br><br>
+              <span class="comment"># Preview what would happen (safe, no changes made)</span><br>
+              <span class="command">./brew_setup_tahoe.sh --dry-run</span><br><br>
+              <span class="comment"># Run for real when ready</span><br>
+              <span class="command">./brew_setup_tahoe.sh</span>
+            </div>
+          </div>
+
+          <div class="instruction-card">
+            <div class="instruction-number">Option B</div>
+            <h3>Clone with Git</h3>
+            <p>Best if you want to stay updated or contribute.</p>
+            <div class="code-block">
+              <span class="comment"># Clone the repository</span><br>
+              <span class="command">git clone https://github.com/DJCastle/homeBrewScripts.git</span><br>
+              <span class="command">cd homeBrewScripts</span><br><br>
+              <span class="comment"># Make scripts executable</span><br>
+              <span class="command">chmod +x *.sh</span><br><br>
+              <span class="comment"># Preview what would happen (safe, no changes made)</span><br>
+              <span class="command">./brew_setup_tahoe.sh --dry-run</span><br><br>
+              <span class="comment"># Run for real when ready</span><br>
+              <span class="command">./brew_setup_tahoe.sh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scripts Library -->
+    <section class="section reveal">
+      <div class="container">
+        <h2 class="section-title">Scripts Library</h2>
+        <p class="section-subtitle">Browse individual scripts. Download only what you need, or grab them all above.</p>
+        <div id="brew-list" class="scripts-grid">
+          <p class="loading">Loading scripts library...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section reveal">
+      <div class="container">
+        <h2 class="section-title">What You Get</h2>
+        <p class="section-subtitle">Professional tools designed to teach and automate.</p>
+        <div class="features-grid">
+
+          <div class="feature-card">
+            <div class="feature-icon">🍺</div>
+            <h3>Interactive Setup</h3>
+            <p>Full Homebrew installation with architecture detection, shell configuration, and guided app selection. Works on Intel and Apple Silicon.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3>Safety First</h3>
+            <p>Dry-run mode, interactive checkpoints, comprehensive validation, and idempotent design. Preview every change before it happens.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <h3>App Management</h3>
+            <p>Batch install development tools, productivity apps, creative software, and utilities. Fully configurable through a single config file.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Auto Updates</h3>
+            <p>Scheduled Homebrew updates with network and power awareness. Runs only when conditions are right.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Smart Notifications</h3>
+            <p>Email reports and text message summaries for automated updates. Stay informed without babysitting your scripts.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🎓</div>
+            <h3>Learn While You Build</h3>
+            <p>Every function is documented with educational comments explaining shell scripting concepts, patterns, and best practices.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Requirements -->
+    <section class="section reveal">
+      <div class="container">
+        <h2 class="section-title">Requirements</h2>
+        <p class="section-subtitle">What you need before running these scripts.</p>
+        <div class="requirements-list">
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>macOS 12.0 (Monterey) or later</strong> &mdash; Intel or Apple Silicon</div>
+          </div>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>Administrator privileges</strong> &mdash; you'll be prompted for your password</div>
+          </div>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>Internet connection</strong> &mdash; for downloading Homebrew and packages</div>
+          </div>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>Terminal access</strong> &mdash; Applications &rarr; Utilities &rarr; Terminal</div>
+          </div>
+          <div class="requirement-item">
+            <span class="req-icon">&#9679;</span>
+            <div><strong>At least 1 GB free disk space</strong> &mdash; for Homebrew and installed apps</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="section reveal">
+      <div class="container">
+        <h2 class="section-title">About</h2>
+        <div class="about-content">
+          <p>Brew Scripts is part of <a href="https://codecraftedapps.com">CodeCraftedApps</a>, an independent developer's collection of apps, tools, and open-source projects. Every script here is built with care, documented for learning, and tested for reliability.</p>
+          <p>Whether you're setting up a new Mac, learning shell scripting, or automating your development environment, these scripts are designed to be your starting point. Fork, customize, and make them your own.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="site-logo">Brew<span>Scripts</span></a>
+          <p class="footer-tagline">Homebrew automation scripts for macOS — learn shell scripting while automating your Mac setup.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Resources</h4>
+          <a href="getting-started.html">Getting Started</a>
+          <a href="guides.html">Guides</a>
+          <a href="scripts.html">Scripts</a>
+          <a href="faq.html">FAQ</a>
+        </div>
+        <div class="footer-column">
+          <h4>Project</h4>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+          <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 CodeCraftedApps. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" aria-label="Back to top">&uarr;</button>
+
+  <!-- Scripts Library Loader -->
+  <script>
+  (async function(){
+    const fmt = (iso) => iso ? new Date(iso).toLocaleString([], {
+      year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit"
+    }) : "\u2014";
+
+    async function loadManifest(url, mountId) {
+      const el = document.getElementById(mountId);
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.status + " " + res.statusText);
+        const data = await res.json();
+        const items = Array.isArray(data.items) ? data.items : [];
+        el.innerHTML = items.map(it => {
+          const isScript = it.name.endsWith('.sh');
+          const isDoc = it.name.endsWith('.md');
+          const typeLabel = isScript ? 'Script' : isDoc ? 'Docs' : 'File';
+          const typeClass = isScript ? 'badge-script' : isDoc ? 'badge-docs' : 'badge-file';
+          return `
+          <article class="card">
+            <div class="card-header">
+              <span class="card-type ${typeClass}">${typeLabel}</span>
+              <span class="card-filename">${it.name}</span>
+            </div>
+            <h3><a href="${it.html_url}" target="_blank" rel="noopener noreferrer">${it.title || it.name}</a></h3>
+            ${it.description ? `<p class="card-desc">${it.description}</p>` : ''}
+            <p class="meta">Updated: ${fmt(it.updated)}</p>
+            <div class="card-actions">
+              <a class="btn btn-download" href="${it.raw_url}" download="${it.name}">Download</a>
+              <a class="btn" href="${it.html_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </div>
+          </article>
+        `}).join("") || `<p>No scripts found.</p>`;
+      } catch(e) {
+        console.error("Manifest load failed:", e);
+        el.innerHTML = `<p style="color:var(--text-muted)">Failed to load scripts library. <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">View on GitHub</a> instead.</p>`;
+      }
+    }
+
+    await loadManifest("https://cdn.jsdelivr.net/gh/DJCastle/homeBrewScripts@main/manifest.json", "brew-list");
+  })();
+  </script>
+
+  <script>
+  (function() {
+    var toggle = document.querySelector('.nav-toggle');
+    var nav = document.querySelector('.site-nav');
+    toggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      nav.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    // Scroll reveal
+    var reveals = document.querySelectorAll('.reveal');
+    if (reveals.length) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(function(el) { observer.observe(el); });
+    }
+
+    // Back to top
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+          backToTop.classList.add('visible');
+        } else {
+          backToTop.classList.remove('visible');
+        }
+      });
+      backToTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+  </script>
+
+  <!-- Buy Me a Coffee -->
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="codecraftopensource" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting and for your support." data-color="#F59E0B" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+
+</body>
+</html>
