@@ -4,15 +4,15 @@
     "name": "homeBrewScripts",
     "branch": "main"
   },
-  "generated_at": "2026-04-30T03:16:12.029Z",
+  "generated_at": "2026-04-30T03:31:52.757Z",
   "items": [
     {
       "name": "README.md",
       "path": "README.md",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/README.md",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/README.md",
-      "updated": "2026-02-16T21:19:07Z",
-      "sha": "3567b8c",
+      "updated": "2026-04-30T03:31:37Z",
+      "sha": "a779d37",
       "title": "📚 Documentation & Getting Started",
       "description": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively."
     },
