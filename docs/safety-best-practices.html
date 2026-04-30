@@ -13,17 +13,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Safety &amp; Best Practices — Brew Scripts</title>
-  <meta name="description" content="Comprehensive safety guide for using Brew Scripts. Learn about built-in safety measures, pre-installation checklists, emergency procedures, and best practices for system automation.">
+  <meta name="description" content="Safety guide for Brew Scripts: built-in safeguards, what to check before running, emergency recovery, and habits that make automation less risky.">
   <meta name="author" content="CodeCraftedApps">
   <link rel="canonical" href="https://brewscripts.codecraftedapps.com/safety-best-practices.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Safety &amp; Best Practices — Brew Scripts">
-  <meta property="og:description" content="Comprehensive safety guide for using Brew Scripts. Learn about built-in safety measures, pre-installation checklists, emergency procedures, and best practices for system automation.">
+  <meta property="og:description" content="Safety guide for Brew Scripts: built-in safeguards, what to check before running, emergency recovery, and habits that make automation less risky.">
   <meta property="og:url" content="https://brewscripts.codecraftedapps.com/safety-best-practices.html">
   <meta property="og:site_name" content="Brew Scripts">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Safety &amp; Best Practices — Brew Scripts">
-  <meta name="twitter:description" content="Comprehensive safety guide for using Brew Scripts. Learn about built-in safety measures, pre-installation checklists, emergency procedures, and best practices for system automation.">
+  <meta name="twitter:description" content="Safety guide for Brew Scripts: built-in safeguards, what to check before running, emergency recovery, and habits that make automation less risky.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -119,8 +119,8 @@
 }</code></pre>
             <p>At each checkpoint, you can choose to continue, skip the step, or stop the script entirely. Skipping a step does not affect subsequent steps &mdash; the script is designed to handle partial installations gracefully. This means you can always come back later and run only the steps you skipped.</p>
 
-            <h3>Comprehensive Logging</h3>
-            <p>Every operation performed by the scripts is recorded in a detailed log file with timestamps, severity levels, and descriptive messages. This creates a complete audit trail that you can review at any time.</p>
+            <h3>Detailed Logging</h3>
+            <p>Every operation is recorded in a log file with timestamps, severity levels, and a description of what happened. If something goes wrong later, the log is your audit trail.</p>
             <pre><code># All operations logged with timestamps
 LOG_FILE="$HOME/Library/Logs/HomebrewSetup.log"
 
@@ -138,7 +138,7 @@ if brew list --cask "$app" &gt;/dev/null 2&gt;&amp;1; then
     log_success "$app is already installed"
     return 0
 fi</code></pre>
-            <p>This design has several practical benefits. You can safely resume a script after an interruption without worrying about duplicate installations. If you run a script again after adding new apps to your config, it will only install the new ones and skip everything that is already in place. This idempotent design is a professional software engineering pattern that makes the scripts robust and forgiving.</p>
+            <p>The practical upshot: if a script gets interrupted, you can re-run it without ending up with duplicate installs. Add a new app to your config and re-run, and only the new one gets installed.</p>
 
             <h3>Input Validation</h3>
             <p>Every piece of user input and configuration is validated before it is used. This prevents common mistakes from causing problems downstream, such as invalid email addresses, malformed file paths, or unsupported operating system versions.</p>

@@ -184,7 +184,7 @@ fi</code></pre>
             <ul>
               <li><strong>Single Responsibility</strong> &mdash; Each function should do exactly one thing. If you find yourself adding "and" to a function's description, it probably needs to be split into two functions.</li>
               <li><strong>Parameter Validation</strong> &mdash; Always check that inputs are valid before processing them. Catching bad input at the function boundary is much easier than debugging the effects of invalid data flowing through multiple layers of logic.</li>
-              <li><strong>Return Codes</strong> &mdash; Use return code 0 for success and non-zero for failure. This is the universal convention in Unix systems, and it allows your functions to work seamlessly with <code>if</code> statements, <code>&amp;&amp;</code>/<code>||</code> operators, and <code>set -e</code>.</li>
+              <li><strong>Return Codes</strong> &mdash; Use return code 0 for success and non-zero for failure. This is the universal convention in Unix, and it lets your functions work cleanly with <code>if</code> statements, <code>&amp;&amp;</code>/<code>||</code>, and <code>set -e</code>.</li>
               <li><strong>Local Variables</strong> &mdash; Always use <code>local</code> for variables inside functions. Global variables in shell scripts are a recipe for hard-to-find bugs, especially as your script grows larger.</li>
             </ul>
 
@@ -241,7 +241,7 @@ echo -e "${BLUE}[INFO]${NC} Checking system requirements..."</code></pre>
 
             <!-- 5. Error Handling and Validation -->
             <h2 id="error-handling">5. Error Handling and Validation</h2>
-            <p>Robust error handling separates amateur scripts from professional-grade automation. In a production environment, network connections drop, disks fill up, permissions change, and commands that worked yesterday fail today. Your script needs to anticipate these situations and respond intelligently rather than simply crashing.</p>
+            <p>Real error handling is what separates a script you can rely on from one that crashes the first time something unexpected happens. In production, network connections drop, disks fill up, permissions change, and commands that worked yesterday fail today. Your script has to anticipate that, not just exit on the first error.</p>
 
             <h3>Defensive Programming</h3>
             <p>Defensive programming means checking prerequisites before attempting operations. The <code>check_prerequisites</code> function examines the system environment at startup, identifies all issues, and reports them together rather than failing on the first problem found. This saves the user from a frustrating cycle of fixing one issue, rerunning, finding the next issue, and repeating.</p>

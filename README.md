@@ -74,4 +74,4 @@ These scripts install software and modify system configuration files. Always bac
 
 ---
 
-**Author:** DJCastle | **License:** MIT | **Version:** 3.1.0 (2026 Edition)
+**Author:** DJCastle | **License:** MIT | **Version:** 3.1.0
