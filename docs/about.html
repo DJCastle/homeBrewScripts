@@ -64,22 +64,21 @@
     <div class="container content-body">
 
       <h2>About This Project</h2>
-      <p>Brew Scripts is an open-source collection of shell scripts designed to automate Homebrew package management on macOS. Built with an educational focus, every script is extensively documented with comments explaining shell scripting concepts, patterns, and best practices. Whether you're setting up a new Mac, learning shell scripting, or automating your development environment, these scripts are designed to be your starting point.</p>
-      <p>The toolkit covers the full lifecycle of Homebrew management: from initial installation and architecture detection, through interactive app selection and batch installation, to scheduled automatic updates with notification support and disk cleanup. Each script is built to be run independently or as part of a larger workflow, and every one of them supports a <code>--dry-run</code> mode so you can preview exactly what will happen before any changes are made to your system.</p>
-      <p>Beyond just getting the job done, Brew Scripts is designed to teach. Every function, every conditional, and every loop is accompanied by comments that explain not just <em>what</em> the code does, but <em>why</em> it does it that way. If you've ever wanted to understand how professional shell scripts handle error checking, logging, configuration parsing, or cross-architecture compatibility, this codebase is a hands-on learning resource.</p>
+      <p>Brew Scripts is a small set of shell scripts for installing, updating, and cleaning up <a href="https://brew.sh" target="_blank" rel="noopener noreferrer">Homebrew</a> on macOS. The source is commented inline so you can read what each script does before you run it.</p>
+      <p>The scripts cover the lifecycle: first-time Homebrew install, batch app installation from a config file, scheduled auto-updates with email or text notifications, and periodic cleanup. Each one runs independently and supports <code>--dry-run</code> to show what it would do without touching your system.</p>
 
-      <h2>Why We Built This</h2>
-      <p>Setting up a new Mac involves hours of downloading apps, configuring tools, and tweaking settings. Developers often find themselves repeating this process every time they get a new machine, restore from scratch, or set up a work laptop alongside a personal one. The typical approach is to follow a scattered collection of blog posts, bookmarked Stack Overflow answers, and half-remembered terminal commands. It works, but it's slow, error-prone, and teaches you nothing you'll remember next time.</p>
-      <p>Brew Scripts automates this process while teaching you how automation works under the hood. Instead of copy-pasting commands from scattered sources, you get a cohesive, tested, and documented toolkit that handles architecture differences between Apple Silicon and Intel, manages shell configuration across zsh and bash, and provides meaningful feedback at every step. The scripts are designed to be read and understood, not just executed blindly.</p>
-      <p>We also wanted to demonstrate that shell scripting doesn't have to be cryptic or fragile. With proper structure, error handling, and documentation, shell scripts can be just as maintainable and reliable as code written in any other language. Brew Scripts serves as a reference implementation for these best practices.</p>
+      <h2>Why It Exists</h2>
+      <p>I got tired of copy-pasting setup commands every time I got a new Mac, and tired of half-remembering which package I had and didn't have. So I wrote it down — once, with comments — and turned it into something I could re-run on any machine.</p>
+      <p>It handles the things that always trip me up: Apple Silicon vs Intel paths, zsh vs bash config, scheduling with launchd, and idempotent re-runs so you can safely run the same script twice without it duplicating work.</p>
+      <p>It's also a worked example of shell scripting that isn't cryptic. If you've wanted to see how to structure a real bash script — error handling, logging, config parsing, signal handling — the source is meant to be read.</p>
 
       <h2>Open Source</h2>
       <p>Brew Scripts is licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>. You're free to use, modify, and distribute the code for any purpose — personal, educational, or commercial. There are no restrictions beyond preserving the license notice.</p>
       <p>We welcome contributions of all kinds. Whether it's fixing a bug, improving documentation, suggesting a new feature, or adding support for additional tools and applications, your input makes the project better for everyone. Visit the <a href="https://github.com/DJCastle/homeBrewScripts" target="_blank" rel="noopener noreferrer">GitHub repository</a> to browse the source code, open an issue, or submit a pull request. Every contribution is reviewed and appreciated.</p>
 
       <h2>Part of CodeCraftedApps</h2>
-      <p>Brew Scripts is maintained by <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a>, an independent developer building apps, tools, and open-source projects for the Apple ecosystem and beyond. CodeCraftedApps is focused on creating software that is practical, well-documented, and built with care.</p>
-      <p>See all projects and get in touch at <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">codecraftedapps.com</a>, or reach out directly through the <a href="contact.html">Contact page</a>.</p>
+      <p>Brew Scripts is maintained by <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">CodeCraftedApps</a> — an independent shop building apps and tools for the Apple ecosystem.</p>
+      <p>Other projects and contact info at <a href="https://codecraftedapps.com" target="_blank" rel="noopener noreferrer">codecraftedapps.com</a>, or use the <a href="contact.html">Contact page</a>.</p>
 
     </div>
   </section>
