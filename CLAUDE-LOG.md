@@ -14,4 +14,4 @@ Now matches the sibling pattern (dailyStrideTracker, shoeMiles): Pages source = 
 
 **Gotcha:** the site is fronted by Cloudflare (`server: cloudflare` in response headers), so the GitHub Pages `https_certificate: bad_authz` state seen across the three subdomains may be cosmetic for end users — Cloudflare terminates TLS. Worth verifying before chasing it.
 
-**Open:** add an OG/banner image to `docs/` to match the other subdomains.
+**Closed (2026-05-06):** OG image was already added — `docs/og-image.png` is 1200×630, git-tracked, referenced in `docs/index.html` OG + Twitter meta. The 2026-04-29 "open" thread was stale.
