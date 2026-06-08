@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Fail fast: error on any failure, unset variable, or broken pipe
+set -euo pipefail
 ###############################################################################
 # Script Name: install-essential-apps.sh
 # Description: 📦 Batch App Installer - Installs all essential apps automatically (no prompts)

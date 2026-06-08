@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Fail fast: error on any failure, unset variable, or broken pipe
+set -euo pipefail
 ###############################################################################
 # Script Name: auto-update-brew-hybrid.sh
 # Description: 🤖 Auto-Updater Pro - Advanced updates with email + text notifications
@@ -155,7 +158,7 @@ EOF
         local result=$?
         rm "$email_file"
         
-        if [ $result -eq 0 ]; then
+        if [ "$result" -eq 0 ]; then
             print_success "Email notification sent successfully"
             return 0
         else
@@ -206,7 +209,7 @@ EOF
 check_wifi_network() {
     local retry_count=0
     
-    while [ $retry_count -lt $MAX_RETRIES ]; do
+    while [ "$retry_count" -lt "$MAX_RETRIES" ]; do
         local current_network=$(networksetup -getairportnetwork en0 2>/dev/null | awk -F': ' '{print $2}')
         
         if [ "$current_network" = "$WIFI_NETWORK" ]; then
@@ -216,9 +219,9 @@ check_wifi_network() {
             print_warning "Not connected to $WIFI_NETWORK WiFi (current: $current_network)"
             ((retry_count++))
             
-            if [ $retry_count -lt $MAX_RETRIES ]; then
+            if [ "$retry_count" -lt "$MAX_RETRIES" ]; then
                 print_status "Retrying in $RETRY_DELAY seconds... (attempt $retry_count/$MAX_RETRIES)"
-                sleep $RETRY_DELAY
+                sleep "$RETRY_DELAY"
             fi
         fi
     done

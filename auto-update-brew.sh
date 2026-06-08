@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Fail fast: error on any failure, unset variable, or broken pipe
+set -euo pipefail
 ###############################################################################
 # Script Name: auto-update-brew.sh
 # Description: 🤖 Auto-Updater Basic - Keeps Homebrew updated with text notifications
