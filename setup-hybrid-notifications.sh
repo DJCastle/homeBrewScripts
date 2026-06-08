@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Fail fast: error on any failure, unset variable, or broken pipe
+set -euo pipefail
 ###############################################################################
 # Script Name: setup-hybrid-notifications.sh
 # Description: ⚙️ Setup Pro Automation - Configure advanced email + text notifications

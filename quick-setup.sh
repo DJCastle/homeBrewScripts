@@ -85,7 +85,36 @@ else
         log_info "[DRY RUN] Would install Homebrew"
     else
         log_info "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        # Security: never pipe a remote script straight into bash. Download to a
+        # temp file, surface the source so it can be inspected, then run the
+        # local copy and clean up. (Mirrors brew_setup_tahoe.sh.)
+        brew_install_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+        brew_install_script="$(mktemp)"
+
+        if ! curl -fsSL "$brew_install_url" -o "$brew_install_script"; then
+            log_error "Failed to download Homebrew installation script — check your connection"
+            rm -f "$brew_install_script"
+            exit 1
+        fi
+
+        # Basic source verification before executing
+        if ! head -1 "$brew_install_script" | grep -q "^#!/bin/bash"; then
+            log_error "Downloaded script doesn't look like a valid bash script — aborting"
+            rm -f "$brew_install_script"
+            exit 1
+        fi
+
+        log_info "Downloaded Homebrew installer to: $brew_install_script"
+        log_info "Source: $brew_install_url (inspect it before continuing if unsure)"
+
+        if ! /bin/bash "$brew_install_script"; then
+            log_error "Homebrew installation failed"
+            rm -f "$brew_install_script"
+            exit 1
+        fi
+        rm -f "$brew_install_script"
+
         # Add Homebrew to PATH for this session
         local_prefix="$(get_homebrew_prefix)"
         eval "$("$local_prefix/bin/brew" shellenv)"

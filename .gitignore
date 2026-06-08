@@ -63,3 +63,7 @@ fastlane/test_output/
 
 # Archives
 *.xcarchive
+
+# Internal AI context (local only)
+CLAUDE.md
+CLAUDE-LOG.md

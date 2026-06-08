@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Fail fast: error on any failure, unset variable, or broken pipe
+set -euo pipefail
 ###############################################################################
 # Script Name: setup-auto-update.sh
 # Description: ⚙️ Setup Basic Automation - Configure automatic Homebrew updates
