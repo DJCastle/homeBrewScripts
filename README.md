@@ -42,7 +42,7 @@ This installs CLI tools (gh, node, jq, tree, etc.), configures VSCode extensions
 | `auto-update-brew-hybrid.sh` | Auto-updates with email + text notifications |
 | `setup-auto-update.sh` | Schedules automatic updates (basic) |
 | `setup-hybrid-notifications.sh` | Schedules automatic updates (email + text) |
-| `cleanup-homebrew.sh` | Removes old packages and frees disk space |
+| `cleanup-homebrew.sh` | Removes old packages and frees disk space — preview with `--check`, confirms before deleting |
 
 ## Features
 

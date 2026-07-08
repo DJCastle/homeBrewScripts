@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: cleanup-homebrew.sh
 # Description: 🧹 System Cleaner - Removes old packages and frees up disk space
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2025-01-11
-# Updated: 2026-02-06
+# Updated: 2026-07-08
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -34,8 +34,14 @@ set -euo pipefail
 # 1. Open Terminal application (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homeBrewScripts
 # 3. Make script executable: chmod +x cleanup-homebrew.sh
-# 4. Run the script: ./cleanup-homebrew.sh
+# 4. Preview what would be removed: ./cleanup-homebrew.sh --check
+# 5. Run the cleanup: ./cleanup-homebrew.sh
 # Run periodically (monthly recommended) for optimal system maintenance
+#
+# OPTIONS:
+#   --check   Dry run: show what would be removed without deleting anything
+#   --yes     Skip the confirmation prompt (for unattended/scheduled runs)
+#   --help    Show usage and exit
 #
 # REQUIREMENTS:
 #   - Homebrew must be installed
@@ -79,6 +85,31 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1" | tee -a "$LOG"
 }
 
+# Usage text for --help and bad arguments
+usage() {
+    echo "Usage: ./cleanup-homebrew.sh [--check] [--yes] [--help]"
+    echo ""
+    echo "  --check   Dry run: show what would be removed without deleting anything"
+    echo "  --yes     Skip the confirmation prompt (for unattended/scheduled runs)"
+    echo "  --help    Show this help and exit"
+}
+
+# Parse arguments
+CHECK_ONLY=false
+ASSUME_YES=false
+for arg in "$@"; do
+    case "$arg" in
+        --check) CHECK_ONLY=true ;;
+        --yes) ASSUME_YES=true ;;
+        --help) usage; exit 0 ;;
+        *)
+            print_error "Unknown option: $arg"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
 # Function to check if Homebrew is installed
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
@@ -93,6 +124,19 @@ get_disk_usage() {
     local brew_prefix=$(brew --prefix)
     local usage=$(du -sh "$brew_prefix" 2>/dev/null | awk '{print $1}')
     echo "$usage"
+}
+
+# Function to preview cleanup without deleting anything (--check)
+preview_cleanup() {
+    print_status "CHECK MODE — nothing will be deleted."
+    echo ""
+    print_status "Old versions and cache files brew cleanup would remove:"
+    brew cleanup --dry-run 2>&1 | tee -a "$LOG" || true
+    echo ""
+    print_status "Orphaned dependencies brew autoremove would remove:"
+    brew autoremove --dry-run 2>&1 | tee -a "$LOG" || true
+    echo ""
+    print_success "Preview complete. Run ./cleanup-homebrew.sh to perform the cleanup."
 }
 
 # Function to perform cleanup operations
@@ -185,7 +229,26 @@ main() {
     if ! check_homebrew; then
         exit 1
     fi
-    
+
+    # Dry-run mode: preview and exit without touching anything
+    if [[ "$CHECK_ONLY" == true ]]; then
+        preview_cleanup
+        exit 0
+    fi
+
+    # PREFLIGHT: say what's about to happen and confirm before deleting
+    echo ""
+    print_warning "PREFLIGHT — this will: update Homebrew, remove old package/cask"
+    print_warning "versions, purge the download cache (--prune=all), and remove"
+    print_warning "orphaned dependencies (brew autoremove). Preview with --check."
+    if [[ "$ASSUME_YES" != true ]]; then
+        read -r -p "Proceed with cleanup? [y/N] " reply
+        if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+            print_status "Aborted. Nothing was changed."
+            exit 0
+        fi
+    fi
+
     print_success "Homebrew is available. Starting cleanup..."
     
     # Get disk usage before cleanup

@@ -85,7 +85,7 @@ Walks you through each step interactively. You can skip any step you're not comf
 | `auto-update-brew-hybrid.sh` | Runs updates with both email and text notifications |
 | `setup-auto-update.sh` | Schedules automatic updates (basic) |
 | `setup-hybrid-notifications.sh` | Schedules automatic updates (with email + text) |
-| `cleanup-homebrew.sh` | Removes old packages and frees disk space |
+| `cleanup-homebrew.sh` | Removes old packages and frees disk space — preview with `--check`, confirms before deleting |
 
 ## Optional — Set Up Auto-Updates
 

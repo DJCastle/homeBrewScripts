@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.2.0 — Safer Cleanup (July 2026)
+
+### Changed
+
+- **`cleanup-homebrew.sh` no longer deletes on sight** — it now shows a preflight summary and asks for confirmation before removing anything. Preview everything first with `--check` (dry run via `brew cleanup --dry-run` / `brew autoremove --dry-run`); pass `--yes` to skip the prompt in unattended or scheduled runs. `--help` documents all options.
+
+---
+
 ## v3.1.0 — Quick Setup & CLI Tools (February 2026)
 
 ### New Features
