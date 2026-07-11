@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: setup-hybrid-notifications.sh
 # Description: ⚙️ Setup Pro Automation - Configure advanced email + text notifications
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2025-01-11
-# Updated: 2026-02-06
+# Updated: 2026-07-10
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -34,8 +34,14 @@ set -euo pipefail
 # 1. Open Terminal application (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homeBrewScripts
 # 3. Make script executable: chmod +x setup-hybrid-notifications.sh
-# 4. Run the script: ./setup-hybrid-notifications.sh
+# 4. Preview first: ./setup-hybrid-notifications.sh --dry-run
+# 5. Run the script: ./setup-hybrid-notifications.sh
 # Follow the interactive prompts to configure both notification methods
+#
+# OPTIONS:
+#   --dry-run, --check   Walk through the setup questions and show what would be
+#                        configured — no messages, file edits, or schedule changes
+#   --help, -h           Show usage and exit
 #
 # NOTIFICATION METHODS:
 # 📧 EMAIL: Detailed HTML reports using macOS Mail app (no external dependencies)
@@ -59,6 +65,35 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HYBRID_SCRIPT="$SCRIPT_DIR/auto-update-brew-hybrid.sh"
 LOG="$HOME/Library/Logs/HybridNotificationSetup.log"
+
+# Parse options
+DRY_RUN=false
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run|--check)
+            DRY_RUN=true
+            ;;
+        --help|-h)
+            echo "Usage: ./setup-hybrid-notifications.sh [--dry-run] [--help]"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run, --check   Walk through the setup questions and show what would"
+            echo "                       be configured — no messages sent, no files changed,"
+            echo "                       no schedule installed"
+            echo "  --help, -h           Show this help and exit"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $arg (try --help)" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# In dry-run mode, touch nothing — not even the log file
+if [[ "$DRY_RUN" == "true" ]]; then
+    LOG="/dev/null"
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -107,7 +142,12 @@ validate_phone_number() {
 # Function to test email functionality
 test_email() {
     local email_address="$1"
-    
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would send a test email to $email_address"
+        return 0
+    fi
+
     print_status "Testing email functionality..."
     
     # Check if mail command is available
@@ -134,7 +174,12 @@ test_email() {
 # Function to test text messaging
 test_text_message() {
     local phone_number="$1"
-    
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would send a test iMessage to $phone_number"
+        return 0
+    fi
+
     print_status "Testing text message to $phone_number..."
     
     # Send test message
@@ -168,6 +213,12 @@ sed_escape_replacement() {
 update_script_config() {
     local email_address="$1"
     local phone_number="$2"
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would set EMAIL_ADDRESS=\"$email_address\" and PHONE_NUMBER=\"$phone_number\" in auto-update-brew-hybrid.sh"
+        return 0
+    fi
+
     local email_escaped phone_escaped
     email_escaped="$(sed_escape_replacement "$email_address")"
     phone_escaped="$(sed_escape_replacement "$phone_number")"
@@ -247,9 +298,15 @@ create_launchd_plist() {
             ;;
     esac
     
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would write $plist_path ($schedule schedule)"
+        print_status "[DRY-RUN] Would load it with: launchctl load $plist_path"
+        return 0
+    fi
+
     # Write plist file
     echo "$plist_content" > "$plist_path"
-    
+
     # Load the plist
     launchctl load "$plist_path"
     
@@ -299,7 +356,11 @@ main() {
     fi
     
     # Make sure hybrid script is executable
-    chmod +x "$HYBRID_SCRIPT"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would make auto-update-brew-hybrid.sh executable (chmod +x)"
+    else
+        chmod +x "$HYBRID_SCRIPT"
+    fi
     
     echo ""
     echo "🔄 Hybrid Notification Setup"
@@ -381,7 +442,11 @@ main() {
     # Test the hybrid script
     echo ""
     print_status "Testing hybrid auto-update script..."
-    if "$HYBRID_SCRIPT"; then
+    local test_args=()
+    if [[ "$DRY_RUN" == "true" ]]; then
+        test_args+=("--dry-run")
+    fi
+    if "$HYBRID_SCRIPT" ${test_args[@]+"${test_args[@]}"}; then
         print_success "Hybrid script test completed successfully"
     else
         print_warning "Hybrid script test had issues (this is normal if conditions aren't met)"

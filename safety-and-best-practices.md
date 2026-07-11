@@ -256,7 +256,7 @@ cp ~/.zshrc.backup ~/.zshrc
 
 ### Application Security
 - **Official sources**: Scripts only install from official Homebrew repositories
-- **Signature verification**: Homebrew verifies application signatures
+- **Checksum verification**: Homebrew verifies download checksums (SHA-256); macOS Gatekeeper checks app signatures on first launch
 - **Update management**: Keep applications updated for security patches
 - **Permission review**: Review application permissions after installation
 
@@ -264,7 +264,7 @@ cp ~/.zshrc.backup ~/.zshrc
 - **HTTPS only**: All downloads use encrypted connections
 - **Certificate validation**: Network libraries verify SSL certificates
 - **No credential storage**: Scripts don't store passwords or tokens
-- **Audit trails**: All network activity is logged
+- **Audit trails**: Script operations and their results are logged
 
 ## 📚 Learning from Failures
 

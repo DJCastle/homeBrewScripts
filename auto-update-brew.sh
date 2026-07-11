@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: auto-update-brew.sh
 # Description: 🤖 Auto-Updater Basic - Keeps Homebrew updated with text notifications
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2025-01-11
-# Updated: 2026-02-06
+# Updated: 2026-07-10
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -39,8 +39,14 @@ set -euo pipefail
 # 1. Open Terminal application (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homeBrewScripts
 # 3. Make script executable: chmod +x auto-update-brew.sh
-# 4. Run the script: ./auto-update-brew.sh
+# 4. Preview first: ./auto-update-brew.sh --dry-run
+# 5. Run the script: ./auto-update-brew.sh
 # Note: Use setup-auto-update.sh for scheduling automatic runs
+#
+# OPTIONS:
+#   --dry-run, --check   Check conditions and list outdated packages without
+#                        upgrading anything or sending notifications
+#   --help, -h           Show usage and exit
 #
 # REQUIREMENTS:
 #   - Homebrew must be installed
@@ -57,7 +63,36 @@ set -euo pipefail
 ###############################################################################
 
 LOG="$HOME/Library/Logs/AutoUpdateBrew.log"
-echo "Starting Auto Update Brew at $(date)" >> "$LOG"
+
+# Parse options
+DRY_RUN=false
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run|--check)
+            DRY_RUN=true
+            ;;
+        --help|-h)
+            echo "Usage: ./auto-update-brew.sh [--dry-run] [--help]"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run, --check   Check conditions and list outdated packages without"
+            echo "                       upgrading anything or sending notifications"
+            echo "  --help, -h           Show this help and exit"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $arg (try --help)" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# In dry-run mode, touch nothing — not even the log file
+if [[ "$DRY_RUN" == "true" ]]; then
+    LOG="/dev/null"
+else
+    echo "Starting Auto Update Brew at $(date)" >> "$LOG"
+fi
 
 # Configuration
 WIFI_NETWORK="YourWiFiNetwork"
@@ -91,7 +126,13 @@ print_error() {
 # Function to send text message
 send_text_message() {
     local message="$1"
-    
+
+    # Never send anything in dry-run mode
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would send text to $PHONE_NUMBER: $message"
+        return 0
+    fi
+
     # Check if iMessage is available
     if ! command -v osascript &> /dev/null; then
         print_error "AppleScript not available for text messaging"
@@ -239,7 +280,19 @@ main() {
     
     # All conditions met, proceed with updates
     print_success "All conditions met. Proceeding with updates..."
-    
+
+    # Dry-run: show what a real run would do, then stop
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would run: brew update, brew upgrade, brew upgrade --cask, brew cleanup"
+        print_status "[DRY-RUN] Outdated packages a real run would upgrade:"
+        brew outdated || true
+        print_status "[DRY-RUN] Outdated casks a real run would upgrade:"
+        brew outdated --cask || true
+        print_success "Dry run complete — no changes were made and no notifications were sent."
+        exit 0
+    fi
+
+
     # Perform updates and capture results
     local update_results=$(perform_updates)
     local update_summary=$(echo "$update_results" | head -4 | tr '\n' ' ')

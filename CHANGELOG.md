@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.3.0 — Dry-Run Everywhere (July 2026)
+
+### New Features
+
+- **Every script now supports `--dry-run` / `--check` and `--help`.** The auto-update scripts (`auto-update-brew.sh`, `auto-update-brew-hybrid.sh`) check their run conditions and list outdated packages/casks without upgrading anything or sending notifications; the setup scripts (`setup-auto-update.sh`, `setup-hybrid-notifications.sh`) walk through the interactive questions and show exactly what would be configured — no test messages, no file edits, no launchd changes; `install-essential-apps.sh` lists what it would install and what's already present. Dry runs write nothing, not even log files.
+
+### Changed
+
+- **LICENSE is now the unmodified MIT text.** The appended "additional disclaimer" paragraph moved to DISCLAIMER.md (its content was already covered there), so GitHub and license scanners detect the repo as clean MIT.
+- Docs: corrected the security notes — Homebrew verifies download checksums (SHA-256), while app code signatures are checked by macOS Gatekeeper; log files capture script operations and results, not raw network traffic.
+
+---
+
 ## v3.2.0 — Safer Cleanup (July 2026)
 
 ### Changed

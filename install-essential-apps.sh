@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: install-essential-apps.sh
 # Description: 📦 Batch App Installer - Installs all essential apps automatically (no prompts)
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2025-01-11
-# Updated: 2026-02-06
+# Updated: 2026-07-10
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -33,10 +33,16 @@ set -euo pipefail
 # 1. Open Terminal application (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homeBrewScripts
 # 3. Make script executable: chmod +x install-essential-apps.sh
-# 4. Run the script: ./install-essential-apps.sh
+# 4. Preview first: ./install-essential-apps.sh --dry-run
+# 5. Run the script: ./install-essential-apps.sh
 # This will install all essential applications automatically (no prompts)
 #
+# OPTIONS:
+#   --dry-run, --check   Show what would be installed without changing anything
+#   --help, -h           Show usage and exit
+#
 # FEATURES:
+# ✅ Dry-run mode to preview every change before committing
 # ✅ Safe to run multiple times — skips apps that are already installed
 # ✅ Comprehensive logging and error handling
 # ✅ Progress feedback with colored output
@@ -58,7 +64,35 @@ set -euo pipefail
 ###############################################################################
 
 LOG="$HOME/Library/Logs/EssentialAppsInstall.log"
-echo "Starting Essential Apps installation at $(date)" >> "$LOG"
+
+# Parse options
+DRY_RUN=false
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run|--check)
+            DRY_RUN=true
+            ;;
+        --help|-h)
+            echo "Usage: ./install-essential-apps.sh [--dry-run] [--help]"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run, --check   Show what would be installed without changing anything"
+            echo "  --help, -h           Show this help and exit"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $arg (try --help)" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# In dry-run mode, touch nothing — not even the log file
+if [[ "$DRY_RUN" == "true" ]]; then
+    LOG="/dev/null"
+else
+    echo "Starting Essential Apps installation at $(date)" >> "$LOG"
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -93,12 +127,15 @@ fi
 print_success "Homebrew is available. Starting app installation..."
 
 # Update Homebrew before installing
-print_status "Updating Homebrew..."
-brew update >> "$LOG" 2>&1
-if [ $? -eq 0 ]; then
-    print_success "Homebrew updated successfully"
+if [[ "$DRY_RUN" == "true" ]]; then
+    print_status "[DRY-RUN] Would update Homebrew (brew update)"
 else
-    print_warning "Homebrew update failed, but continuing with installation"
+    print_status "Updating Homebrew..."
+    if brew update >> "$LOG" 2>&1; then
+        print_success "Homebrew updated successfully"
+    else
+        print_warning "Homebrew update failed, but continuing with installation"
+    fi
 fi
 
 # Function to install an app if not already installed
@@ -122,6 +159,11 @@ install_app() {
     fi
     
     # Install the app
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would install $display_name (brew install --cask $cask_name)"
+        return 0
+    fi
+
     print_status "Installing $display_name..."
     if brew install --cask "$cask_name" >> "$LOG" 2>&1; then
         print_success "$display_name installed successfully"
@@ -149,6 +191,14 @@ install_app "Grammarly Desktop" "grammarly-desktop" "Grammarly Desktop"
 
 # 5. Visual Studio Code
 install_app "Visual Studio Code" "visual-studio-code" "Visual Studio Code"
+
+# In dry-run mode there is nothing to verify — stop before the summary
+if [[ "$DRY_RUN" == "true" ]]; then
+    echo ""
+    print_success "Dry run complete — no changes were made."
+    print_status "Run again without --dry-run to install."
+    exit 0
+fi
 
 # Post-installation summary
 print_status "Installation complete! Summary:"

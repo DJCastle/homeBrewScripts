@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: auto-update-brew-hybrid.sh
 # Description: 🤖 Auto-Updater Pro - Advanced updates with email + text notifications
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2025-01-11
-# Updated: 2026-02-06
+# Updated: 2026-07-10
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -44,8 +44,14 @@ set -euo pipefail
 # 1. Open Terminal application (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homeBrewScripts
 # 3. Make script executable: chmod +x auto-update-brew-hybrid.sh
-# 4. Run the script: ./auto-update-brew-hybrid.sh
+# 4. Preview first: ./auto-update-brew-hybrid.sh --dry-run
+# 5. Run the script: ./auto-update-brew-hybrid.sh
 # Note: Use setup-hybrid-notifications.sh for configuration and scheduling
+#
+# OPTIONS:
+#   --dry-run, --check   Check conditions and list outdated packages without
+#                        upgrading anything or sending any notifications
+#   --help, -h           Show usage and exit
 #
 # REQUIREMENTS:
 #   - Homebrew must be installed
@@ -68,7 +74,36 @@ set -euo pipefail
 ###############################################################################
 
 LOG="$HOME/Library/Logs/AutoUpdateBrewHybrid.log"
-echo "Starting Hybrid Auto Update Brew at $(date)" >> "$LOG"
+
+# Parse options
+DRY_RUN=false
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run|--check)
+            DRY_RUN=true
+            ;;
+        --help|-h)
+            echo "Usage: ./auto-update-brew-hybrid.sh [--dry-run] [--help]"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run, --check   Check conditions and list outdated packages without"
+            echo "                       upgrading anything or sending any notifications"
+            echo "  --help, -h           Show this help and exit"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $arg (try --help)" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# In dry-run mode, touch nothing — not even the log file
+if [[ "$DRY_RUN" == "true" ]]; then
+    LOG="/dev/null"
+else
+    echo "Starting Hybrid Auto Update Brew at $(date)" >> "$LOG"
+fi
 
 # Configuration
 WIFI_NETWORK="YourWiFiNetwork"
@@ -107,7 +142,13 @@ send_email_notification() {
     local subject="$1"
     local body="$2"
     local log_file="$3"
-    
+
+    # Never send anything in dry-run mode
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would email $EMAIL_ADDRESS: $subject"
+        return 0
+    fi
+
     # Create temporary email file
     local email_file=$(mktemp)
     
@@ -175,7 +216,13 @@ EOF
 # Function to send text message
 send_text_message() {
     local message="$1"
-    
+
+    # Never send anything in dry-run mode
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would send text to $PHONE_NUMBER: $message"
+        return 0
+    fi
+
     # Check if iMessage is available
     if ! command -v osascript &> /dev/null; then
         print_error "AppleScript not available for text messaging"
@@ -217,8 +264,16 @@ check_wifi_network() {
             return 0
         else
             print_warning "Not connected to $WIFI_NETWORK WiFi (current: $current_network)"
+
+            # A dry run reports the miss immediately instead of waiting
+            # through the retry window
+            if [[ "$DRY_RUN" == "true" ]]; then
+                print_status "[DRY-RUN] A real run would retry $MAX_RETRIES times, $RETRY_DELAY seconds apart"
+                return 1
+            fi
+
             ((retry_count++))
-            
+
             if [ "$retry_count" -lt "$MAX_RETRIES" ]; then
                 print_status "Retrying in $RETRY_DELAY seconds... (attempt $retry_count/$MAX_RETRIES)"
                 sleep "$RETRY_DELAY"
@@ -395,7 +450,18 @@ main() {
     
     # All conditions met, proceed with updates
     print_success "All conditions met. Proceeding with updates..."
-    
+
+    # Dry-run: show what a real run would do, then stop
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would run: brew update, brew upgrade, brew upgrade --cask, brew cleanup"
+        print_status "[DRY-RUN] Outdated packages a real run would upgrade:"
+        brew outdated || true
+        print_status "[DRY-RUN] Outdated casks a real run would upgrade:"
+        brew outdated --cask || true
+        print_success "Dry run complete — no changes were made and no notifications were sent."
+        exit 0
+    fi
+
     # Perform updates and capture results
     local update_results=$(perform_updates)
     local update_summary=$(echo "$update_results" | head -1)

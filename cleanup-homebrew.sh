@@ -39,9 +39,9 @@ set -euo pipefail
 # Run periodically (monthly recommended) for optimal system maintenance
 #
 # OPTIONS:
-#   --check   Dry run: show what would be removed without deleting anything
-#   --yes     Skip the confirmation prompt (for unattended/scheduled runs)
-#   --help    Show usage and exit
+#   --check, --dry-run   Dry run: show what would be removed without deleting anything
+#   --yes                Skip the confirmation prompt (for unattended/scheduled runs)
+#   --help               Show usage and exit
 #
 # REQUIREMENTS:
 #   - Homebrew must be installed
@@ -89,7 +89,7 @@ print_error() {
 usage() {
     echo "Usage: ./cleanup-homebrew.sh [--check] [--yes] [--help]"
     echo ""
-    echo "  --check   Dry run: show what would be removed without deleting anything"
+    echo "  --check, --dry-run   Dry run: show what would be removed without deleting anything"
     echo "  --yes     Skip the confirmation prompt (for unattended/scheduled runs)"
     echo "  --help    Show this help and exit"
 }
@@ -99,7 +99,7 @@ CHECK_ONLY=false
 ASSUME_YES=false
 for arg in "$@"; do
     case "$arg" in
-        --check) CHECK_ONLY=true ;;
+        --check|--dry-run) CHECK_ONLY=true ;;
         --yes) ASSUME_YES=true ;;
         --help) usage; exit 0 ;;
         *)

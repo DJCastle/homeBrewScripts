@@ -28,3 +28,4 @@ By using this tool, you acknowledge that:
 - You assume all risk associated with installing and running third-party software
 - You will comply with all applicable laws and software license terms
 - The setup script modifies your system configuration (git config, PATH, etc.) — review before running
+- You should back up your system before running any system-modification script

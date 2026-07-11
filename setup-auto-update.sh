@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: setup-auto-update.sh
 # Description: ⚙️ Setup Basic Automation - Configure automatic Homebrew updates
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 1.1.0
 # Created: 2025-01-11
-# Updated: 2026-02-06
+# Updated: 2026-07-10
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -33,8 +33,15 @@ set -euo pipefail
 # 1. Open Terminal application (Applications > Utilities > Terminal)
 # 2. Navigate to script directory: cd /path/to/homeBrewScripts
 # 3. Make script executable: chmod +x setup-auto-update.sh
-# 4. Run the script: ./setup-auto-update.sh
-# Follow the interactive prompts to configure
+# 4. Preview first: ./setup-auto-update.sh --dry-run
+# 5. Run the script: ./setup-auto-update.sh
+#
+# OPTIONS:
+#   --dry-run, --check   Walk through the setup questions and show what would be
+#                        configured — no messages, file edits, or schedule changes
+#   --help, -h           Show usage and exit
+#
+# Follow the interactive prompts to configure.
 #
 # NOTIFICATION SETUP:
 # - Requires iMessage to be signed in and configured
@@ -58,6 +65,35 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 AUTO_UPDATE_SCRIPT="$SCRIPT_DIR/auto-update-brew.sh"
 LOG="$HOME/Library/Logs/AutoUpdateSetup.log"
+
+# Parse options
+DRY_RUN=false
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run|--check)
+            DRY_RUN=true
+            ;;
+        --help|-h)
+            echo "Usage: ./setup-auto-update.sh [--dry-run] [--help]"
+            echo ""
+            echo "Options:"
+            echo "  --dry-run, --check   Walk through the setup questions and show what would"
+            echo "                       be configured — no messages sent, no files changed,"
+            echo "                       no schedule installed"
+            echo "  --help, -h           Show this help and exit"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $arg (try --help)" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# In dry-run mode, touch nothing — not even the log file
+if [[ "$DRY_RUN" == "true" ]]; then
+    LOG="/dev/null"
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -96,7 +132,12 @@ validate_phone_number() {
 # Function to test text messaging
 test_text_message() {
     local phone_number="$1"
-    
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would send a test iMessage to $phone_number"
+        return 0
+    fi
+
     print_status "Testing text message to $phone_number..."
     
     # Send test message
@@ -130,6 +171,12 @@ sed_escape_replacement() {
 # Function to update phone number in auto-update script
 update_phone_number() {
     local phone_number="$1"
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would set PHONE_NUMBER=\"$phone_number\" in auto-update-brew.sh"
+        return 0
+    fi
+
     local escaped
     escaped="$(sed_escape_replacement "$phone_number")"
     local temp_file
@@ -205,9 +252,15 @@ create_launchd_plist() {
             ;;
     esac
     
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would write $plist_path ($schedule schedule)"
+        print_status "[DRY-RUN] Would load it with: launchctl load $plist_path"
+        return 0
+    fi
+
     # Write plist file
     echo "$plist_content" > "$plist_path"
-    
+
     # Load the plist
     launchctl load "$plist_path"
     
@@ -231,7 +284,11 @@ main() {
     fi
     
     # Make sure auto-update script is executable
-    chmod +x "$AUTO_UPDATE_SCRIPT"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_status "[DRY-RUN] Would make auto-update-brew.sh executable (chmod +x)"
+    else
+        chmod +x "$AUTO_UPDATE_SCRIPT"
+    fi
     
     echo ""
     echo "🔄 Auto Update Brew Setup"
@@ -286,10 +343,15 @@ main() {
             ;;
     esac
     
-    # Test the auto-update script
+    # Test the auto-update script (pass the dry-run flag through so a
+    # dry-run of setup never triggers a real update)
     echo ""
     print_status "Testing auto-update script..."
-    if "$AUTO_UPDATE_SCRIPT"; then
+    local test_args=()
+    if [[ "$DRY_RUN" == "true" ]]; then
+        test_args+=("--dry-run")
+    fi
+    if "$AUTO_UPDATE_SCRIPT" ${test_args[@]+"${test_args[@]}"}; then
         print_success "Auto-update script test completed successfully"
     else
         print_warning "Auto-update script test had issues (this is normal if conditions aren't met)"
