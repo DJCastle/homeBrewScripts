@@ -65,5 +65,6 @@ fastlane/test_output/
 *.xcarchive
 
 # Internal AI context (local only)
-CLAUDE.md
+# CLAUDE.md is committed on purpose since 2026-09-13 -- it is technical
+# project documentation and carries nothing private.
 CLAUDE-LOG.md
