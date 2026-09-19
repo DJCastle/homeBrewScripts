@@ -1,5 +1,9 @@
 # Homebrew Scripts — Claude Instructions
 
+Shared craft rules — imported so every surface loads them, including Xcode's sandboxed agent:
+
+@Agentic_Developer.md
+
 ## Stack & purpose
 
 Open-source bash scripts for automating Homebrew package management on macOS — interactive setup, scheduled updates with notifications, manual cleanup. Public repo, MIT-licensed, currently v3.3.0.
