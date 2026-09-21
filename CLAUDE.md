@@ -40,7 +40,7 @@ Open-source bash scripts for automating Homebrew package management on macOS —
 - `dotfiles/` — git config + VSCode settings backups.
 - `*.sh` at root — top-level entry-point scripts.
 - `Brewfile` — declarative bundle file consumed by `brew bundle`.
-- No `docs/` dir — the public site pages live in `DJCastle/codeCraftedApps` under `brew/`; the `*.md` files at root (`safety-and-best-practices.md`, `shell-scripting-tutorial.md`, etc.) are the content sources.
+- No `docs/` dir — the public site pages live in `DJCastle/codeCraftedApps-site` under `brew/`; the `*.md` files at root (`safety-and-best-practices.md`, `shell-scripting-tutorial.md`, etc.) are the content sources.
 
 ### User experience
 
@@ -57,24 +57,16 @@ This repo is open source — different commit hygiene than private repos:
 - Clean, descriptive commit messages (no internal shorthand).
 - `README.md` and `GETTING_STARTED.md` must stay accurate. Update in the same commit as user-facing behavior changes.
 - `CHANGELOG.md` updated for any user-visible change. Semver.
-- Site content (`codeCraftedApps/brew/*.html`) and source markdown (`*.md` at root) must agree.
-- The root `*.md` files are the canonical source; when copy changes, update the matching page in `codeCraftedApps/brew/` in the same session.
+- Site content (`codeCraftedApps-site/brew/*.html`) and source markdown (`*.md` at root) must agree.
+- The root `*.md` files are the canonical source; when copy changes, update the matching page in `codeCraftedApps-site/brew/` in the same session.
 
 ## Cross-repo sync
 
 Part of the **CodeCraftedApps** ecosystem.
 
-| Project | Page URL | Repo |
-| --- | --- | --- |
-| Root site | `codecraftedapps.com` | `DJCastle/codeCraftedApps` |
-| Daily Stride Tracker | `codecraftedapps.com/apps/dailystridetracker/` | `DJCastle/dailyStrideTracker` |
-| Shoe Miles | `codecraftedapps.com/apps/shoemiles/` | `DJCastle/shoeMiles` |
-| Page Journey | `codecraftedapps.com/apps/pagejourney/` | `DJCastle/pageJourney` |
-| Nabbit | `codecraftedapps.com/apps/nabbit/` | `DJCastle/NabbIt` |
-| Brew Scripts (this) | `codecraftedapps.com/brew/` | `DJCastle/homeBrewScripts` |
-| Browser Extensions (GPQ + future) | `codecraftedapps.com/extensions/` | `DJCastle/browserExtensions` |
+The full product list lives in `codeCraftedApps-site/CLAUDE.md` ("Managed projects") — the one canonical copy. Don't mirror it here; copies drift.
 
-When changing the project's name or landing-page content, update the hub site `DJCastle/codeCraftedApps` → `index.html` project card, `contact.html` email, `README.md` ecosystem table. The site is served entirely from the apex `codecraftedapps.com` (GitHub Pages); there are no per-app subdomains.
+When changing the project's name or landing-page content, update the hub site `DJCastle/codeCraftedApps-site` → `index.html` project card, `contact.html` email, `README.md`. The site is served entirely from the apex `codecraftedapps.com` (GitHub Pages); there are no per-app subdomains.
 
 ## Running scripts
 
