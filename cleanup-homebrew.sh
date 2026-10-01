@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: cleanup-homebrew.sh
 # Description: 🧹 System Cleaner - Removes old packages and frees up disk space
 # Author: DJCastle
-# Version: 4.1.0
+# Version: 4.1.1
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -121,8 +121,11 @@ check_homebrew() {
 
 # Function to get disk usage before cleanup
 get_disk_usage() {
-    local brew_prefix=$(brew --prefix)
-    local usage=$(du -sh "$brew_prefix" 2>/dev/null | awk '{print $1}')
+    local brew_prefix usage
+    brew_prefix=$(brew --prefix)
+    # `|| true` on the du pipeline: a permission error or a missing prefix is
+    # worth reporting as "unknown", not worth aborting a cleanup run over.
+    usage=$(du -sh "$brew_prefix" 2>/dev/null | awk '{print $1}' || true)
     echo "$usage"
 }
 
@@ -152,50 +155,50 @@ perform_cleanup() {
     print_status "Updating Homebrew..."
     if brew update >> "$LOG" 2>&1; then
         cleanup_summary+="✅ Homebrew updated successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Homebrew update failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Clean up old versions
     print_status "Cleaning up old versions..."
     if brew cleanup >> "$LOG" 2>&1; then
         cleanup_summary+="✅ Old versions cleaned up successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Cleanup failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Clean up download cache
     print_status "Cleaning up download cache..."
     if brew cleanup --prune=all >> "$LOG" 2>&1; then
         cleanup_summary+="✅ Download cache cleaned up successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Cache cleanup failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Remove orphaned dependencies
     print_status "Removing orphaned dependencies..."
     if brew autoremove >> "$LOG" 2>&1; then
         cleanup_summary+="✅ Orphaned dependencies removed successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Orphaned dependency removal failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Run brew doctor for health check
     print_status "Running brew doctor for health check..."
     if brew doctor >> "$LOG" 2>&1; then
         cleanup_summary+="✅ Health check completed successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Health check failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Return summary
@@ -216,7 +219,7 @@ show_cleanup_stats() {
     echo "After cleanup:  $after_usage"
     
     # Calculate space saved (if possible)
-    if [ "$before_usage" != "$after_usage" ]; then
+    if [[ "$before_usage" != "$after_usage" ]]; then
         print_success "Space saved through cleanup!"
     fi
 }
@@ -257,6 +260,10 @@ main() {
     print_status "Current Homebrew disk usage: $before_usage"
     
     # Perform cleanup operations
+    # These field extractions keep the `local x=$(...)` form on purpose. The
+    # producer function always succeeds (it ends in `echo`), and head/tail on a
+    # short in-memory string has nothing meaningful to fail at, so splitting the
+    # assignments would only add SIGPIPE exposure under pipefail for no gain.
     local cleanup_results=$(perform_cleanup)
     local cleanup_summary=$(echo "$cleanup_results" | head -1)
     local errors=$(echo "$cleanup_results" | head -2 | tail -1)
@@ -272,7 +279,7 @@ main() {
     print_status "Cleanup complete! Summary:"
     echo "----------------------------------------" | tee -a "$LOG"
     
-    if [ "$error_count" -eq 0 ]; then
+    if [[ "$error_count" -eq 0 ]]; then
         print_success "✅ All cleanup operations completed successfully ($success_count operations)"
     else
         print_warning "⚠️ Some cleanup operations had issues ($success_count/$((success_count + error_count)) operations)"

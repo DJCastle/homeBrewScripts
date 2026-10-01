@@ -1,5 +1,48 @@
 # Changelog
 
+## v4.1.1 — Shell Hygiene (October 2026)
+
+Mostly mechanical, with one real bug found along the way.
+
+### Fixed
+
+- **The Wi-Fi check never matched on desktop Macs.** Both updater scripts asked
+  `networksetup` about a hardcoded `en0`. That is Wi-Fi on a laptop, but on a Mac
+  mini, Studio or Pro `en0` is usually Ethernet and Wi-Fi is `en1` or later.
+  Asking about a non-Wi-Fi interface exits 10, and that failure was being
+  swallowed, so the network gate silently never matched and every scheduled run
+  skipped with "not connected to <network>". The interface is now discovered
+  from `networksetup -listallhardwareports`, with `NETWORK_INTERFACE` in the
+  config still taking precedence.
+- **`check_wifi_network()` in `lib/common.sh` could abort before its own guard.**
+  It assigned from a pipeline that fails for a non-Wi-Fi interface, so under
+  `set -o pipefail` the script exited before reaching the empty-value check
+  written to handle exactly that case — the same pattern fixed in
+  `check_power_status()` in v4.1.0.
+
+### Changed
+
+- **`((count++))` replaced with `count=$((count+1))` in 42 places.**
+  Post-increment returns the *old* value, so `((count++))` exits non-zero
+  whenever the counter is 0, and a zero arithmetic result is a false exit status.
+  Bash 3.2 as shipped with macOS does not abort on it, but these scripts install
+  Homebrew, after which `#!/usr/bin/env bash` may well resolve to a newer bash.
+  An assignment is unambiguously exit-0 on every version, so the question no
+  longer arises.
+- **The remaining 16 single-bracket `[ ]` tests are now `[[ ]]`**, per this
+  repo's own convention. Two string comparisons became `==` with the right-hand
+  side still quoted, so they stay literal comparisons rather than becoming glob
+  patterns — a network name containing `*` would otherwise have started matching
+  the wrong thing.
+- **`local x=$(...)` split where a failure should stop the run** (`mktemp` for
+  the email body, `brew --prefix`), and given an explicit `|| true` where
+  degrading is correct (`du` on the Homebrew prefix, the Wi-Fi lookup). The
+  form masks the command's exit status behind the `local` builtin, which is
+  what hid two bugs in v4.1.0. The field extractions that read a function's
+  multi-line output keep the compact form deliberately, and now say why.
+
+---
+
 ## v4.1.0 — Honest Notifications (September 2026)
 
 v4.0.0 fixed the setup script. This fixes the five scripts it did not touch —

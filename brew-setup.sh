@@ -2,7 +2,7 @@
 ###############################################################################
 # Script Name: brew-setup.sh
 # Description: 🍺 Educational Homebrew Installer - Interactive setup with customizable app selection
-# Version: 4.1.0
+# Version: 4.1.1
 # License: MIT
 #
 # EDUCATIONAL PURPOSE:
@@ -76,7 +76,7 @@ set -euo pipefail
 # This block used to sit after init_common_lib, so `--help` on a fresh clone
 # died trying to load a config instead of printing help.
 # -----------------------------------------------------------------------------
-readonly SCRIPT_VERSION="4.1.0"
+readonly SCRIPT_VERSION="4.1.1"
 
 # Educational function: Show comprehensive help information
 show_help() {
@@ -313,27 +313,27 @@ install_applications() {
         # Check if already installed
         if brew list --cask "$app_cask" >/dev/null 2>&1; then
             log_success "$display_name is already installed via Homebrew"
-            ((skipped_count++))
+            skipped_count=$((skipped_count+1))
             continue
         elif [[ -d "/Applications/$display_name.app" ]]; then
             log_warning "$display_name is already installed (not via Homebrew)"
-            ((skipped_count++))
+            skipped_count=$((skipped_count+1))
             continue
         fi
 
         # Install the application
         if [[ "${DRY_RUN_MODE:-false}" == "true" ]]; then
             log_info "[DRY RUN] Would install: $display_name"
-            ((installed_count++))
+            installed_count=$((installed_count+1))
         else
             log_info "Installing $display_name..."
             if brew install --cask "$app_cask"; then
                 log_success "Successfully installed $display_name"
-                ((installed_count++))
+                installed_count=$((installed_count+1))
             else
                 log_error "Failed to install $display_name"
                 failed_apps+=("$display_name")
-                ((failed_count++))
+                failed_count=$((failed_count+1))
             fi
         fi
     done
@@ -374,7 +374,7 @@ validate_system_requirements() {
     # Check operating system
     if [[ "$(uname)" != "Darwin" ]]; then
         handle_system_requirement_error "Operating System" "$(uname)" "Darwin (macOS)"
-        ((errors++))
+        errors=$((errors+1))
     else
         log_success "✅ Running on macOS"
     fi
@@ -389,7 +389,7 @@ validate_system_requirements() {
 
     if version_lt "$macos_version" "$MACOS_MINIMUM"; then
         handle_system_requirement_error "macOS Version" "$macos_version" "$MACOS_MINIMUM or later"
-        ((errors++))
+        errors=$((errors+1))
     elif version_lt "$macos_version" "$MACOS_SUPPORTED"; then
         log_warning "⚠️  macOS $macos_version is below Homebrew's supported floor ($MACOS_SUPPORTED)"
         log_warning "    Homebrew still runs, but ships no prebuilt bottles for it — packages"
@@ -403,7 +403,7 @@ validate_system_requirements() {
     arch=$(detect_architecture)
     if [[ "$arch" == "unknown" ]]; then
         handle_system_requirement_error "Architecture" "$(uname -m)" "x86_64 or arm64"
-        ((errors++))
+        errors=$((errors+1))
     else
         log_success "✅ Architecture: $arch"
     fi
@@ -417,7 +417,7 @@ validate_system_requirements() {
                 "1. Install Xcode Command Line Tools: xcode-select --install
 2. Check if the command is in your PATH
 3. Restart Terminal and try again"
-            ((errors++))
+            errors=$((errors+1))
         else
             log_debug "✅ Command available: $cmd"
         fi
@@ -430,7 +430,7 @@ validate_system_requirements() {
 
     if [[ "$available_gb" -lt "$required_gb" ]]; then
         handle_disk_space_error "${required_gb}GB" "${available_gb}GB"
-        ((errors++))
+        errors=$((errors+1))
     else
         log_success "✅ Sufficient disk space: ${available_gb}GB available"
     fi
@@ -438,7 +438,7 @@ validate_system_requirements() {
     # Check internet connectivity
     if ! check_internet_connection; then
         handle_network_error
-        ((errors++))
+        errors=$((errors+1))
     else
         log_success "✅ Internet connection verified"
     fi
@@ -457,7 +457,7 @@ validate_configuration() {
         if validate_with_error validate_email "$EMAIL_ADDRESS" "email" "Valid email format: user@domain.com"; then
             log_success "✅ Email address format is valid"
         else
-            ((errors++))
+            errors=$((errors+1))
         fi
     fi
 
@@ -466,13 +466,13 @@ validate_configuration() {
         if validate_with_error validate_phone "$PHONE_NUMBER" "phone" "International format with country code: +1234567890"; then
             log_success "✅ Phone number format is valid"
         else
-            ((errors++))
+            errors=$((errors+1))
         fi
     fi
 
     # Validate percentage values
     if ! validate_with_error validate_percentage "${MIN_BATTERY_PERCENTAGE:-50}" "battery percentage" "Number between 0 and 100"; then
-        ((errors++))
+        errors=$((errors+1))
     fi
 
     # Validate application configuration

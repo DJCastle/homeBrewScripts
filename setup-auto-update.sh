@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: setup-auto-update.sh
 # Description: ⚙️ Setup Basic Automation - Configure automatic Homebrew updates
 # Author: DJCastle
-# Version: 4.1.0
+# Version: 4.1.1
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -305,7 +305,7 @@ main() {
     print_status "Auto Update Brew Setup started at $(date)"
     
     # Check if auto-update script exists
-    if [ ! -f "$AUTO_UPDATE_SCRIPT" ]; then
+    if [[ ! -f "$AUTO_UPDATE_SCRIPT" ]]; then
         print_error "Auto-update script not found: $AUTO_UPDATE_SCRIPT"
         exit 1
     fi

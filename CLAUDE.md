@@ -6,7 +6,7 @@ Shared craft rules — imported so every surface loads them, including Xcode's s
 
 ## Stack & purpose
 
-Open-source bash scripts for automating Homebrew package management on macOS — interactive setup, scheduled updates with notifications, manual cleanup. Public repo, MIT-licensed, currently v4.1.0.
+Open-source bash scripts for automating Homebrew package management on macOS — interactive setup, scheduled updates with notifications, manual cleanup. Public repo, MIT-licensed, currently v4.1.1.
 
 - **Repo:** `DJCastle/homeBrewScripts` (public)
 - **Page URL:** `codecraftedapps.com/brew/` (GitHub Pages)
@@ -119,6 +119,29 @@ Every script should respond to `--help` and `--check` (dry-run).
   `codeCraftedApps` repo — it reports the drift, and `--apply` copies the file.
   Note the CI run happens *after* your push, so sync the site in a follow-up,
   not in the same breath.
+
+- **`((count++))` returns non-zero when count is 0.** Post-increment yields the
+  old value, and a zero arithmetic result is a false exit status. Bash 3.2 does
+  not abort on it but a newer bash may, and these scripts install Homebrew.
+  Use `count=$((count+1))` — an assignment is always exit-0.
+- **Never assign from a pipeline containing `grep` or `networksetup` without
+  `|| true`.** Under `set -o pipefail` a grep that matches nothing, or
+  networksetup asked about a non-Wi-Fi interface (exit 10), fails the whole
+  pipeline and aborts the script — typically skipping the very empty-value check
+  written to handle that case. This has now bitten three separate functions.
+- **`local x=$(cmd)` hides `cmd`'s exit status** behind the `local` builtin,
+  which always succeeds. Declare then assign (`local x; x=$(cmd)`) when a
+  failure should stop the run. Two bugs hid behind this, including `brew upgrade`
+  failures being reported as successes.
+- **Don't assume `en0` is Wi-Fi.** It is on laptops; on desktop Macs it is
+  usually Ethernet. Discover it from
+  `networksetup -listallhardwareports`, honouring `NETWORK_INTERFACE` from config.
+- **`mail` exits 0 with no MTA running**, and macOS ships postfix disabled, so a
+  plain exit-code check reports success for mail that is never delivered. Probe
+  `/usr/sbin/postqueue -p` before claiming an email was sent.
+- **`launchctl load`/`unload` are deprecated** (`launchctl help` names
+  bootstrap/bootout). Use `launchctl bootout gui/$(id -u)/<label> || true`
+  followed by `launchctl bootstrap gui/$(id -u) <plist>`, in that order.
 
 ## Documentation maintenance
 

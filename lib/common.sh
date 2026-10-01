@@ -475,9 +475,23 @@ check_wifi_network() {
         return 0
     fi
     
-    local interface="${NETWORK_INTERFACE:-en0}"
+    # Discover the Wi-Fi interface rather than defaulting to en0: en0 is Wi-Fi
+    # on laptops, but on desktop Macs (mini, Studio, Pro) it is usually Ethernet
+    # and Wi-Fi is en1 or later. NETWORK_INTERFACE in the config still wins.
+    local interface
+    interface="${NETWORK_INTERFACE:-$(networksetup -listallhardwareports 2>/dev/null \
+        | awk '/Hardware Port: Wi-Fi/{getline; print $2; exit}')}"
+
+    if [[ -z "$interface" ]]; then
+        log_warning "No Wi-Fi interface found on this Mac"
+        return 1
+    fi
+
+    # `|| true` because networksetup exits 10 for a non-Wi-Fi interface, which
+    # under `set -o pipefail` would abort before the empty check below — the
+    # check that exists precisely to handle this.
     local current_network
-    current_network=$(networksetup -getairportnetwork "$interface" 2>/dev/null | awk -F': ' '{print $2}')
+    current_network=$(networksetup -getairportnetwork "$interface" 2>/dev/null | awk -F': ' '{print $2}' || true)
     
     if [[ -z "$current_network" ]]; then
         log_warning "Could not determine current WiFi network"
@@ -603,7 +617,7 @@ retry_with_backoff() {
             delay=$((delay * 2))  # Exponential backoff
         fi
         
-        ((attempt++))
+        attempt=$((attempt+1))
     done
     
     log_error "All $max_attempts attempts failed"

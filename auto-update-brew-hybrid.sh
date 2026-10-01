@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: auto-update-brew-hybrid.sh
 # Description: 🤖 Auto-Updater Pro - Advanced updates with email + text notifications
 # Author: DJCastle
-# Version: 4.1.0
+# Version: 4.1.1
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -150,7 +150,10 @@ send_email_notification() {
     fi
 
     # Create temporary email file
-    local email_file=$(mktemp)
+    # Split so a failure actually stops us: there is no point building an
+    # email body with nowhere to put it.
+    local email_file
+    email_file=$(mktemp)
     
     # Create email content
     cat > "$email_file" << EOF
@@ -287,14 +290,41 @@ EOF
     fi
 }
 
+# Find the Wi-Fi interface instead of assuming en0.
+#
+# en0 is Wi-Fi on laptops, but on desktop Macs (mini, Studio, Pro) en0 is
+# usually Ethernet and Wi-Fi is en1 or later. Asking networksetup about a
+# non-Wi-Fi interface exits 10, which was being swallowed — so the Wi-Fi check
+# silently never matched and scheduled updates skipped every run with
+# "not connected to <network>".
+#
+# Honours NETWORK_INTERFACE from the config if it is set.
+get_wifi_interface() {
+    if [[ -n "${NETWORK_INTERFACE:-}" ]]; then
+        printf '%s\n' "$NETWORK_INTERFACE"
+        return 0
+    fi
+    networksetup -listallhardwareports 2>/dev/null \
+        | awk '/Hardware Port: Wi-Fi/{getline; print $2; exit}'
+}
+
 # Function to check WiFi network with retry
 check_wifi_network() {
     local retry_count=0
     
-    while [ "$retry_count" -lt "$MAX_RETRIES" ]; do
-        local current_network=$(networksetup -getairportnetwork en0 2>/dev/null | awk -F': ' '{print $2}')
+    while [[ "$retry_count" -lt "$MAX_RETRIES" ]]; do
+        # Split the assignment so a failure is visible, with `|| true` because an
+        # absent or switched-off Wi-Fi interface is a normal state to degrade from,
+        # not a reason to abort the run.
+        local wifi_if current_network
+        wifi_if="$(get_wifi_interface || true)"
+        if [[ -z "$wifi_if" ]]; then
+            print_warning "No Wi-Fi interface found on this Mac; cannot check the network."
+            return 1
+        fi
+        current_network="$(networksetup -getairportnetwork "$wifi_if" 2>/dev/null | awk -F': ' '{print $2}' || true)"
         
-        if [ "$current_network" = "$WIFI_NETWORK" ]; then
+        if [[ "$current_network" == "$WIFI_NETWORK" ]]; then
             print_success "Connected to $WIFI_NETWORK WiFi"
             return 0
         else
@@ -307,9 +337,9 @@ check_wifi_network() {
                 return 1
             fi
 
-            ((retry_count++))
+            retry_count=$((retry_count+1))
 
-            if [ "$retry_count" -lt "$MAX_RETRIES" ]; then
+            if [[ "$retry_count" -lt "$MAX_RETRIES" ]]; then
                 print_status "Retrying in $RETRY_DELAY seconds... (attempt $retry_count/$MAX_RETRIES)"
                 sleep "$RETRY_DELAY"
             fi
@@ -360,10 +390,10 @@ perform_updates() {
     print_status "Updating Homebrew..."
     if brew update >> "$LOG" 2>&1; then
         update_summary+="✅ Homebrew updated successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Homebrew update failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Upgrade all packages
@@ -378,12 +408,12 @@ perform_updates() {
     if package_output=$(brew upgrade 2>&1); then
         update_summary+="✅ All packages upgraded successfully<br>"
         updated_packages=$(echo "$package_output" | grep -cE "^==> Upgrading|^==> Downloading" || true)
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Package upgrade failed<br>"
         print_error "brew upgrade failed; see $LOG"
         printf '%s\n' "$package_output" >> "$LOG"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Upgrade all casks
@@ -393,22 +423,22 @@ perform_updates() {
     if cask_output=$(brew upgrade --cask 2>&1); then
         update_summary+="✅ All applications upgraded successfully<br>"
         updated_apps=$(echo "$cask_output" | grep -cE "^==> Upgrading|^==> Downloading" || true)
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Application upgrade failed<br>"
         print_error "brew upgrade --cask failed; see $LOG"
         printf '%s\n' "$cask_output" >> "$LOG"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Clean up old versions
     print_status "Cleaning up old versions..."
     if brew cleanup >> "$LOG" 2>&1; then
         update_summary+="✅ Cleanup completed successfully<br>"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Cleanup failed<br>"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Return summary
@@ -431,7 +461,7 @@ send_hybrid_notifications() {
     
     # Prepare email body
     local email_body=""
-    if [ "$error_count" -eq 0 ]; then
+    if [[ "$error_count" -eq 0 ]]; then
         email_body+="<h3 class='success'>🎉 All updates completed successfully!</h3>"
     else
         email_body+="<h3 class='warning'>⚠️ Some updates had issues</h3>"
@@ -445,12 +475,12 @@ send_hybrid_notifications() {
     email_body+="<li>🖥️ Applications updated: $updated_apps</li>"
     email_body+="</ul>"
     
-    if [ -n "$update_summary" ]; then
+    if [[ -n "$update_summary" ]]; then
         email_body+="<p><strong>Details:</strong></p>"
         email_body+="<p>$update_summary</p>"
     fi
     
-    if [ -n "$errors" ]; then
+    if [[ -n "$errors" ]]; then
         email_body+="<p><strong>Errors:</strong></p>"
         email_body+="<p class='error'>$errors</p>"
     fi
@@ -461,7 +491,7 @@ send_hybrid_notifications() {
     
     # Prepare text message (short summary only)
     local text_message="🔄 Auto Update Brew: "
-    if [ "$error_count" -eq 0 ]; then
+    if [[ "$error_count" -eq 0 ]]; then
         text_message+="✅ Success ($success_count ops, $updated_packages pkgs, $updated_apps apps)"
     else
         text_message+="⚠️ Issues ($success_count/$((success_count + error_count)) ops)"
@@ -513,6 +543,10 @@ main() {
     fi
 
     # Perform updates and capture results
+    # These field extractions keep the `local x=$(...)` form on purpose. The
+    # producer function always succeeds (it ends in `echo`), and head/tail on a
+    # short in-memory string has nothing meaningful to fail at, so splitting the
+    # assignments would only add SIGPIPE exposure under pipefail for no gain.
     local update_results=$(perform_updates)
     local update_summary=$(echo "$update_results" | head -1)
     local errors=$(echo "$update_results" | head -2 | tail -1)

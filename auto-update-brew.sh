@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: auto-update-brew.sh
 # Description: 🤖 Auto-Updater Basic - Keeps Homebrew updated with text notifications
 # Author: DJCastle
-# Version: 4.1.0
+# Version: 4.1.1
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -170,11 +170,38 @@ EOF
     fi
 }
 
+# Find the Wi-Fi interface instead of assuming en0.
+#
+# en0 is Wi-Fi on laptops, but on desktop Macs (mini, Studio, Pro) en0 is
+# usually Ethernet and Wi-Fi is en1 or later. Asking networksetup about a
+# non-Wi-Fi interface exits 10, which was being swallowed — so the Wi-Fi check
+# silently never matched and scheduled updates skipped every run with
+# "not connected to <network>".
+#
+# Honours NETWORK_INTERFACE from the config if it is set.
+get_wifi_interface() {
+    if [[ -n "${NETWORK_INTERFACE:-}" ]]; then
+        printf '%s\n' "$NETWORK_INTERFACE"
+        return 0
+    fi
+    networksetup -listallhardwareports 2>/dev/null \
+        | awk '/Hardware Port: Wi-Fi/{getline; print $2; exit}'
+}
+
 # Function to check WiFi network
 check_wifi_network() {
-    local current_network=$(networksetup -getairportnetwork en0 2>/dev/null | awk -F': ' '{print $2}')
+    # Split the assignment so a failure is visible, with `|| true` because an
+    # absent or switched-off Wi-Fi interface is a normal state to degrade from,
+    # not a reason to abort the run.
+    local wifi_if current_network
+    wifi_if="$(get_wifi_interface || true)"
+    if [[ -z "$wifi_if" ]]; then
+        print_warning "No Wi-Fi interface found on this Mac; cannot check the network."
+        return 1
+    fi
+    current_network="$(networksetup -getairportnetwork "$wifi_if" 2>/dev/null | awk -F': ' '{print $2}' || true)"
     
-    if [ "$current_network" = "$WIFI_NETWORK" ]; then
+    if [[ "$current_network" == "$WIFI_NETWORK" ]]; then
         print_success "Connected to $WIFI_NETWORK WiFi"
         return 0
     else
@@ -222,40 +249,40 @@ perform_updates() {
     print_status "Updating Homebrew..."
     if brew update >> "$LOG" 2>&1; then
         update_summary+="✅ Homebrew updated\n"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Homebrew update failed\n"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Upgrade all packages
     print_status "Upgrading all packages..."
     if brew upgrade >> "$LOG" 2>&1; then
         update_summary+="✅ All packages upgraded\n"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Package upgrade failed\n"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Upgrade all casks
     print_status "Upgrading all applications..."
     if brew upgrade --cask >> "$LOG" 2>&1; then
         update_summary+="✅ All applications upgraded\n"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Application upgrade failed\n"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Clean up old versions
     print_status "Cleaning up old versions..."
     if brew cleanup >> "$LOG" 2>&1; then
         update_summary+="✅ Cleanup completed\n"
-        ((success_count++))
+        success_count=$((success_count+1))
     else
         errors+="❌ Cleanup failed\n"
-        ((error_count++))
+        error_count=$((error_count+1))
     fi
     
     # Return summary
@@ -305,6 +332,10 @@ main() {
 
 
     # Perform updates and capture results
+    # These field extractions keep the `local x=$(...)` form on purpose. The
+    # producer function always succeeds (it ends in `echo`), and head/tail on a
+    # short in-memory string has nothing meaningful to fail at, so splitting the
+    # assignments would only add SIGPIPE exposure under pipefail for no gain.
     local update_results=$(perform_updates)
     local update_summary=$(echo "$update_results" | head -4 | tr '\n' ' ')
     local errors=$(echo "$update_results" | tail -n +5 | head -4 | tr '\n' ' ')
@@ -316,7 +347,7 @@ main() {
     message+="✅ Successful operations: $success_count\n"
     message+="❌ Errors: $error_count\n\n"
     
-    if [ "$error_count" -eq 0 ]; then
+    if [[ "$error_count" -eq 0 ]]; then
         message+="🎉 All updates completed successfully!"
     else
         message+="⚠️ Some updates had issues. Check log for details."

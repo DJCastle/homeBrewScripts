@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: install-essential-apps.sh
 # Description: 📦 Batch App Installer - Installs all essential apps automatically (no prompts)
 # Author: DJCastle
-# Version: 4.1.0
+# Version: 4.1.1
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -183,7 +183,7 @@ install_app() {
     fi
     
     # Check if app exists in Applications folder
-    if [ -d "/Applications/$app_name.app" ]; then
+    if [[ -d "/Applications/$app_name.app" ]]; then
         print_warning "$display_name is already installed in Applications folder"
         return 0
     fi
@@ -246,7 +246,7 @@ failed_apps=()
 for app_info in "${APPS[@]}"; do
     IFS=':' read -r display_name cask_name <<< "$app_info"
     
-    if brew list --cask "$cask_name" &> /dev/null || [ -d "/Applications/$display_name.app" ]; then
+    if brew list --cask "$cask_name" &> /dev/null || [[ -d "/Applications/$display_name.app" ]]; then
         installed_apps+=("$display_name")
         print_success "✓ $display_name"
     else
@@ -258,7 +258,7 @@ done
 echo "" | tee -a "$LOG"
 print_status "Installation Summary:"
 print_success "Successfully installed/verified: ${#installed_apps[@]} apps"
-if [ ${#failed_apps[@]} -gt 0 ]; then
+if [[ ${#failed_apps[@]} -gt 0 ]]; then
     print_warning "Failed to install: ${#failed_apps[@]} apps"
     for app in "${failed_apps[@]}"; do
         print_warning "  - $app"

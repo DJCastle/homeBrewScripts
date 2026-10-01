@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![macOS](https://img.shields.io/badge/macOS-11%2B%20(15%2B%20recommended)-blue.svg)](https://www.apple.com/macos/)
-[![Version](https://img.shields.io/badge/version-4.1.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
+[![Version](https://img.shields.io/badge/version-4.1.1-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
 
 Shell scripts for automating Homebrew package management on macOS. Install apps, schedule updates, get notifications, and keep everything clean — all from the command line.
 
@@ -107,4 +107,4 @@ These scripts install software and modify system configuration files. Always bac
 
 ---
 
-**Author:** DJCastle | **License:** MIT | **Version:** 4.1.0
+**Author:** DJCastle | **License:** MIT | **Version:** 4.1.1

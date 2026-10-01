@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: setup-hybrid-notifications.sh
 # Description: ⚙️ Setup Pro Automation - Configure advanced email + text notifications
 # Author: DJCastle
-# Version: 4.1.0
+# Version: 4.1.1
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -405,7 +405,7 @@ main() {
     print_status "Hybrid Notification Setup started at $(date)"
     
     # Check if hybrid script exists
-    if [ ! -f "$HYBRID_SCRIPT" ]; then
+    if [[ ! -f "$HYBRID_SCRIPT" ]]; then
         print_error "Hybrid script not found: $HYBRID_SCRIPT"
         exit 1
     fi
