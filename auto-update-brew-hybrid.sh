@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: auto-update-brew-hybrid.sh
 # Description: 🤖 Auto-Updater Pro - Advanced updates with email + text notifications
 # Author: DJCastle
-# Version: 4.0.0
+# Version: 4.1.0
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -193,24 +193,52 @@ Content-Type: text/html; charset=utf-8
 </html>
 EOF
 
-    # Send email using macOS Mail
-    if command -v mail &> /dev/null; then
-        mail -s "$subject" "$EMAIL_ADDRESS" < "$email_file" >> "$LOG" 2>&1
-        local result=$?
-        rm "$email_file"
-        
-        if [ "$result" -eq 0 ]; then
-            print_success "Email notification sent successfully"
-            return 0
-        else
-            print_error "Failed to send email notification"
-            return 1
-        fi
-    else
-        print_error "mail command not available"
-        rm "$email_file"
+    # Send the email.
+    #
+    # `mail` exits 0 even when there is no mail transfer agent running to
+    # deliver the message, so a plain exit-code check reported "sent
+    # successfully" for mail that was never delivered. macOS ships postfix but
+    # leaves it switched off, so on a default Mac that is the normal case — the
+    # user configures email, is told it works, and never receives anything.
+    #
+    # Check that an MTA is actually reachable first and say so plainly if not.
+    if ! command -v mail >/dev/null 2>&1; then
+        print_error "mail command not available — cannot send email notifications"
+        rm -f "$email_file"
         return 1
     fi
+
+    if ! mail_transport_available; then
+        print_error "Email NOT sent: no mail transfer agent is running on this Mac."
+        print_error "  macOS ships postfix but leaves it disabled, so 'mail' accepts the"
+        print_error "  message and silently never delivers it."
+        print_error "  Use text notifications instead, or configure an MTA / SMTP relay."
+        rm -f "$email_file"
+        return 1
+    fi
+
+    if mail -s "$subject" "$EMAIL_ADDRESS" < "$email_file" >> "$LOG" 2>&1; then
+        rm -f "$email_file"
+        print_success "Email notification handed to the local mail system"
+        return 0
+    fi
+
+    rm -f "$email_file"
+    print_error "Failed to send email notification; see $LOG"
+    return 1
+}
+
+# Report whether a mail transfer agent is actually running.
+#
+# postqueue exits non-zero with "mail system is down" when postfix is not
+# running, which is the macOS default. This needs no elevated privileges.
+mail_transport_available() {
+    if [[ -x /usr/sbin/postqueue ]]; then
+        /usr/sbin/postqueue -p >/dev/null 2>&1 && return 0
+        return 1
+    fi
+    # No postqueue: cannot prove delivery works, so do not claim that it does.
+    return 1
 }
 
 # Function to send text message
@@ -233,7 +261,15 @@ send_text_message() {
     # osascript argv instead of interpolating them into the heredoc — the
     # message is built from brew output and could contain AppleScript
     # metacharacters (quotes, backslashes) that would otherwise break it.
-    osascript - "$PHONE_NUMBER" "$message" <<'EOF'
+    # Test the command directly rather than checking $? afterwards.
+    #
+    # Under `set -euo pipefail` a bare `osascript` that fails aborts the whole
+    # script immediately, so the else branch below was unreachable and a
+    # notification problem (Messages not signed in, Automation permission
+    # denied) killed the entire update run after it had already upgraded
+    # packages but before it logged a summary. Running unattended from launchd,
+    # that failed invisibly.
+    if osascript - "$PHONE_NUMBER" "$message" <<'EOF'
 on run argv
     set phoneNumber to item 1 of argv
     set theMessage to item 2 of argv
@@ -242,12 +278,11 @@ on run argv
     end tell
 end run
 EOF
-    
-    if [ $? -eq 0 ]; then
+    then
         print_success "Text message sent successfully"
         return 0
     else
-        print_error "Failed to send text message"
+        print_error "Failed to send text message (is Messages signed in, and is Terminal allowed to control it in System Settings > Privacy & Security > Automation?)"
         return 1
     fi
 }
@@ -286,7 +321,11 @@ check_wifi_network() {
 
 # Function to check if plugged into power
 check_power_status() {
-    local power_status=$(pmset -g ps | grep -E "AC Power|Battery Power")
+    # Assigned separately with `|| true`: a grep that matches nothing would
+    # otherwise fail the pipeline under `set -o pipefail`. This only works today
+    # because `local` happens to swallow the exit code — do not rely on that.
+    local power_status
+    power_status=$(pmset -g ps | grep -E "AC Power|Battery Power" || true)
     
     if echo "$power_status" | grep -q "AC Power"; then
         print_success "Device is plugged into power"
@@ -329,25 +368,36 @@ perform_updates() {
     
     # Upgrade all packages
     print_status "Upgrading all packages..."
-    local package_output=$(brew upgrade 2>&1)
-    if [ $? -eq 0 ]; then
+    # Assign inside the `if` so the test sees brew's exit code.
+    #
+    # This was `local package_output=$(brew upgrade 2>&1)` followed by
+    # `[ $? -eq 0 ]`, but $? there is the exit status of the `local` builtin,
+    # which is always 0. The else branch could never run, so a failed upgrade
+    # was reported in the email as "All packages upgraded successfully".
+    local package_output
+    if package_output=$(brew upgrade 2>&1); then
         update_summary+="✅ All packages upgraded successfully<br>"
-        updated_packages=$(echo "$package_output" | grep -E "^==> Upgrading|^==> Downloading" | wc -l)
+        updated_packages=$(echo "$package_output" | grep -cE "^==> Upgrading|^==> Downloading" || true)
         ((success_count++))
     else
         errors+="❌ Package upgrade failed<br>"
+        print_error "brew upgrade failed; see $LOG"
+        printf '%s\n' "$package_output" >> "$LOG"
         ((error_count++))
     fi
     
     # Upgrade all casks
     print_status "Upgrading all applications..."
-    local cask_output=$(brew upgrade --cask 2>&1)
-    if [ $? -eq 0 ]; then
+    # Same masked-exit-code bug as the package upgrade above.
+    local cask_output
+    if cask_output=$(brew upgrade --cask 2>&1); then
         update_summary+="✅ All applications upgraded successfully<br>"
-        updated_apps=$(echo "$cask_output" | grep -E "^==> Upgrading|^==> Downloading" | wc -l)
+        updated_apps=$(echo "$cask_output" | grep -cE "^==> Upgrading|^==> Downloading" || true)
         ((success_count++))
     else
         errors+="❌ Application upgrade failed<br>"
+        print_error "brew upgrade --cask failed; see $LOG"
+        printf '%s\n' "$cask_output" >> "$LOG"
         ((error_count++))
     fi
     

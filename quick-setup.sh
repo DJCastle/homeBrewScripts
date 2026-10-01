@@ -3,7 +3,7 @@
 # Script Name: quick-setup.sh
 # Description: Quick developer environment bootstrap
 # Author: DJCastle
-# Version: 4.0.0
+# Version: 4.1.0
 # Created: 2026-02-16
 #
 # LICENSE: Free to use, modify, and distribute
@@ -90,7 +90,7 @@ DRY_RUN_MODE=false
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --help|-h)        show_help; exit 0 ;;
-        --version|-V)     echo "quick-setup.sh 4.0.0"; exit 0 ;;
+        --version|-V)     echo "quick-setup.sh 4.1.0"; exit 0 ;;
         --dry-run|--check|-d) DRY_RUN_MODE=true ;;
         --) shift; break ;;
         *)

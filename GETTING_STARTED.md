@@ -30,6 +30,9 @@ Copy the example configuration and fill in your details:
 cp config/homebrew-scripts.example.conf config/homebrew-scripts.conf
 ```
 
+(You can skip this — `brew-setup.sh` creates the file for you on first run. Copy
+it by hand only if you want to edit it before running anything.)
+
 Open it in any text editor:
 
 ```bash
@@ -44,15 +47,44 @@ Key settings to customize:
 | `EMAIL_ADDRESS` | Where to send update reports |
 | `PHONE_NUMBER` | iMessage number for quick text alerts |
 | `INSTALL_*` | Toggle app categories on/off |
-| `CUSTOM_APPS` | Add or remove specific applications |
+| `CUSTOM_APPS` | The apps to offer, inside the `EDIT HERE` block |
+
+### Choosing apps — nothing is installed by default
+
+`CUSTOM_APPS` ships with every entry commented out and named with a placeholder,
+so a fresh copy cannot install software you did not pick. Uncomment what you
+want and replace the placeholder with the real Homebrew name, which you can find
+with `brew search <name>`:
+
+```bash
+# ===== EDIT HERE =====
+CUSTOM_APPS=(
+    # "browser1:Browser:productivity"        <- placeholder
+    "firefox:Firefox:productivity"           # <- your actual choice
+)
+# ===== DO NOT EDIT BELOW THIS LINE =====
+```
+
+The format is `cask-name:Display Name:category`, and a category only installs if
+its `INSTALL_*` switch above is `true`.
+
+> **Upgrading from v3.x?** `CUSTOM_APPS` changed from an associative array
+> (`declare -A`) to an indexed one, because macOS ships bash 3.2 where
+> associative arrays do not exist. If you have an old config, convert it — see
+> the Migration section in [CHANGELOG.md](CHANGELOG.md).
+
+`install-essential-apps.sh` keeps its own list in its own `EDIT HERE` block and
+does **not** read this config file. `Brewfile` and
+`dotfiles/vscode/extensions.txt` work the same way.
 
 ## Step 3 — Make Scripts Executable
+
+The scripts in this repository are already executable, so there is normally
+nothing to do here. If you copied them somewhere and lost the permission bit:
 
 ```bash
 chmod +x *.sh
 ```
-
-You only need to do this once.
 
 ## Step 4 — Run Your First Script
 
@@ -79,8 +111,8 @@ Walks you through each step interactively. You can skip any step you're not comf
 | Script | Purpose |
 |--------|---------|
 | `quick-setup.sh` | Quick bootstrap — CLI tools, VSCode extensions, Git config |
-| `brew-setup.sh` | Full interactive setup — installs Homebrew, configures your shell, installs apps |
-| `install-essential-apps.sh` | Batch-installs apps from your config |
+| `brew-setup.sh` | Full interactive setup — Homebrew, your shell, and the apps you listed in your config |
+| `install-essential-apps.sh` | Batch-installs the apps in its own `EDIT HERE` block (not from the config file) |
 | `auto-update-brew.sh` | Runs Homebrew updates with text notifications |
 | `auto-update-brew-hybrid.sh` | Runs updates with both email and text notifications |
 | `setup-auto-update.sh` | Schedules automatic updates (basic) |
@@ -109,7 +141,7 @@ ls ~/Library/Logs/Homebrew*.log
 
 - **Use `--dry-run`** on any script to preview before committing
 - **Back up your system** before running scripts that modify system files
-- **Review the config** before running — the example config has sensible defaults
+- **Review the config** before running — no apps are enabled until you choose them
 - **Read the code** — every script is commented to explain what it does and why
 
 ## Need More Info?

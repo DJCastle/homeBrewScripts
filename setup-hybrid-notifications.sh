@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: setup-hybrid-notifications.sh
 # Description: ⚙️ Setup Pro Automation - Configure advanced email + text notifications
 # Author: DJCastle
-# Version: 4.0.0
+# Version: 4.1.0
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -160,15 +160,43 @@ test_email() {
     local test_subject="🧪 Test Email from Auto Update Brew Setup"
     local test_body="This is a test email from your Auto Update Brew setup script. If you receive this, email notifications are working correctly."
     
-    echo "$test_body" | mail -s "$test_subject" "$email_address" >> "$LOG" 2>&1
-    
-    if [ $? -eq 0 ]; then
-        print_success "Test email sent successfully!"
-        return 0
-    else
-        print_error "Failed to send test email. Please check Mail app configuration."
+    # `mail` exits 0 even with no mail transfer agent running to deliver the
+    # message. This test used to report "Test email sent successfully!" in that
+    # case, which is the worst possible outcome during setup: the user is told
+    # email works, and then never receives a single notification.
+    #
+    # macOS ships postfix but leaves it disabled, so this is the default state.
+    if ! mail_transport_available; then
+        print_error "Test email NOT sent: no mail transfer agent is running on this Mac."
+        print_error "  macOS ships postfix but leaves it disabled, so 'mail' accepts the"
+        print_error "  message and silently discards it. Nothing would arrive."
+        print_error "  Options: use text notifications instead, or configure an MTA"
+        print_error "  or SMTP relay before relying on email."
         return 1
     fi
+
+    if echo "$test_body" | mail -s "$test_subject" "$email_address" >> "$LOG" 2>&1; then
+        print_success "Test email handed to the local mail system."
+        print_status  "Check your inbox. If nothing arrives, delivery failed downstream"
+        print_status  "of this script — see $LOG and your MTA's logs."
+        return 0
+    else
+        print_error "Failed to send test email; see $LOG"
+        return 1
+    fi
+}
+
+# Report whether a mail transfer agent is actually running.
+#
+# postqueue exits non-zero with "mail system is down" when postfix is not
+# running, which is the macOS default. Needs no elevated privileges.
+mail_transport_available() {
+    if [[ -x /usr/sbin/postqueue ]]; then
+        /usr/sbin/postqueue -p >/dev/null 2>&1 && return 0
+        return 1
+    fi
+    # No postqueue: cannot prove delivery works, so do not claim that it does.
+    return 1
 }
 
 # Function to test text messaging
@@ -183,17 +211,27 @@ test_text_message() {
     print_status "Testing text message to $phone_number..."
     
     # Send test message
-    osascript <<EOF
-tell application "Messages"
-    send "🧪 Test message from Auto Update Brew hybrid setup script" to buddy "$phone_number" of (service 1 whose service type is iMessage)
-end tell
+    # Pass the number as argv with a QUOTED heredoc delimiter, rather than
+    # interpolating it into the AppleScript. A number containing a quote would
+    # otherwise alter or break the script.
+    #
+    # Test the command directly too: under `set -euo pipefail` a bare osascript
+    # that fails aborts the script, so the else branch below was unreachable.
+    if osascript - "$phone_number" <<'EOF'
+on run argv
+    set phoneNumber to item 1 of argv
+    tell application "Messages"
+        send "🧪 Test message from Auto Update Brew hybrid setup script" to buddy phoneNumber of (service 1 whose service type is iMessage)
+    end tell
+end run
 EOF
-    
-    if [ $? -eq 0 ]; then
+    then
         print_success "Test message sent successfully!"
         return 0
     else
-        print_error "Failed to send test message. Please check iMessage setup."
+        print_error "Failed to send test message."
+        print_error "  Check that Messages is signed in, and that your terminal is allowed"
+        print_error "  to control it in System Settings > Privacy & Security > Automation."
         return 1
     fi
 }
@@ -298,23 +336,40 @@ create_launchd_plist() {
             ;;
     esac
     
+    local domain="gui/$(id -u)"
+
     if [[ "$DRY_RUN" == "true" ]]; then
         print_status "[DRY-RUN] Would write $plist_path ($schedule schedule)"
-        print_status "[DRY-RUN] Would load it with: launchctl load $plist_path"
+        print_status "[DRY-RUN] Would unload any existing agent, then load it with:"
+        print_status "[DRY-RUN]   launchctl bootout $domain/$plist_name   (if already loaded)"
+        print_status "[DRY-RUN]   launchctl bootstrap $domain $plist_path"
         return 0
     fi
 
     # Write plist file
     echo "$plist_content" > "$plist_path"
 
-    # Load the plist
-    launchctl load "$plist_path"
-    
-    if [ $? -eq 0 ]; then
+    # Unload any existing agent FIRST.
+    #
+    # bootstrap refuses to load a label that is already loaded, so re-running
+    # this installer used to fail here. And because the old code checked $?
+    # after a bare `launchctl load`, `set -e` aborted before the error branch
+    # could report it — the installer just died with no explanation.
+    #
+    # bootout on a service that is not loaded returns non-zero, which is fine
+    # and expected, hence the `|| true`.
+    launchctl bootout "$domain/$plist_name" >/dev/null 2>&1 || true
+
+    # `launchctl load` is deprecated — `launchctl help` names bootstrap/enable
+    # as the replacements. bootstrap also takes an explicit domain target, so
+    # the agent cannot land in the wrong session.
+    if launchctl bootstrap "$domain" "$plist_path"; then
         print_success "Automatic execution scheduled: $schedule"
         return 0
     else
-        print_error "Failed to schedule automatic execution"
+        print_error "Failed to schedule automatic execution."
+        print_error "  Tried: launchctl bootstrap $domain $plist_path"
+        print_error "  Check the plist with: plutil -lint $plist_path"
         return 1
     fi
 }

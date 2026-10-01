@@ -1,5 +1,73 @@
 # Changelog
 
+## v4.1.0 — Honest Notifications (September 2026)
+
+v4.0.0 fixed the setup script. This fixes the five scripts it did not touch —
+the scheduled ones, which fail where nobody is watching.
+
+### Fixed — scheduled runs failed silently
+
+- **A notification problem killed the whole update run.** Nine places across five
+  scripts checked `if [ $? -eq 0 ]` after a bare command. Under
+  `set -euo pipefail` the script aborts *at* the failing command, so every one of
+  those error branches was unreachable — and a failing `osascript` (Messages not
+  signed in, or Automation permission not granted) terminated
+  `auto-update-brew.sh` after it had upgraded packages but before it logged
+  anything. Running unattended from launchd, that failed invisibly. Each site now
+  tests the command directly.
+- **Email was never delivered, and the script said it was.** `mail` exits 0 even
+  with no mail transfer agent running to deliver the message. macOS ships postfix
+  but leaves it disabled, so on a default Mac every "Email notification sent
+  successfully" was false — including the setup script's test email, whose whole
+  purpose is to confirm email works. Both paths now check that an MTA is actually
+  reachable and say plainly when it is not, pointing at text notifications
+  instead.
+- **`brew upgrade` failures were reported as successes.** The hybrid updater used
+  `local output=$(brew upgrade 2>&1)` followed by `if [ $? -eq 0 ]`, but `$?`
+  there is the exit status of the `local` builtin, which is always 0. The failure
+  branch could never run, so a failed upgrade arrived in the email as "All
+  packages upgraded successfully". Affected both the package and cask upgrades.
+- **The hybrid updater crashed whenever there was nothing to upgrade.** It
+  counted upgrades with `grep -E … | wc -l` assigned directly to a variable;
+  under `set -o pipefail` a grep that matches nothing fails the pipeline and
+  aborts the script. The most common outcome — everything already current — was
+  the one that broke.
+- **`check_power_status()` could abort on a Mac with no battery reading.** The
+  same pipeline problem, guarded by a `-n` check two lines further down that
+  `set -e` never let it reach.
+
+### Fixed — scheduling
+
+- **Re-running a setup script failed with no explanation.** `launchctl bootstrap`
+  refuses a label that is already loaded and nothing unloaded the old agent
+  first, so a second run died at that line — silently, because of the `$?` bug
+  above. The installers now `bootout` any existing agent before loading.
+- **Migrated off deprecated `launchctl load`.** `launchctl help` names
+  `bootstrap`/`enable` as its replacements. `bootstrap` also takes an explicit
+  domain target (`gui/<uid>`), so the agent cannot land in the wrong session.
+
+### Fixed — the test-message scripts
+
+- **Phone numbers were interpolated into AppleScript** through an unquoted
+  heredoc in both setup scripts, which is exactly what the comments in the
+  updater scripts warn against. They now pass the number as an argument with a
+  quoted heredoc, so a number containing a quote cannot alter the script.
+
+### Documentation
+
+- **README and GETTING_STARTED described the old behaviour.** v4.0.0 stopped
+  installing applications by default and moved every list into an `EDIT HERE`
+  block, but the docs still said `install-essential-apps.sh` reads your config
+  file (it never has), still listed `node` among the packages `quick-setup.sh`
+  installs (it is commented out), and never mentioned the `EDIT HERE` model or
+  the breaking `CUSTOM_APPS` format change at all. README gains a "Choosing what
+  gets installed" section; GETTING_STARTED gains the conversion note.
+- Dropped two setup steps that are no longer needed: copying the example config
+  by hand (the script creates it) and `chmod +x *.sh` (the scripts ship
+  executable).
+
+---
+
 ## v4.0.0 — Actually Runs (September 2026)
 
 This release fixes a set of defects that stopped `brew-setup.sh` from working at

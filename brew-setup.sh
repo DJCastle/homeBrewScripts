@@ -2,7 +2,7 @@
 ###############################################################################
 # Script Name: brew-setup.sh
 # Description: 🍺 Educational Homebrew Installer - Interactive setup with customizable app selection
-# Version: 4.0.0
+# Version: 4.1.0
 # License: MIT
 #
 # EDUCATIONAL PURPOSE:
@@ -76,7 +76,7 @@ set -euo pipefail
 # This block used to sit after init_common_lib, so `--help` on a fresh clone
 # died trying to load a config instead of printing help.
 # -----------------------------------------------------------------------------
-readonly SCRIPT_VERSION="4.0.0"
+readonly SCRIPT_VERSION="4.1.0"
 
 # Educational function: Show comprehensive help information
 show_help() {

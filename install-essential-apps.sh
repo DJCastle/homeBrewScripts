@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: install-essential-apps.sh
 # Description: 📦 Batch App Installer - Installs all essential apps automatically (no prompts)
 # Author: DJCastle
-# Version: 4.0.0
+# Version: 4.1.0
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #

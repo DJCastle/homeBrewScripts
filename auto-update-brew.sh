@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: auto-update-brew.sh
 # Description: 🤖 Auto-Updater Basic - Keeps Homebrew updated with text notifications
 # Author: DJCastle
-# Version: 4.0.0
+# Version: 4.1.0
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
@@ -144,7 +144,15 @@ send_text_message() {
     # interpolating them into the heredoc — `$message` is built from brew
     # output and could contain quotes or other AppleScript metacharacters
     # that would otherwise break or alter the script.
-    osascript - "$PHONE_NUMBER" "$message" <<'EOF'
+    # Test the command directly rather than checking $? afterwards.
+    #
+    # Under `set -euo pipefail` a bare `osascript` that fails aborts the whole
+    # script immediately, so the else branch below was unreachable and a
+    # notification problem (Messages not signed in, Automation permission
+    # denied) killed the entire update run after it had already upgraded
+    # packages but before it logged a summary. Running unattended from launchd,
+    # that failed invisibly.
+    if osascript - "$PHONE_NUMBER" "$message" <<'EOF'
 on run argv
     set phoneNumber to item 1 of argv
     set theMessage to item 2 of argv
@@ -153,12 +161,11 @@ on run argv
     end tell
 end run
 EOF
-    
-    if [ $? -eq 0 ]; then
+    then
         print_success "Text message sent successfully"
         return 0
     else
-        print_error "Failed to send text message"
+        print_error "Failed to send text message (is Messages signed in, and is Terminal allowed to control it in System Settings > Privacy & Security > Automation?)"
         return 1
     fi
 }
@@ -178,7 +185,11 @@ check_wifi_network() {
 
 # Function to check if plugged into power
 check_power_status() {
-    local power_status=$(pmset -g ps | grep -E "AC Power|Battery Power")
+    # Assigned separately with `|| true`: a grep that matches nothing would
+    # otherwise fail the pipeline under `set -o pipefail`. This only works today
+    # because `local` happens to swallow the exit code — do not rely on that.
+    local power_status
+    power_status=$(pmset -g ps | grep -E "AC Power|Battery Power" || true)
     
     if echo "$power_status" | grep -q "AC Power"; then
         print_success "Device is plugged into power"

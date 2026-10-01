@@ -557,7 +557,10 @@ check_power_status() {
         # Check battery percentage if running on battery
         if echo "$power_info" | grep -q "Battery Power"; then
             local battery_pct
-            battery_pct=$(echo "$power_info" | grep -o '[0-9]*%' | head -1 | tr -d '%')
+            # `|| true` because under `set -o pipefail` a grep that matches
+            # nothing fails the whole pipeline and aborts the script, which
+            # would skip the empty-value check immediately below.
+            battery_pct=$(echo "$power_info" | grep -o '[0-9]*%' | head -1 | tr -d '%' || true)
             local min_battery="${MIN_BATTERY_PERCENTAGE:-50}"
             
             if [[ -n "$battery_pct" && "$battery_pct" -ge "$min_battery" ]]; then

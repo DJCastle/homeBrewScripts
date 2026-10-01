@@ -6,7 +6,7 @@ set -euo pipefail
 # Script Name: cleanup-homebrew.sh
 # Description: 🧹 System Cleaner - Removes old packages and frees up disk space
 # Author: DJCastle
-# Version: 4.0.0
+# Version: 4.1.0
 # Created: 2025-01-11
 # Updated: 2026-09-30
 #
