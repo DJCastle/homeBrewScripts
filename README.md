@@ -1,8 +1,8 @@
 # Brew Scripts for macOS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![macOS](https://img.shields.io/badge/macOS-12.0%2B-blue.svg)](https://www.apple.com/macos/)
-[![Version](https://img.shields.io/badge/version-3.3.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
+[![macOS](https://img.shields.io/badge/macOS-11%2B%20(15%2B%20recommended)-blue.svg)](https://www.apple.com/macos/)
+[![Version](https://img.shields.io/badge/version-4.0.0-green.svg)](https://github.com/DJCastle/homeBrewScripts/releases)
 
 Shell scripts for automating Homebrew package management on macOS. Install apps, schedule updates, get notifications, and keep everything clean — all from the command line.
 
@@ -13,7 +13,7 @@ git clone https://github.com/DJCastle/homeBrewScripts.git
 cd homeBrewScripts
 cp config/homebrew-scripts.example.conf config/homebrew-scripts.conf
 chmod +x *.sh
-./brew_setup_tahoe.sh --dry-run
+./brew-setup.sh --dry-run
 ```
 
 See the **[Getting Started Guide](GETTING_STARTED.md)** for the full walkthrough.
@@ -29,14 +29,14 @@ chmod +x quick-setup.sh
 ./quick-setup.sh
 ```
 
-This installs CLI tools (gh, node, jq, tree, etc.), configures VSCode extensions, and sets up Git — all in one pass. For the full interactive experience with app installation, use `brew_setup_tahoe.sh` instead.
+This installs CLI tools (gh, node, jq, tree, etc.), configures VSCode extensions, and sets up Git — all in one pass. For the full interactive experience with app installation, use `brew-setup.sh` instead.
 
 ## Scripts
 
 | Script | What it does |
 |--------|-------------|
 | `quick-setup.sh` | Quick bootstrap — CLI tools, VSCode extensions, Git config |
-| `brew_setup_tahoe.sh` | Interactive setup — installs Homebrew, configures your shell, installs apps |
+| `brew-setup.sh` | Interactive setup — installs Homebrew, configures your shell, installs apps |
 | `install-essential-apps.sh` | Batch-installs apps from your config |
 | `auto-update-brew.sh` | Auto-updates with text notifications |
 | `auto-update-brew-hybrid.sh` | Auto-updates with email + text notifications |
@@ -55,7 +55,7 @@ This installs CLI tools (gh, node, jq, tree, etc.), configures VSCode extensions
 
 ## Requirements
 
-- macOS 12.0 (Monterey) or later
+- macOS 11 (Big Sur) or later — macOS 15 (Sequoia) or later recommended
 - Administrator privileges
 - Internet connection
 
@@ -74,4 +74,4 @@ These scripts install software and modify system configuration files. Always bac
 
 ---
 
-**Author:** DJCastle | **License:** MIT | **Version:** 3.3.0
+**Author:** DJCastle | **License:** MIT | **Version:** 4.0.0

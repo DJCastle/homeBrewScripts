@@ -4,7 +4,7 @@ A step-by-step guide to setting up and using Brew Scripts on your Mac.
 
 ## Requirements
 
-- macOS 12.0 (Monterey) or later
+- macOS 11 (Big Sur) or later — macOS 15 (Sequoia) or later recommended
 - Administrator privileges (you'll be prompted for your password)
 - Internet connection
 - At least 1GB free disk space
@@ -68,8 +68,8 @@ Installs CLI tools via Brewfile, configures VSCode extensions, and sets up Git i
 **Option B: Full Interactive Setup** (config-driven, educational)
 
 ```bash
-./brew_setup_tahoe.sh --dry-run   # Preview first
-./brew_setup_tahoe.sh             # Run for real
+./brew-setup.sh --dry-run   # Preview first
+./brew-setup.sh             # Run for real
 ```
 
 Walks you through each step interactively. You can skip any step you're not comfortable with.
@@ -79,7 +79,7 @@ Walks you through each step interactively. You can skip any step you're not comf
 | Script | Purpose |
 |--------|---------|
 | `quick-setup.sh` | Quick bootstrap — CLI tools, VSCode extensions, Git config |
-| `brew_setup_tahoe.sh` | Full interactive setup — installs Homebrew, configures your shell, installs apps |
+| `brew-setup.sh` | Full interactive setup — installs Homebrew, configures your shell, installs apps |
 | `install-essential-apps.sh` | Batch-installs apps from your config |
 | `auto-update-brew.sh` | Runs Homebrew updates with text notifications |
 | `auto-update-brew-hybrid.sh` | Runs updates with both email and text notifications |

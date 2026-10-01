@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: setup-auto-update.sh
 # Description: ⚙️ Setup Basic Automation - Configure automatic Homebrew updates
 # Author: DJCastle
-# Version: 1.1.0
+# Version: 4.0.0
 # Created: 2025-01-11
-# Updated: 2026-07-10
+# Updated: 2026-09-30
 #
 # LICENSE: Free to use, modify, and distribute
 #

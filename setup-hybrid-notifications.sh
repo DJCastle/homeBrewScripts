@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: setup-hybrid-notifications.sh
 # Description: ⚙️ Setup Pro Automation - Configure advanced email + text notifications
 # Author: DJCastle
-# Version: 1.1.0
+# Version: 4.0.0
 # Created: 2025-01-11
-# Updated: 2026-07-10
+# Updated: 2026-09-30
 #
 # LICENSE: Free to use, modify, and distribute
 #

@@ -1,17 +1,21 @@
 {
   "_comment": "Configuration for filtering and displaying scripts on the blog - updated for manifest generation",
-  "include": ["*.sh", "README.md"],
+  "include": [
+    "*.sh",
+    "README.md"
+  ],
   "exclude": [
     "readme.md",
     "LICENSE",
     "LICENSE.md",
     "*.txt",
-    ".*"
+    ".*",
+    "brew_setup_tahoe.sh"
   ],
   "order": [
     "README.md",
     "quick-setup.sh",
-    "brew_setup_tahoe.sh",
+    "brew-setup.sh",
     "install-essential-apps.sh",
     "setup-auto-update.sh",
     "setup-hybrid-notifications.sh",
@@ -21,21 +25,21 @@
   ],
   "hidden": [],
   "titles": {
-    "README.md": "📚 Documentation & Getting Started",
-    "quick-setup.sh": "🚀 Quick Dev Environment Setup",
-    "brew_setup_tahoe.sh": "🍺 Homebrew Setup (Educational)",
-    "install-essential-apps.sh": "📦 Essential Apps Installer",
-    "setup-auto-update.sh": "⚙️ Auto-Update Setup",
-    "setup-hybrid-notifications.sh": "📧 Notification Setup (Email + SMS)",
-    "auto-update-brew.sh": "🔄 Auto-Update (Basic)",
-    "auto-update-brew-hybrid.sh": "🔄 Auto-Update (Advanced)",
-    "cleanup-homebrew.sh": "🧹 Homebrew Cleanup"
+    "README.md": "\ud83d\udcda Documentation & Getting Started",
+    "quick-setup.sh": "\ud83d\ude80 Quick Dev Environment Setup",
+    "brew-setup.sh": "\ud83c\udf7a Homebrew Setup (Educational)",
+    "install-essential-apps.sh": "\ud83d\udce6 Essential Apps Installer",
+    "setup-auto-update.sh": "\u2699\ufe0f Auto-Update Setup",
+    "setup-hybrid-notifications.sh": "\ud83d\udce7 Notification Setup (Email + SMS)",
+    "auto-update-brew.sh": "\ud83d\udd04 Auto-Update (Basic)",
+    "auto-update-brew-hybrid.sh": "\ud83d\udd04 Auto-Update (Advanced)",
+    "cleanup-homebrew.sh": "\ud83e\uddf9 Homebrew Cleanup"
   },
   "descriptions": {
     "README.md": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively.",
-    "quick-setup.sh": "Lightweight bootstrap script — installs CLI tools via Brewfile, configures VSCode extensions, and sets up Git in one command.",
-    "brew_setup_tahoe.sh": "Educational Homebrew installer with interactive setup, dry-run mode, and comprehensive safety features. Perfect for learning shell scripting while automating macOS setup.",
-    "install-essential-apps.sh": "Batch installer for essential macOS applications using Homebrew. Installs productivity, development, and utility apps automatically.",
+    "quick-setup.sh": "Lightweight bootstrap script \u2014 installs CLI tools via Brewfile, configures VSCode extensions, and sets up Git in one command.",
+    "brew-setup.sh": "Interactive Homebrew installer with a real dry-run mode, pre-flight validation, and an EDIT HERE config block for choosing apps. Runs on stock macOS bash. Educational throughout \u2014 written to be read as much as run.",
+    "install-essential-apps.sh": "Batch cask installer driven by an EDIT HERE block at the top of the script. Ships with no apps enabled \u2014 you list the ones you want, then run it. Supports --dry-run and skips anything already installed.",
     "setup-auto-update.sh": "Configures automatic Homebrew updates with text notifications. Sets up scheduled maintenance using macOS launchd.",
     "setup-hybrid-notifications.sh": "Advanced notification setup supporting both email and SMS alerts for system updates and maintenance tasks.",
     "auto-update-brew.sh": "Basic automatic Homebrew updater with text notifications. Runs scheduled updates and sends status reports.",

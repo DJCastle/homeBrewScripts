@@ -113,15 +113,24 @@ create_default_config() {
         return 1
     }
     
-    # Copy the template configuration
-    if [[ -f "$PROJECT_ROOT/config/homebrew-scripts.conf" ]]; then
-        cp "$PROJECT_ROOT/config/homebrew-scripts.conf" "${CONFIG_LOCATIONS[0]}" || {
+    # Copy the template configuration.
+    #
+    # The template that actually ships in the repo is the .example.conf — the
+    # plain homebrew-scripts.conf is the user's copy, i.e. the thing this
+    # function CREATES. Looking for the plain name here meant a fresh clone
+    # could never find a template and every script died at startup.
+    local template="$PROJECT_ROOT/config/homebrew-scripts.example.conf"
+
+    if [[ -f "$template" ]]; then
+        cp "$template" "${CONFIG_LOCATIONS[0]}" || {
             log_error "Failed to create default configuration file"
             return 1
         }
         log_info "Created default configuration: ${CONFIG_LOCATIONS[0]}"
+        log_info "Edit its EDIT HERE block to choose which apps to install."
     else
-        log_error "Template configuration file not found"
+        log_error "Template configuration file not found: $template"
+        log_error "Expected it alongside the scripts — re-clone the repo if it is missing."
         return 1
     fi
 }
@@ -287,7 +296,9 @@ ask_yes_no() {
             read -r response
         fi
         
-        response=${response,,}  # Convert to lowercase
+        # ${response,,} would be cleaner but is bash 4 only; macOS ships 3.2,
+        # and every interactive prompt in these scripts goes through here.
+        response="$(printf '%s' "$response" | tr '[:upper:]' '[:lower:]')"
         
         case "$response" in
             ""|"y"|"yes")
@@ -423,6 +434,33 @@ get_macos_version() {
         echo "Not macOS"
         return 1
     fi
+}
+
+# -----------------------------------------------------------------------------
+# Supported macOS range
+#
+# Two thresholds, deliberately mirroring Homebrew's own (brew.sh sets
+# HOMEBREW_MACOS_OLDEST_ALLOWED / _OLDEST_SUPPORTED / _NEWEST_SUPPORTED):
+#
+#   MACOS_MINIMUM    Below this, Homebrew refuses to run. Hard stop.
+#   MACOS_SUPPORTED  Below this, Homebrew runs but publishes no prebuilt
+#                    bottles, so every formula compiles from source — slow
+#                    and far more likely to fail. Warn, do not block.
+#   MACOS_TESTED     Newest release these scripts have actually been run on.
+#
+# Verify against the installed Homebrew before changing these:
+#   grep HOMEBREW_MACOS "$(brew --repository)/Library/Homebrew/brew.sh"
+# -----------------------------------------------------------------------------
+readonly MACOS_MINIMUM="11.0"      # Big Sur
+readonly MACOS_SUPPORTED="15.0"    # Sequoia
+readonly MACOS_TESTED="27"         # Golden Gate
+
+# Return 0 if version $1 is strictly older than version $2.
+# Uses sort -V so 10.15 < 11.0 and 9.0 < 15.0 compare correctly, which plain
+# string or float comparison both get wrong.
+version_lt() {
+    local a="$1" b="$2"
+    [[ "$a" != "$b" ]] && [[ "$(printf '%s\n' "$a" "$b" | sort -V | head -n1)" == "$a" ]]
 }
 
 # =============================================================================
@@ -710,7 +748,7 @@ validate_with_error() {
                 echo "  • +447123456789 (UK)"
                 echo "  • +33123456789 (France)"
                 ;;
-            "percentage")
+            "percentage"|*percentage*)
                 echo "  • 50 (for 50%)"
                 echo "  • 75 (for 75%)"
                 echo "  • 100 (for 100%)"

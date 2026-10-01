@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: cleanup-homebrew.sh
 # Description: 🧹 System Cleaner - Removes old packages and frees up disk space
 # Author: DJCastle
-# Version: 1.1.0
+# Version: 4.0.0
 # Created: 2025-01-11
-# Updated: 2026-07-08
+# Updated: 2026-09-30
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -113,7 +113,7 @@ done
 # Function to check if Homebrew is installed
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
-        print_error "Homebrew is not installed. Please run ./brew_setup_tahoe.sh first."
+        print_error "Homebrew is not installed. Please run ./brew-setup.sh first."
         return 1
     fi
     return 0

@@ -3,7 +3,7 @@
 # Script Name: quick-setup.sh
 # Description: Quick developer environment bootstrap
 # Author: DJCastle
-# Version: 1.0.0
+# Version: 4.0.0
 # Created: 2026-02-16
 #
 # LICENSE: Free to use, modify, and distribute
@@ -14,7 +14,7 @@
 #
 # PURPOSE:
 # Bootstrap a fresh Mac with CLI tools, VSCode extensions, and Git config
-# in one pass. For the full interactive experience, use brew_setup_tahoe.sh.
+# in one pass. For the full interactive experience, use brew-setup.sh.
 #
 # HOW TO RUN:
 #   chmod +x quick-setup.sh
@@ -44,9 +44,65 @@ LOG_FILE="$HOME/Library/Logs/QuickSetup.log"
 setup_logging
 
 # Parse arguments
+# -----------------------------------------------------------------------------
+# Command line arguments
+#
+# This used to be a single `[[ "${1:-}" == "--dry-run" ]]` test, which meant
+# --help was ignored and started a full install, --check did nothing, and
+# --dry-run only worked if it happened to be the first argument.
+# -----------------------------------------------------------------------------
+show_help() {
+    cat << 'EOF'
+quick-setup.sh — bootstrap a Mac dev environment in one pass
+
+USAGE:
+    ./quick-setup.sh [OPTIONS]
+
+OPTIONS:
+    -h, --help          Show this help and exit
+    -d, --dry-run       Show what would happen, change nothing
+        --check         Same as --dry-run
+    -V, --version       Print the version and exit
+
+WHAT IT DOES:
+    1. Xcode Command Line Tools
+    2. Homebrew
+    3. Packages from ./Brewfile
+    4. VS Code CLI
+    5. VS Code extensions from dotfiles/vscode/extensions.txt
+    6. Git configuration (prompts for your name and email)
+    7. GitHub CLI authentication
+    8. Summary
+
+    Steps 3 and 5 install only what you have enabled in the EDIT HERE blocks of
+    Brewfile and dotfiles/vscode/extensions.txt. Out of the box that is a small
+    set of CLI tools and two editor extensions — no GUI applications.
+
+REQUIREMENTS:
+    macOS 11 (Big Sur) or later; macOS 15 (Sequoia) or later recommended.
+    For the full interactive setup with app selection, use ./brew-setup.sh
+
+EOF
+}
+
 DRY_RUN_MODE=false
-if [[ "${1:-}" == "--dry-run" ]]; then
-    DRY_RUN_MODE=true
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --help|-h)        show_help; exit 0 ;;
+        --version|-V)     echo "quick-setup.sh 4.0.0"; exit 0 ;;
+        --dry-run|--check|-d) DRY_RUN_MODE=true ;;
+        --) shift; break ;;
+        *)
+            echo "ERROR: unknown option: $1" >&2
+            echo "Run './quick-setup.sh --help' to see the supported options." >&2
+            exit 2
+            ;;
+    esac
+    shift
+done
+
+if [[ "$DRY_RUN_MODE" == "true" ]]; then
     log_info "DRY RUN MODE — no changes will be made"
 fi
 
@@ -88,7 +144,7 @@ else
 
         # Security: never pipe a remote script straight into bash. Download to a
         # temp file, surface the source so it can be inspected, then run the
-        # local copy and clean up. (Mirrors brew_setup_tahoe.sh.)
+        # local copy and clean up. (Mirrors brew-setup.sh.)
         brew_install_url="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
         brew_install_script="$(mktemp)"
 
@@ -175,14 +231,22 @@ else
     if [[ "$DRY_RUN_MODE" == "true" ]]; then
         log_info "[DRY RUN] Would install extensions from $EXTENSIONS_FILE:"
         while IFS= read -r ext; do
-            ext="$(echo "$ext" | xargs)"
-            [[ -z "$ext" ]] && continue
+            # Trim with sed rather than xargs: xargs interprets quotes and
+            # backslashes, and died with "unterminated quote" as soon as the
+            # extensions file gained prose comments.
+            ext="$(printf '%s' "$ext" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+            # Skip blanks and comments so the file can document itself.
+            [[ -z "$ext" || "$ext" == \#* ]] && continue
             log_info "  $ext"
         done < "$EXTENSIONS_FILE"
     else
         while IFS= read -r ext; do
-            ext="$(echo "$ext" | xargs)"
-            [[ -z "$ext" ]] && continue
+            # Trim with sed rather than xargs: xargs interprets quotes and
+            # backslashes, and died with "unterminated quote" as soon as the
+            # extensions file gained prose comments.
+            ext="$(printf '%s' "$ext" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+            # Skip blanks and comments so the file can document itself.
+            [[ -z "$ext" || "$ext" == \#* ]] && continue
             if code --list-extensions 2>/dev/null | grep -qi "^${ext}$"; then
                 log_success "Already installed: $ext"
             else
@@ -268,4 +332,4 @@ fi
 
 echo
 log_info "Log file: $LOG_FILE"
-log_info "For the full interactive setup, use: ./brew_setup_tahoe.sh"
+log_info "For the full interactive setup, use: ./brew-setup.sh"

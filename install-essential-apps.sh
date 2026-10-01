@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: install-essential-apps.sh
 # Description: 📦 Batch App Installer - Installs all essential apps automatically (no prompts)
 # Author: DJCastle
-# Version: 1.1.0
+# Version: 4.0.0
 # Created: 2025-01-11
-# Updated: 2026-07-10
+# Updated: 2026-09-30
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -20,14 +20,12 @@ set -euo pipefail
 #
 # PURPOSE:
 # Install essential applications using Homebrew casks without user interaction.
-# This script is aligned with brew_setup_tahoe.sh app list for consistency.
+# This script is aligned with brew-setup.sh app list for consistency.
 #
 # APPLICATIONS INSTALLED:
-#   - Adobe Creative Cloud (Creative software suite)
-#   - Bambu Studio (3D printing slicer software)
-#   - ChatGPT Desktop (AI assistant desktop app)
-#   - Grammarly Desktop (Writing assistant)
-#   - Visual Studio Code (Code editor)
+#   Whatever you list in the EDIT HERE block near the top of this script.
+#   Nothing ships enabled — the placeholders are commented out on purpose, so
+#   a fresh copy of this script installs no apps until you choose them.
 #
 # HOW TO RUN IN TERMINAL:
 # 1. Open Terminal application (Applications > Utilities > Terminal)
@@ -49,7 +47,7 @@ set -euo pipefail
 # ✅ Detailed installation summary
 #
 # REQUIREMENTS:
-#   - Homebrew must be installed (use brew_setup_tahoe.sh for full setup)
+#   - Homebrew must be installed (use brew-setup.sh for full setup)
 #   - macOS with administrator privileges
 #   - Internet connection
 #
@@ -57,13 +55,45 @@ set -euo pipefail
 # - Some apps may require manual setup after installation
 # - You may be prompted for your macOS password
 # - Large downloads may take time depending on your internet speed
-# - For interactive installation with more options, use brew_setup_tahoe.sh
+# - For interactive installation with more options, use brew-setup.sh
 #
 # LOG FILE:
 #   All operations are logged to: ~/Library/Logs/EssentialAppsInstall.log
 ###############################################################################
 
 LOG="$HOME/Library/Logs/EssentialAppsInstall.log"
+
+# =============================================================================
+#                          ▼▼▼  EDIT HERE  ▼▼▼
+# =============================================================================
+#
+# List the apps you want installed, one per line, in the form:
+#
+#     "Display Name:cask-name"
+#
+#   Display Name   what you see in /Applications (used to skip apps you
+#                  already installed by hand, outside Homebrew)
+#   cask-name      Homebrew's name for it — find it with:  brew search <app>
+#
+# Every line below is a PLACEHOLDER and is commented out. These are examples
+# of the *kinds* of apps people install, not recommendations. Replace them
+# with the apps you actually want and delete the leading '#'.
+#
+# Leave them all commented and the script still runs fine — it just reports
+# that no apps are configured and exits cleanly.
+#
+APPS=(
+    # "Browser:browser1"              # e.g. "Firefox:firefox"
+    # "Code Editor:editor1"           # e.g. "Visual Studio Code:visual-studio-code"
+    # "Terminal:terminal1"            # e.g. "iTerm:iterm2"
+    # "Chat App:chat1"                # e.g. "Slack:slack"
+    # "Notes App:notes1"              # e.g. "Obsidian:obsidian"
+    # "Archive Tool:archiver1"        # e.g. "The Unarchiver:the-unarchiver"
+)
+
+# =============================================================================
+#                   ▲▲▲  DO NOT EDIT BELOW THIS LINE  ▲▲▲
+# =============================================================================
 
 # Parse options
 DRY_RUN=false
@@ -120,7 +150,7 @@ print_error() {
 
 # Check if Homebrew is installed
 if ! command -v brew &> /dev/null; then
-    print_error "Homebrew is not installed. Please run brew_setup_tahoe.sh first for full setup."
+    print_error "Homebrew is not installed. Please run brew-setup.sh first for full setup."
     exit 1
 fi
 
@@ -174,23 +204,26 @@ install_app() {
     fi
 }
 
-# Install applications (aligned with brew_setup_tahoe.sh)
-print_status "Starting application installations..."
+# Install every app listed in the EDIT HERE block above.
+# An empty list is a normal, successful outcome — not an error.
+if [[ ${#APPS[@]} -eq 0 ]]; then
+    print_warning "No apps are configured, so there is nothing to install."
+    print_status  "Open this script and edit the EDIT HERE block near the top:"
+    print_status  "  ${BASH_SOURCE[0]}"
+    print_success "Nothing was changed."
+    exit 0
+fi
 
-# 1. Adobe Creative Cloud
-install_app "Adobe Creative Cloud" "adobe-creative-cloud" "Adobe Creative Cloud"
+print_status "Starting application installations (${#APPS[@]} configured)..."
 
-# 2. Bambu Studio
-install_app "Bambu Studio" "bambustudio" "Bambu Studio"
-
-# 3. ChatGPT Desktop
-install_app "ChatGPT" "chatgpt" "ChatGPT Desktop"
-
-# 4. Grammarly Desktop
-install_app "Grammarly Desktop" "grammarly-desktop" "Grammarly Desktop"
-
-# 5. Visual Studio Code
-install_app "Visual Studio Code" "visual-studio-code" "Visual Studio Code"
+for app_entry in "${APPS[@]}"; do
+    IFS=':' read -r display_name cask_name <<< "$app_entry"
+    if [[ -z "$display_name" || -z "$cask_name" ]]; then
+        print_error "Skipping malformed APPS entry: '$app_entry' (expected \"Display Name:cask-name\")"
+        continue
+    fi
+    install_app "$display_name" "$cask_name" "$display_name" || true
+done
 
 # In dry-run mode there is nothing to verify — stop before the summary
 if [[ "$DRY_RUN" == "true" ]]; then
@@ -208,16 +241,9 @@ echo "----------------------------------------" | tee -a "$LOG"
 installed_apps=()
 failed_apps=()
 
-# Check each app (aligned with brew_setup_tahoe.sh)
-apps=(
-    "Adobe Creative Cloud:adobe-creative-cloud"
-    "Bambu Studio:bambustudio"
-    "ChatGPT Desktop:chatgpt"
-    "Grammarly Desktop:grammarly-desktop"
-    "Visual Studio Code:visual-studio-code"
-)
-
-for app_info in "${apps[@]}"; do
+# Verify against the SAME list the install loop used. Keeping one list means a
+# new app can never be installed but silently left out of the summary.
+for app_info in "${APPS[@]}"; do
     IFS=':' read -r display_name cask_name <<< "$app_info"
     
     if brew list --cask "$cask_name" &> /dev/null || [ -d "/Applications/$display_name.app" ]; then

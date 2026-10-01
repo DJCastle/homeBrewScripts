@@ -31,7 +31,7 @@ These scripts will modify your system. While they include extensive safety measu
 ### 1. Dry-Run Mode
 ```bash
 # See what would happen without making changes
-./brew_setup_tahoe.sh --dry-run
+./brew-setup.sh --dry-run
 ```
 
 **What it does:**
@@ -135,7 +135,7 @@ retry_with_backoff() {
 ## 📋 Pre-Installation Checklist
 
 ### System Requirements
-- [ ] macOS 12.0 (Monterey) or later
+- [ ] macOS 11 (Big Sur) or later — macOS 15 (Sequoia) or later recommended
 - [ ] Administrator privileges (you know your password)
 - [ ] At least 1GB free disk space
 - [ ] Stable internet connection
@@ -169,8 +169,8 @@ INSTALL_UTILITIES=true
 ### 2. Use Dry-Run Mode First
 ```bash
 # Always test before applying
-./brew_setup_tahoe.sh --dry-run
-./brew_setup_tahoe.sh --debug --dry-run  # For detailed output
+./brew-setup.sh --dry-run
+./brew-setup.sh --debug --dry-run  # For detailed output
 ```
 
 ### 3. Review Logs Regularly

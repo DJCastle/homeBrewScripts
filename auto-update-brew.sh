@@ -6,9 +6,9 @@ set -euo pipefail
 # Script Name: auto-update-brew.sh
 # Description: 🤖 Auto-Updater Basic - Keeps Homebrew updated with text notifications
 # Author: DJCastle
-# Version: 1.1.0
+# Version: 4.0.0
 # Created: 2025-01-11
-# Updated: 2026-07-10
+# Updated: 2026-09-30
 #
 # LICENSE: Free to use, modify, and distribute
 #
@@ -192,7 +192,7 @@ check_power_status() {
 # Function to check if Homebrew is installed
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
-        print_error "Homebrew is not installed. Please run ./brew_setup_tahoe.sh first."
+        print_error "Homebrew is not installed. Please run ./brew-setup.sh first."
         return 1
     fi
     return 0

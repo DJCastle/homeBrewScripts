@@ -68,3 +68,10 @@ fastlane/test_output/
 # CLAUDE.md is committed on purpose since 2026-09-13 -- it is technical
 # project documentation and carries nothing private.
 CLAUDE-LOG.md
+
+# User configuration generated from config/homebrew-scripts.example.conf.
+# It holds personal values (EMAIL_ADDRESS, PHONE_NUMBER, chosen apps), so it
+# must never be committed — this is a public repo. The .example.conf is the
+# tracked template; this is the user's private copy.
+config/homebrew-scripts.conf
+.homebrew-scripts.conf

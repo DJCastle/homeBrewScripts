@@ -1,5 +1,28 @@
-GitHub.copilot
-GitHub.copilot-chat
+# VS Code extensions installed by quick-setup.sh.
+#
+# =============================================================================
+#                          vvv  EDIT HERE  vvv
+# =============================================================================
+#
+# One extension ID per line. Blank lines and lines starting with '#' are ignored.
+#
+# Find an extension's ID on its Marketplace page, or list what you already have:
+#   code --list-extensions
+#
+# These two are editor-agnostic and useful to almost anyone, so they ship enabled:
 eamodio.gitlens
-Google.geminicodeassist
-anthropic.claude-code
+streetsidesoftware.code-spell-checker
+
+# Everything below is commented out — examples, not recommendations.
+# Uncomment what you actually use.
+#
+# GitHub.copilot                  # AI completions (subscription)
+# GitHub.copilot-chat             # AI chat (subscription)
+# anthropic.claude-code           # Claude Code
+# Google.geminicodeassist         # Gemini Code Assist
+# esbenp.prettier-vscode          # Code formatter
+# timonwong.shellcheck            # Shell script linting — handy for this repo
+#
+# =============================================================================
+#                   ^^^  DO NOT EDIT BELOW THIS LINE  ^^^
+# =============================================================================

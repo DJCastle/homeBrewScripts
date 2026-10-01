@@ -34,9 +34,9 @@ This tutorial uses the Homebrew automation scripts as a practical example to tea
 ### Script Metadata
 ```bash
 ###############################################################################
-# Script Name: brew_setup_tahoe.sh
+# Script Name: brew-setup.sh
 # Description: Educational Homebrew installer
-# Version: 3.0.0
+# Version: 4.0.0
 # License: MIT
 ###############################################################################
 ```
