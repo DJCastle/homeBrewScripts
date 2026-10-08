@@ -27,8 +27,8 @@ Open-source bash scripts for automating Homebrew package management on macOS —
 
 ### Shell defaults
 
-- Shebang `#!/usr/bin/env bash` (some older scripts still use `#!/bin/bash` — migrate when touched).
-- Aim for `set -euo pipefail`; existing scripts may still be `set -e`-only — upgrade opportunistically when you edit one.
+- Shebang `#!/usr/bin/env bash` (every script uses it).
+- `set -euo pipefail` in every executable script. `lib/common.sh` is sourced, so it inherits the caller's mode and sets none of its own.
 - Quote all expansions: `"$var"`.
 - `[[ ]]` for conditionals, never `[ ]`.
 - `readonly` for constants.
@@ -84,7 +84,7 @@ Every script should respond to `--help` and `--check` (dry-run).
 ## Known issues / don't reintroduce
 
 - **`brew` as root will fail.** Homebrew silently refuses. If a wrapper script needs to elevate for a non-brew step, it must `sudo` only that step, never the `brew` invocation itself.
-- **`PEP 668 "externally-managed-environment"`** breaks `pip --user` on modern macOS. Use `pipx` (isolated venvs) for any Python CLI tool. Already encoded in `personalCode/brew-setup.sh`.
+- **`PEP 668 "externally-managed-environment"`** breaks `pip --user` on modern macOS. Use `pipx` (isolated venvs) for any Python CLI tool.
 - **Apple Silicon vs Intel paths:** brew prefix is `/opt/homebrew` on Apple Silicon, `/usr/local` on Intel. Scripts must detect via `$(brew --prefix)` not hardcode.
 - **Schedule installers (`setup-auto-update.sh`, `setup-hybrid-notifications.sh`)** drop launchd plists into `~/Library/LaunchAgents/`. If a user reinstalls the script suite, plist removal must come *before* re-creation or `launchctl bootstrap` will refuse. Existing installer handles this; new schedule scripts must too.
 
