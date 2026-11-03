@@ -36,7 +36,7 @@ This tutorial uses the Homebrew automation scripts as a practical example to tea
 ###############################################################################
 # Script Name: brew-setup.sh
 # Description: Educational Homebrew installer
-# Version: 4.0.0
+# Version: 4.1.1
 # License: MIT
 ###############################################################################
 ```
@@ -68,10 +68,12 @@ TOTAL_STEPS=8
 
 ### Configuration Arrays
 ```bash
-# Associative arrays for structured data
-declare -A CUSTOM_APPS=(
-    ["visual-studio-code"]="Visual Studio Code:development"
-    ["docker"]="Docker Desktop:development"
+# Structured data without associative arrays (declare -A needs bash 4;
+# the /bin/bash that ships with macOS is 3.2). Each entry packs the cask
+# name, display name and category into one colon-separated string.
+CUSTOM_APPS=(
+    "visual-studio-code:Visual Studio Code:development"
+    "docker:Docker Desktop:development"
 )
 
 # Regular arrays for lists
@@ -141,7 +143,8 @@ ask_yes_no() {
         fi
         
         read -r response
-        response=${response,,}  # Convert to lowercase
+        # Convert to lowercase (portable; ${response,,} is bash 4+ only)
+        response="$(printf '%s' "$response" | tr '[:upper:]' '[:lower:]')"
         
         case "$response" in
             ""|"y"|"yes")
@@ -161,7 +164,7 @@ ask_yes_no() {
 **Learning Points:**
 - **Input Validation:** Loop until valid input
 - **Default Values:** Handle empty input gracefully
-- **Case Conversion:** `${response,,}` converts to lowercase
+- **Case Conversion:** `tr '[:upper:]' '[:lower:]'` converts to lowercase on bash 3.2 (`${response,,}` needs bash 4)
 - **Color Coding:** Make interface user-friendly
 
 **Exercise:** Create a function that asks for a number within a specific range.
@@ -176,7 +179,7 @@ check_prerequisites() {
     # Check operating system
     if [[ "$(uname)" != "Darwin" ]]; then
         log_error "This script requires macOS"
-        ((errors++))
+        errors=$((errors + 1))
     fi
     
     # Check required commands
@@ -184,7 +187,7 @@ check_prerequisites() {
     for cmd in "${required_commands[@]}"; do
         if ! command -v "$cmd" >/dev/null 2>&1; then
             log_error "Required command not found: $cmd"
-            ((errors++))
+            errors=$((errors + 1))
         fi
     done
     
@@ -193,7 +196,7 @@ check_prerequisites() {
     available_space=$(df -h "$HOME" | awk 'NR==2 {print $4}' | sed 's/G//')
     if [[ "${available_space%.*}" -lt 1 ]]; then
         log_error "Insufficient disk space (need at least 1GB)"
-        ((errors++))
+        errors=$((errors + 1))
     fi
     
     return $errors
@@ -218,7 +221,7 @@ retry_with_backoff() {
             delay=$((delay * 2))  # Exponential backoff
         fi
         
-        ((attempt++))
+        attempt=$((attempt + 1))
     done
     
     log_error "All $max_attempts attempts failed"

@@ -118,7 +118,7 @@ retry_with_backoff() {
             return 0
         fi
         log_warning "Attempt $attempt failed, retrying..."
-        ((attempt++))
+        attempt=$((attempt + 1))
     done
     
     log_error "All attempts failed"
@@ -187,8 +187,7 @@ grep ERROR ~/Library/Logs/HomebrewSetup.log
 # Create your config from the example file
 cp config/homebrew-scripts.example.conf config/homebrew-scripts.conf
 
-# Track your configuration changes
-git init config/
+# Track configuration changes with Git
 git add config/homebrew-scripts.conf
 git commit -m "Initial configuration"
 ```
@@ -211,8 +210,11 @@ git commit -m "Initial configuration"
 
 #### Homebrew Installation Issues
 ```bash
-# Remove incomplete Homebrew installation
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
+# Remove an incomplete Homebrew installation with Homebrew's own uninstaller.
+# Download it and read it before running it, rather than piping it to a shell.
+curl -fsSL -o /tmp/homebrew-uninstall.sh https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh
+less /tmp/homebrew-uninstall.sh
+/bin/bash /tmp/homebrew-uninstall.sh
 
 # Clean up shell configuration
 # Edit ~/.zshrc and remove Homebrew-related lines
@@ -229,13 +231,11 @@ brew cleanup --prune=all
 
 #### Shell Configuration Problems
 ```bash
-# Backup current configuration
+# Back up the current configuration before editing it
 cp ~/.zshrc ~/.zshrc.backup
 
-# Reset to system default
-cp /etc/zshrc ~/.zshrc
-
-# Or restore from backup
+# Remove the Homebrew lines from ~/.zshrc by hand, then restore from the
+# backup if the edit goes wrong
 cp ~/.zshrc.backup ~/.zshrc
 ```
 

@@ -89,6 +89,7 @@ report that nothing is configured and carry on.
 ## Requirements
 
 - macOS 11 (Big Sur) or later — macOS 15 (Sequoia) or later recommended
+- Apple silicon recommended. Intel Macs still run, but Homebrew now treats them as Tier 3 (no new prebuilt bottles) and plans to drop them in September 2027
 - Administrator privileges
 - Internet connection
 

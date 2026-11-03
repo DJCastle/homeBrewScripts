@@ -515,8 +515,8 @@ main() {
     # Check WiFi network with retry
     if ! check_wifi_network; then
         print_warning "Skipping update - not on $WIFI_NETWORK WiFi after $MAX_RETRIES attempts"
-        send_text_message "⚠️ Auto Update Brew: Skipped - not on YourWiFiNetwork WiFi"
-        send_email_notification "⚠️ Auto Update Brew Skipped" "Update skipped because not connected to YourWiFiNetwork WiFi network." "$LOG"
+        send_text_message "⚠️ Auto Update Brew: Skipped - not on $WIFI_NETWORK WiFi"
+        send_email_notification "⚠️ Auto Update Brew Skipped" "Update skipped because not connected to $WIFI_NETWORK WiFi network." "$LOG"
         exit 0
     fi
     

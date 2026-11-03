@@ -305,7 +305,7 @@ main() {
     # Check WiFi network
     if ! check_wifi_network; then
         print_warning "Skipping update - not on $WIFI_NETWORK WiFi"
-        send_text_message "⚠️ Auto Update Brew: Skipped - not on YourWiFiNetwork WiFi"
+        send_text_message "⚠️ Auto Update Brew: Skipped - not on $WIFI_NETWORK WiFi"
         exit 0
     fi
     
