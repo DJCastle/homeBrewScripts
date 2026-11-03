@@ -4,15 +4,15 @@
     "name": "homeBrewScripts",
     "branch": "main"
   },
-  "generated_at": "2026-11-03T17:37:31.629Z",
+  "generated_at": "2026-11-03T23:29:35.753Z",
   "items": [
     {
       "name": "README.md",
       "path": "README.md",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/README.md",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/README.md",
-      "updated": "2026-10-01T15:56:54Z",
-      "sha": "833ab1d",
+      "updated": "2026-11-03T23:29:21Z",
+      "sha": "1a526bd",
       "title": "📚 Documentation & Getting Started",
       "description": "Complete documentation, installation guide, and educational resources. Start here to understand the project structure, safety practices, and how to use these scripts effectively."
     },
@@ -71,8 +71,8 @@
       "path": "auto-update-brew.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/auto-update-brew.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/auto-update-brew.sh",
-      "updated": "2026-10-01T15:56:54Z",
-      "sha": "833ab1d",
+      "updated": "2026-11-03T23:29:21Z",
+      "sha": "1a526bd",
       "title": "🔄 Auto-Update (Basic)",
       "description": "Basic automatic Homebrew updater with text notifications. Runs scheduled updates and sends status reports."
     },
@@ -81,8 +81,8 @@
       "path": "auto-update-brew-hybrid.sh",
       "html_url": "https://github.com/DJCastle/homeBrewScripts/blob/main/auto-update-brew-hybrid.sh",
       "raw_url": "https://raw.githubusercontent.com/DJCastle/homeBrewScripts/main/auto-update-brew-hybrid.sh",
-      "updated": "2026-10-01T15:56:54Z",
-      "sha": "833ab1d",
+      "updated": "2026-11-03T23:29:21Z",
+      "sha": "1a526bd",
       "title": "🔄 Auto-Update (Advanced)",
       "description": "Advanced automatic updater with email and SMS notifications. Includes detailed reporting and error handling."
     },
