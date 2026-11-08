@@ -9,7 +9,7 @@ Shared craft rules — imported so every surface loads them, including Xcode's s
 Open-source bash scripts for automating Homebrew package management on macOS — interactive setup, scheduled updates with notifications, manual cleanup. Public repo, MIT-licensed, currently v4.1.1.
 
 - **Repo:** `DJCastle/homeBrewScripts` (public)
-- **Page URL:** `codecraftedapps.com/brew/` (GitHub Pages)
+- **Page URL:** `codecraftedapps.com/brew/` (Cloudflare Workers)
 - **Languages:** bash (POSIX-compatible where reasonable)
 - **Targets:** macOS only, both Intel + Apple Silicon
 - **Distribution:** GitHub releases + the `codecraftedapps.com/brew/` landing page
